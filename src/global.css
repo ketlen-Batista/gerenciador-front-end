@@ -1,0 +1,29 @@
+:root {
+  --Primary: #4e73df;
+  --Secondary: #858796;
+  --Success: #1cc88a;
+  --Info: #36b9cc;
+  --Warning: #f6c23e;
+  --Danger: #e74a3b;
+  --Light: #f8f9fc;
+  --Dark: #5a5c69;
+  --Background: #fcf8f9;
+  --ColorFont: #000000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--Background);
+  color: var(--ColorFont);
+  -webkit-font-smoothing: antialiased;
+}
+
+[theme-mode='dark'] {
+  --Background: #5a5c69;
+  --ColorFont: #f8f9fc;
+}
