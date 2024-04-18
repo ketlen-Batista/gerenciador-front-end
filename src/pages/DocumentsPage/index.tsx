@@ -1,6 +1,6 @@
 //PÁGINA FUNCIONARIOS
 import React, { useState } from 'react';
-import TextInput from '../../components//TextInput';
+import TextInput from '../../components/TextInput';
 import SelectCustom from '../../components/SelectCustom';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';

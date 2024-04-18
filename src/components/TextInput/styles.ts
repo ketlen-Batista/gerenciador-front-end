@@ -3,8 +3,8 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme) =>
   createStyles({
     styledInput: {
-      backgroundColor: '#fff',
-      border: '1px solid #e0e0e0',
+      backgroundColor: 'var(--Light)',
+      border: 'var(--Light)',
       borderRadius: 4,
       'box-sizing': 'border-box',
       '&:after': {
@@ -22,7 +22,7 @@ export const useStyles = makeStyles((theme) =>
       },
     },
     disabled: {
-      backgroundColor: 'hsl(0,0%,95%)',
+      backgroundColor: 'var(--Light)',
     },
     miniInput: {
       padding: '21px 12px 5px',

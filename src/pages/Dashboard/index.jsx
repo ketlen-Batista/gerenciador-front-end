@@ -10,15 +10,16 @@ import Container from '@material-ui/core/Container';
 import MenuIcon from '@material-ui/icons/Menu';
 import PersonOutlineTwoToneIcon from '@material-ui/icons/PersonOutlineTwoTone';
 // import Employees from '../Employees';
-import DocumentsPage from '../DocumentsPage';
+// import DocumentsPage from '../DocumentsPage';
 import Sidebar from '../../components/Sidebar';
 import * as S from './styles';
+import EmployeeData from '../EmployeeData';
 
 function Dashboard({ isDark, handleThemeMode }) {
   const classes = S.useStyles();
 
   const [open, setOpen] = React.useState(false);
-  const [titlePage, setTitlePage] = React.useState('Documentos');
+  const [titlePage, setTitlePage] = React.useState('Dados do Funcionário');
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -102,7 +103,10 @@ function Dashboard({ isDark, handleThemeMode }) {
           {/* <Employees /> */}
 
           {/* TELA_DOCUMENTOS */}
-          <DocumentsPage />
+          {/* <DocumentsPage /> */}
+
+          {/* DADOS_DO_FUNCIONÁRIO */}
+          <EmployeeData />
         </Container>
       </main>
     </div>
