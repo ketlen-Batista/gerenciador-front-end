@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import * as S from './styles';
 import avatar from '../../assets/avatar1.jpg';
 import TextInput from '../../components/TextInput';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import CameraAltOutlinedIcon from '@material-ui/icons/CameraAltOutlined';
+import EqualizerOutlinedIcon from '@material-ui/icons/EqualizerOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const data = {
   id: '9d5b884e-8d72-4f29-8e23-f06ebe2394d0',
@@ -35,8 +41,44 @@ function EmployeeData() {
 
   return (
     <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-      {/* IMAGEM DO FUNCIONÁRIO */}
-      <S.Image src={avatar} />
+      {/* container header */}
+      <S.ContainerHeader>
+        {/* IMAGEM DO FUNCIONÁRIO */}
+        <S.Image src={avatar} />
+
+        {/* container icons */}
+        <S.ContainerIcons>
+          <Tooltip title="Relatórios" placement="top">
+            <S.CircleIcon>
+              <EqualizerOutlinedIcon fontSize="medium" />
+            </S.CircleIcon>
+          </Tooltip>
+
+          <Tooltip title="Registro de Serviços" placement="top">
+            <S.CircleIcon>
+              <CameraAltOutlinedIcon fontSize="medium" />
+            </S.CircleIcon>
+          </Tooltip>
+
+          <Tooltip title="Documentos" placement="top">
+            <S.CircleIcon>
+              <DescriptionOutlinedIcon fontSize="medium" />
+            </S.CircleIcon>
+          </Tooltip>
+
+          <Tooltip title="Folha de Ponto" placement="top">
+            <S.CircleIcon>
+              <DateRangeOutlinedIcon fontSize="medium" />
+            </S.CircleIcon>
+          </Tooltip>
+
+          <Tooltip title="Deletar" placement="top">
+            <S.CircleIcon>
+              <DeleteOutlineIcon fontSize="medium" />
+            </S.CircleIcon>
+          </Tooltip>
+        </S.ContainerIcons>
+      </S.ContainerHeader>
 
       {/* INPUT DO NOME */}
       <TextInput
@@ -47,7 +89,6 @@ function EmployeeData() {
         onChange={(event) => setName(event.target.value)}
         mini
       />
-
       {/* INPUT DO TELEFONE */}
       <TextInput
         name="phone"
@@ -57,7 +98,6 @@ function EmployeeData() {
         onChange={(event) => setPhone(event.target.value)}
         mini
       />
-
       {/* INPUT DO EMAIL */}
       <TextInput
         name="email"
@@ -67,7 +107,6 @@ function EmployeeData() {
         onChange={(event) => setEmail(event.target.value)}
         mini
       />
-
       {/* INPUT DO CPF */}
       <TextInput
         name="cpf"
@@ -77,7 +116,6 @@ function EmployeeData() {
         onChange={(event) => setCpf(event.target.value)}
         mini
       />
-
       {/* INPUT DO ID */}
       <TextInput
         name="id"
@@ -87,7 +125,6 @@ function EmployeeData() {
         onChange={(event) => setId(event.target.value)}
         mini
       />
-
       {/* INPUT DO ENDEREÇO */}
       <TextInput
         name="address"
@@ -97,7 +134,6 @@ function EmployeeData() {
         onChange={(event) => setEndereço(event.target.value)}
         mini
       />
-
       {/* INPUT DO MATRÍCULA */}
       <TextInput
         name="registration"
@@ -107,7 +143,6 @@ function EmployeeData() {
         onChange={(event) => setMatrícula(event.target.value)}
         mini
       />
-
       {/* INPUT DO DATA DE NASCIMENTO */}
       <TextInput
         name="dateOfBirth"
@@ -117,7 +152,6 @@ function EmployeeData() {
         onChange={(event) => setData_de_nascimento(event.target.value)}
         mini
       />
-
       {/* INPUT DO CARGO */}
       <TextInput
         name="office"
@@ -127,7 +161,6 @@ function EmployeeData() {
         onChange={(event) => setCargo(event.target.value)}
         mini
       />
-
       {/* INPUT DO SETOR */}
       <TextInput
         name="sector"
@@ -137,7 +170,6 @@ function EmployeeData() {
         onChange={(event) => setSetor(event.target.value)}
         mini
       />
-
       {/* INPUT DO SEÇÃO */}
       <TextInput
         name="section"

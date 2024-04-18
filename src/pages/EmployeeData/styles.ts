@@ -2,6 +2,33 @@ import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 
+export const ContainerHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const ContainerIcons = styled.div`
+  display: flex;
+  width: 300px;
+  justify-content: space-between;
+`;
+
+export const CircleIcon = styled.div`
+  display: flex;
+  background: var(--lightgray);
+  border-radius: 100%;
+  padding: 5px;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  :hover {
+    cursor: pointer;
+  }
+`;
+
 export const Image = styled.img`
   width: 150px;
   height: 150px;
