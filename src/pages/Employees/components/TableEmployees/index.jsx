@@ -2,6 +2,9 @@ import React from 'react';
 import TableDataGrid from '/src/components/TableDataGrid';
 // import TableDataGrid from '../../../../components/TableDataGrid';
 // import { DataGrid } from '@mui/x-data-grid';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 
 function TableEmployees() {
   const rows = [
@@ -89,9 +92,25 @@ function TableEmployees() {
     {
       field: 'actions',
       headerName: 'Ações',
-      flex: 2,
+      flex: 3,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
+
+      renderCell: () => (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-bectween',
+            height: '100%',
+          }}
+        >
+          <VisibilityOutlinedIcon />
+          <CreateOutlinedIcon />
+          <DeleteOutlinedIcon />
+        </div>
+      ),
     },
   ];
 

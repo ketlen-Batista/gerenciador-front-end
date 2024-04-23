@@ -1,5 +1,11 @@
 import React from 'react';
 import TableDataGrid from '/src/components/TableDataGrid';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import CloseIcon from '@material-ui/icons/Close';
+import { red } from '@material-ui/core/colors';
 // import TableDataGrid from '../../../../components/TableDataGrid';
 // import { DataGrid } from '@mui/x-data-grid';
 
@@ -82,16 +88,46 @@ function TableEmployees() {
     {
       field: 'received',
       headerName: 'Recebido?',
-      flex: 4,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
+      renderCell: () => (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            color: 'red',
+          }}
+        >
+          <CloseIcon color="inherit" />
+        </div>
+      ),
     },
+
     {
       field: 'visa',
       headerName: 'Visto',
-      flex: 3,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
+
+      renderCell: () => (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            color: 'green',
+          }}
+        >
+          <DoneOutlineIcon color="inherit" />
+        </div>
+      ),
     },
 
     {
@@ -100,6 +136,29 @@ function TableEmployees() {
       flex: 3,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
+
+      renderCell: () => (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+          }}
+        >
+          <VisibilityOutlinedIcon />
+          <CreateOutlinedIcon />
+          <div
+            style={{
+              display: 'flex',
+              color: 'red',
+            }}
+          >
+            <DeleteOutlinedIcon />
+          </div>
+        </div>
+      ),
     },
   ];
 

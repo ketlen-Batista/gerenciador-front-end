@@ -9,8 +9,8 @@ import { Switch } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import MenuIcon from '@material-ui/icons/Menu';
 import PersonOutlineTwoToneIcon from '@material-ui/icons/PersonOutlineTwoTone';
-// import Employees from '../Employees';
-// import DocumentsPage from '../DocumentsPage';
+import Employees from '../Employees';
+import DocumentsPage from '../DocumentsPage';
 import Sidebar from '../../components/Sidebar';
 import * as S from './styles';
 import EmployeeData from '../EmployeeData';
@@ -18,8 +18,14 @@ import EmployeeData from '../EmployeeData';
 function Dashboard({ isDark, handleThemeMode }) {
   const classes = S.useStyles();
 
+  const titlePages = {
+    documentos: 'Documentos',
+    funcionarios: 'Funcionários',
+    dadosDoFuncionario: 'Dados do Funcionário',
+  };
+
   const [open, setOpen] = React.useState(false);
-  const [titlePage, setTitlePage] = React.useState('Dados do Funcionário');
+  const [page, setPage] = React.useState(titlePages.documentos);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -58,6 +64,7 @@ function Dashboard({ isDark, handleThemeMode }) {
           >
             Dashboard
           </Typography>
+          Cecília Silva Santos
           <IconButton color="inherit">
             <PersonOutlineTwoToneIcon />
           </IconButton>
@@ -87,7 +94,7 @@ function Dashboard({ isDark, handleThemeMode }) {
                 color: 'var(--ColorFont)',
               }}
             >
-              <h1>{titlePage}</h1>
+              <h1>{page}</h1>
             </div>
             <div style={{ display: 'flex', flex: 2, justifyContent: 'end' }}>
               <Switch
@@ -100,13 +107,13 @@ function Dashboard({ isDark, handleThemeMode }) {
           </div>
 
           {/* TELA_DE_FUNCIONÁRIOS */}
-          {/* <Employees /> */}
+          {page === titlePages.funcionarios && <Employees />}
 
           {/* TELA_DOCUMENTOS */}
-          {/* <DocumentsPage /> */}
+          {page === titlePages.documentos && <DocumentsPage />}
 
           {/* DADOS_DO_FUNCIONÁRIO */}
-          <EmployeeData />
+          {page === titlePages.dadosDoFuncionario && <EmployeeData />}
         </Container>
       </main>
     </div>
