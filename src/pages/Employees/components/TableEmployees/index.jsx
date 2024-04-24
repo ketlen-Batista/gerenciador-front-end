@@ -5,7 +5,7 @@ import TableDataGrid from '/src/components/TableDataGrid';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-
+import Tooltip from '@material-ui/core/Tooltip';
 function TableEmployees() {
   const rows = [
     {
@@ -89,6 +89,7 @@ function TableEmployees() {
       headerClassName: 'table-header',
       cellClassName: 'table-body',
     },
+
     {
       field: 'actions',
       headerName: 'Ações',
@@ -106,14 +107,41 @@ function TableEmployees() {
             height: '100%',
           }}
         >
-          <VisibilityOutlinedIcon />
-          <CreateOutlinedIcon />
-          <DeleteOutlinedIcon />
+          <div
+            style={{
+              display: 'flex',
+              color: 'var(--Primary)',
+            }}
+          >
+            <Tooltip title="Ver" placement="top">
+              <VisibilityOutlinedIcon fontSize="medium" />
+            </Tooltip>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              color: 'var(--Success)',
+            }}
+          >
+            <Tooltip title="Editar" placement="top">
+              <CreateOutlinedIcon fontSize="medium" />
+            </Tooltip>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              color: 'var(--Danger)',
+            }}
+          >
+            <Tooltip title="Deletar" placement="top">
+              <DeleteOutlinedIcon fontSize="medium" />
+            </Tooltip>
+          </div>
         </div>
       ),
     },
   ];
-
   return (
     <>
       <TableDataGrid columns={columns} rows={rows} />

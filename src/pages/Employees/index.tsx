@@ -47,7 +47,7 @@ const cargos = [
   },
 ];
 
-const seção = [
+const seções = [
   {
     name: 'Escola 1',
     value: 'escola1',
@@ -114,7 +114,7 @@ function Employees() {
         <S.ContainerSelects>
           <SelectCustom options={setores} defautSelected={'todos'} />
           <SelectCustom options={cargos} defautSelected={'gerente'} />
-          <SelectCustom options={seção} defautSelected={'escola1'} />
+          <SelectCustom options={seções} defautSelected={'escola1'} />
         </S.ContainerSelects>
         <S.ContainerButton>
           <S.ButtonAdd

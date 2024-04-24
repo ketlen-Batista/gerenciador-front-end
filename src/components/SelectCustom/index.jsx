@@ -21,23 +21,21 @@ const SelectCustom = ({ options, defautSelected }) => {
 
   return (
     <S.Container>
-      <div>
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          open={open}
-          onClose={handleClose}
-          onOpen={handleOpen}
-          value={value}
-          onChange={handleChange}
-        >
-          {options.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </div>
+      {/* <div> */}
+      <Select
+        open={open}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        value={value}
+        onChange={handleChange}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.name}
+          </MenuItem>
+        ))}
+      </Select>
+      {/* </div> */}
     </S.Container>
   );
 };

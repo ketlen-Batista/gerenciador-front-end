@@ -25,7 +25,7 @@ function Dashboard({ isDark, handleThemeMode }) {
   };
 
   const [open, setOpen] = React.useState(false);
-  const [page, setPage] = React.useState(titlePages.documentos);
+  const [page, setPage] = React.useState(titlePages.dadosDoFuncionario);
 
   const handleDrawerOpen = () => {
     setOpen(true);

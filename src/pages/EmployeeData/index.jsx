@@ -8,6 +8,64 @@ import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import CameraAltOutlinedIcon from '@material-ui/icons/CameraAltOutlined';
 import EqualizerOutlinedIcon from '@material-ui/icons/EqualizerOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
+import SelectCustom from '../../components/SelectCustom';
+
+const setores = [
+  {
+    name: 'Todos',
+    value: 'todos',
+  },
+  {
+    name: 'Saúde',
+    value: 'saude',
+  },
+  {
+    name: 'Educação',
+    value: 'educacao',
+  },
+  {
+    name: 'TJ',
+    value: 'tj',
+  },
+];
+
+const cargos = [
+  {
+    name: 'Gerente',
+    value: 'gerente',
+  },
+  {
+    name: 'Auxiliar',
+    value: 'auxiliar',
+  },
+  {
+    name: 'Encarregado',
+    value: 'encarregado',
+  },
+  {
+    name: 'Diretor',
+    value: 'diretor',
+  },
+];
+
+const seções = [
+  {
+    name: 'Escola 1',
+    value: 'escola1',
+  },
+  {
+    name: 'Escola 2',
+    value: 'escola2',
+  },
+  {
+    name: 'Escola 3',
+    value: 'escola3',
+  },
+  {
+    name: 'Escola 4',
+    value: 'escola4',
+  },
+];
 
 const data = {
   id: '9d5b884e-8d72-4f29-8e23-f06ebe2394d0',
@@ -18,9 +76,9 @@ const data = {
   address: 'rua 2, california',
   registration: '01',
   dateOfBirth: '01-01-1990',
-  office: 'Gerente',
-  sector: 'Educação',
-  section: 'Colégio Fátima Rodrigues',
+  office: 'auxiliar',
+  sector: 'educacao',
+  section: 'escola1',
   status: 'Ativa',
 };
 
@@ -152,33 +210,22 @@ function EmployeeData() {
         onChange={(event) => setData_de_nascimento(event.target.value)}
         mini
       />
-      {/* INPUT DO CARGO */}
-      <TextInput
-        name="office"
-        label="Cargo"
-        value={cargo}
-        placeholder="Cargo"
-        onChange={(event) => setCargo(event.target.value)}
-        mini
-      />
-      {/* INPUT DO SETOR */}
-      <TextInput
-        name="sector"
-        label="Setor"
-        value={setor}
-        placeholder="Setor"
-        onChange={(event) => setSetor(event.target.value)}
-        mini
-      />
-      {/* INPUT DO SEÇÃO */}
-      <TextInput
-        name="section"
-        label="Seção"
-        value={seção}
-        placeholder="Seção"
-        onChange={(event) => setSeção(event.target.value)}
-        mini
-      />
+
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'left',
+          gap: '30px',
+          marginLeft: '12px',
+          marginTop: '10px',
+        }}
+      >
+        <SelectCustom options={setores} defautSelected={setor} />
+        <SelectCustom options={cargos} defautSelected={cargo} />
+        <SelectCustom options={seções} defautSelected={seção} />
+      </div>
+
       <S.ContainerButton>
         <S.ButtonStyle
           //   variant="contained"

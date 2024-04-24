@@ -6,6 +6,7 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import { red } from '@material-ui/core/colors';
+import Tooltip from '@material-ui/core/Tooltip';
 // import TableDataGrid from '../../../../components/TableDataGrid';
 // import { DataGrid } from '@mui/x-data-grid';
 
@@ -147,15 +148,36 @@ function TableEmployees() {
             height: '100%',
           }}
         >
-          <VisibilityOutlinedIcon />
-          <CreateOutlinedIcon />
           <div
             style={{
               display: 'flex',
-              color: 'red',
+              color: 'var(--Primary)',
             }}
           >
-            <DeleteOutlinedIcon />
+            <Tooltip title="Ver" placement="top">
+              <VisibilityOutlinedIcon fontSize="medium" />
+            </Tooltip>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              color: 'var(--Success)',
+            }}
+          >
+            <Tooltip title="Editar" placement="top">
+              <CreateOutlinedIcon fontSize="medium" />
+            </Tooltip>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              color: 'var(--Danger)',
+            }}
+          >
+            <Tooltip title="Deletar" placement="top">
+              <DeleteOutlinedIcon fontSize="medium" />
+            </Tooltip>
           </div>
         </div>
       ),
