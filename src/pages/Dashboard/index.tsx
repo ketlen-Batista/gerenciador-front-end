@@ -25,7 +25,7 @@ function Dashboard({ isDark, handleThemeMode }) {
   };
 
   const [open, setOpen] = React.useState(false);
-  const [page, setPage] = React.useState(titlePages.dadosDoFuncionario);
+  const [page, setPage] = React.useState(titlePages.funcionarios);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -62,7 +62,7 @@ function Dashboard({ isDark, handleThemeMode }) {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            GIC
           </Typography>
           Cecília Silva Santos
           <IconButton color="inherit">
