@@ -14,6 +14,7 @@ import DocumentsPage from '../DocumentsPage';
 import Sidebar from '../../components/Sidebar';
 import * as S from './styles';
 import EmployeeData from '../EmployeeData';
+import SettingsPage from '../SettingsPage';
 
 function Dashboard({ isDark, handleThemeMode }) {
   const classes = S.useStyles();
@@ -22,10 +23,11 @@ function Dashboard({ isDark, handleThemeMode }) {
     documentos: 'Documentos',
     funcionarios: 'Funcionários',
     dadosDoFuncionario: 'Dados do Funcionário',
+    configuracoes: 'Configurações',
   };
 
   const [open, setOpen] = React.useState(false);
-  const [page, setPage] = React.useState(titlePages.dadosDoFuncionario);
+  const [page, setPage] = React.useState(titlePages.configuracoes);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -62,7 +64,7 @@ function Dashboard({ isDark, handleThemeMode }) {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            GIC
           </Typography>
           Cecília Silva Santos
           <IconButton color="inherit">
@@ -109,11 +111,14 @@ function Dashboard({ isDark, handleThemeMode }) {
           {/* TELA_DE_FUNCIONÁRIOS */}
           {page === titlePages.funcionarios && <Employees />}
 
+          {/* DADOS_DO_FUNCIONÁRIO */}
+          {page === titlePages.dadosDoFuncionario && <EmployeeData />}
+
           {/* TELA_DOCUMENTOS */}
           {page === titlePages.documentos && <DocumentsPage />}
 
-          {/* DADOS_DO_FUNCIONÁRIO */}
-          {page === titlePages.dadosDoFuncionario && <EmployeeData />}
+          {/* TELA_DE CONFIGURAÇÕES */}
+          {page === titlePages.configuracoes && <SettingsPage />}
         </Container>
       </main>
     </div>
