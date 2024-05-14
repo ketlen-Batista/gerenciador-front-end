@@ -10,13 +10,14 @@ export const useStyles = makeStyles((theme) => ({
 
 export const ButtonAdd = withStyles({
   root: {
+    height: '100%',
     boxShadow: 'none',
     textTransform: 'none',
     fontSize: 16,
     padding: '6px 12px',
     border: '1px solid',
     lineHeight: 1.5,
-    backgroundColor: 'var(--Success)',
+    backgroundColor: 'var(--GreenDark)',
     borderColor: '',
     fontFamily: [
       '-apple-system',
@@ -31,14 +32,14 @@ export const ButtonAdd = withStyles({
       '"Segoe UI Symbol"',
     ].join(','),
     '&:hover': {
-      backgroundColor: 'var(--Primary)',
-      borderColor: 'var(--Secundary)',
+      backgroundColor: 'var(--Success)',
+      borderColor: 'var(--Success)',
       boxShadow: 'none',
     },
     '&:active': {
       boxShadow: 'none',
-      backgroundColor: 'var(--Dark)',
-      borderColor: 'var(--Info)',
+      backgroundColor: 'var(--GreenDark)',
+      borderColor: 'var(--Success)',
     },
     '&:focus': {
       boxShadow: '0 0 0 0.2rem "var(--Success)"',
@@ -46,16 +47,25 @@ export const ButtonAdd = withStyles({
   },
 })(Button);
 
+export const ContainerFilters = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 30px;
+  margin-top: 30px;
+`;
+
 export const ContainerInput = styled.div`
   display: flex;
   flex: 4;
-  height: 100px;
+  height: 45px;
   align-items: center;
+  padding-right: 10px;
 `;
 
 export const ContainerSelects = styled.div`
   display: flex;
-  height: 100px;
+  height: 45px;
   align-items: center;
   justify-content: space-around;
   flex: 4;
@@ -64,7 +74,7 @@ export const ContainerSelects = styled.div`
 export const ContainerButton = styled.div`
   display: flex;
   color: var(--Success);
-  height: 100px;
+  height: 45px;
   align-items: center;
   flex: 4;
   justify-content: right;

@@ -8,6 +8,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import TableDocuments from './components/TableDocuments';
 import * as S from './styles';
+import { Box } from '@material-ui/core';
 
 const recebidos = [
   {
@@ -115,13 +116,7 @@ function DocumentsPage() {
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          marginBottom: '20px',
-        }}
-      >
+      <S.ContainerFilters>
         {' '}
         <S.ContainerInput>
           <TextInput
@@ -150,7 +145,9 @@ function DocumentsPage() {
           />
         </S.ContainerInput>
         <S.ContainerSelects>
-          <SelectCustom options={cargos} defautSelected={'cargo'} />
+          <Box display="flex" width="100px" mr="5px" height="45px">
+            <SelectCustom options={cargos} defautSelected={'cargo'} />
+          </Box>
           <SelectCustom options={setores} defautSelected={'setor'} />
           <SelectCustom options={seção} defautSelected={'seção'} />
           <SelectCustom options={recebidos} defautSelected={'enviados'} />
@@ -162,11 +159,12 @@ function DocumentsPage() {
             disableRipple
             className={classes.button}
             startIcon={<PostAddRoundedIcon />}
+            title="Enviar Documentos"
           >
             Enviar Documentos
           </S.ButtonAdd>{' '}
         </S.ContainerButton>
-      </div>
+      </S.ContainerFilters>
 
       <TableDocuments />
     </>

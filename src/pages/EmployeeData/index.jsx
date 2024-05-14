@@ -9,6 +9,7 @@ import CameraAltOutlinedIcon from '@material-ui/icons/CameraAltOutlined';
 import EqualizerOutlinedIcon from '@material-ui/icons/EqualizerOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import SelectCustom from '../../components/SelectCustom';
+import ImageAvatar from '../../components/ImageAvatar';
 
 const setores = [
   {
@@ -102,7 +103,8 @@ function EmployeeData() {
       {/* container header */}
       <S.ContainerHeader>
         {/* IMAGEM DO FUNCIONÁRIO */}
-        <S.Image src={avatar} />
+        <ImageAvatar imageAvatar={avatar} />
+        {/* <S.Image src={avatar} /> */}
 
         {/* container icons */}
         <S.ContainerIcons>
@@ -217,8 +219,10 @@ function EmployeeData() {
           flexDirection: 'row',
           justifyContent: 'left',
           gap: '30px',
-          marginLeft: '12px',
+          // marginLeft: '12px',
           marginTop: '10px',
+          width: '100%',
+          height: '50px',
         }}
       >
         <SelectCustom options={setores} defautSelected={setor} />
