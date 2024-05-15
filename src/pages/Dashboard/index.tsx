@@ -14,7 +14,7 @@ import DocumentsPage from '../DocumentsPage';
 import Sidebar from '../../components/Sidebar';
 import * as S from './styles';
 import EmployeeData from '../EmployeeData';
-import Settings from './ settings';
+import SettingsPage from '../SettingsPage';
 
 function Dashboard({ isDark, handleThemeMode }) {
   const classes = S.useStyles();
@@ -118,7 +118,7 @@ function Dashboard({ isDark, handleThemeMode }) {
           {page === titlePages.dadosDoFuncionario && <EmployeeData />}
 
           {/* TELA_DE_FUNCIONÁRIOS */}
-          {page === titlePages.configuraçoes && <Settings />}
+          {page === titlePages.configuraçoes && <SettingsPage />}
 
         </Container>
       </main>
