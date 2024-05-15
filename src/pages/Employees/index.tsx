@@ -1,12 +1,17 @@
 //PÁGINA FUNCIONARIOS
 import React, { useState } from 'react';
-import TextInput from '../../components/TextInput';
-import SelectCustom from '../../components/SelectCustom';
-import SearchIcon from '@material-ui/icons/Search';
+
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import PersonAddTwoToneIcon from '@material-ui/icons/PersonAddTwoTone';
-import TableEmployees from './components/TableEmployees';
+import SearchIcon from '@material-ui/icons/Search';
+import DefaultPage from '@templates/DefaultPage';
+
+import SelectCustom from '@components/SelectCustom';
+import TextInput from '@components/TextInput';
+
+import TableEmployees from './TableEmployees';
+
 import * as S from './styles';
 
 const setores = [
@@ -76,7 +81,7 @@ function Employees() {
   };
 
   return (
-    <>
+    <DefaultPage pageTitle="Funcionários">
       <div
         style={{
           display: 'flex',
@@ -131,7 +136,7 @@ function Employees() {
 
       {/* TABELA */}
       <TableEmployees />
-    </>
+    </DefaultPage>
   );
 }
 

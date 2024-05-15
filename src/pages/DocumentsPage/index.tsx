@@ -1,12 +1,18 @@
 //PÁGINA FUNCIONARIOS
 import React, { useState } from 'react';
-import TextInput from '../../components//TextInput';
-import SelectCustom from '../../components/SelectCustom';
-import SearchIcon from '@material-ui/icons/Search';
+
+import { Box } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
-import TableDocuments from './components/TableDocuments';
+import SearchIcon from '@material-ui/icons/Search';
+import DefaultPage from '@templates/DefaultPage';
+
+import TextInput from '../../components//TextInput';
+import SelectCustom from '../../components/SelectCustom';
+
+import TableDocuments from './TableDocuments';
+
 import * as S from './styles';
 
 const recebidos = [
@@ -108,20 +114,14 @@ function DocumentsPage() {
   const classes = S.useStyles();
   const [search, setSearch] = useState('');
 
-  const handleChangeFilter = (event) => {
+  const handleChangeFilter = (event: any) => {
     const { value, name } = event.target;
     setSearch(value);
   };
 
   return (
-    <>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          marginBottom: '20px',
-        }}
-      >
+    <DefaultPage pageTitle="Documentos">
+      <S.ContainerFilters>
         {' '}
         <S.ContainerInput>
           <TextInput
@@ -129,7 +129,7 @@ function DocumentsPage() {
             label="Buscar"
             value={search}
             placeholder="Buscar"
-            onChange={(e) =>
+            onChange={(e: any) =>
               handleChangeFilter({
                 target: { name: 'search', value: e.target.value },
               })
@@ -150,7 +150,9 @@ function DocumentsPage() {
           />
         </S.ContainerInput>
         <S.ContainerSelects>
-          <SelectCustom options={cargos} defautSelected={'cargo'} />
+          <Box display="flex" width="100px" mr="5px" height="45px">
+            <SelectCustom options={cargos} defautSelected={'cargo'} />
+          </Box>
           <SelectCustom options={setores} defautSelected={'setor'} />
           <SelectCustom options={seção} defautSelected={'seção'} />
           <SelectCustom options={recebidos} defautSelected={'enviados'} />
@@ -162,14 +164,15 @@ function DocumentsPage() {
             disableRipple
             className={classes.button}
             startIcon={<PostAddRoundedIcon />}
+            title="Enviar Documentos"
           >
             Enviar Documentos
           </S.ButtonAdd>{' '}
         </S.ContainerButton>
-      </div>
+      </S.ContainerFilters>
 
       <TableDocuments />
-    </>
+    </DefaultPage>
   );
 }
 

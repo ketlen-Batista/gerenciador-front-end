@@ -1,14 +1,11 @@
-import React from 'react';
-import TableDataGrid from '/src/components/TableDataGrid';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
-import CloseIcon from '@material-ui/icons/Close';
-import { red } from '@material-ui/core/colors';
-import Tooltip from '@material-ui/core/Tooltip';
-// import TableDataGrid from '../../../../components/TableDataGrid';
-// import { DataGrid } from '@mui/x-data-grid';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+
+import TableDataGrid from '@components/TableDataGrid';
 
 function TableEmployees() {
   const rows = [
@@ -126,7 +123,7 @@ function TableEmployees() {
             color: 'green',
           }}
         >
-          <DoneOutlineIcon color="inherit" />
+          <CheckIcon color="inherit" />
         </div>
       ),
     },
@@ -144,7 +141,7 @@ function TableEmployees() {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'space-around',
             height: '100%',
           }}
         >
@@ -161,7 +158,7 @@ function TableEmployees() {
           <div
             style={{
               display: 'flex',
-              color: 'var(--Success)',
+              color: 'var(--GrayDark200)',
             }}
           >
             <Tooltip title="Editar" placement="top">
@@ -184,11 +181,7 @@ function TableEmployees() {
     },
   ];
 
-  return (
-    <>
-      <TableDataGrid columns={columns} rows={rows} />
-    </>
-  );
+  return <TableDataGrid columns={columns} rows={rows} />;
 }
 
 export default TableEmployees;
