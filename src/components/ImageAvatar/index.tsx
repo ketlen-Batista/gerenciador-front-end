@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+
 import * as S from './styles';
 
 type Props = {

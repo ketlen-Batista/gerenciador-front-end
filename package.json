@@ -13,9 +13,12 @@
     "extends": "react-app"
   },
   "lint-staged": {
-    "src/*/.{js,jsx,json}": [
-      "eslint --ext=js,jsx,ts,tsx --fix --color",
-      "prettier --config .prettierrc --write"
+    "*.{js,ts,tsx,json,css,html}": [
+      "prettier --write",
+      "npm run lint:fix"
+    ],
+    "*.md": [
+      "prettier --write"
     ]
   },
   "dependencies": {
@@ -25,12 +28,17 @@
     "@material-ui/icons": "^4.11.3",
     "@mui/material": "^5.15.15",
     "@mui/x-data-grid": "^7.1.1",
+    "@vitejs/plugin-react-swc": "^3.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
-    "styled-components": "^6.1.8"
+    "react-router-dom": "^6.23.1",
+    "styled-components": "^6.1.8",
+    "vite-plugin-svgr": "^4.2.0",
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
@@ -39,6 +47,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "jest": "^29.7.0",
     "prettier": "3.2.5",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"

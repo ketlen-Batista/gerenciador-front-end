@@ -1,10 +1,11 @@
-import clsx from 'clsx';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { ListItems } from '../Sidebar/ListItems';
+import clsx from 'clsx';
+
+import { ListItems } from './ListItems';
 
 const Sidebar = ({ classes, open, handleDrawerClose }) => {
   return (
@@ -21,7 +22,9 @@ const Sidebar = ({ classes, open, handleDrawerClose }) => {
         </IconButton>
       </div>
       <Divider />
-      <List>{ListItems}</List>
+      <List>
+        <ListItems />
+      </List>
       <Divider />
     </Drawer>
   );

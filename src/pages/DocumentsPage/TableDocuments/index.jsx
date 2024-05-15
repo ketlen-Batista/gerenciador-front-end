@@ -1,11 +1,11 @@
-import React from 'react';
-import TableDataGrid from '/src/components/TableDataGrid';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-import Tooltip from '@material-ui/core/Tooltip';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+
+import TableDataGrid from '@components/TableDataGrid';
 
 function TableEmployees() {
   const rows = [

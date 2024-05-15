@@ -1,3 +1,23 @@
+// {
+//   "root": true,
+//   "env": { "browser": true, "es2020": true },
+//   "plugins": ["react-refresh"],
+//   "parser": "@typescript-eslint/parser",
+//   "ignorePatterns": ["dist", ".eslintrc.json", "index.html", "public"],
+//   "rules": {
+//     "react-hooks/exhaustive-deps": "off",
+//     "react-refresh/only-export-components": [
+//       "warn",
+//       { "allowConstantExport": true }
+//     ]
+//   },
+//   "extends": [
+//     "eslint:recommended",
+//     "plugin:@typescript-eslint/recommended",
+//     "plugin:react-hooks/recommended"
+//   ]
+// }
+
 module.exports = {
   env: {
     browser: true,

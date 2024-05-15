@@ -1,6 +1,4 @@
 import React from 'react';
-// import { DataGrid, DataGridProps } from '@material-ui/data-grid';
-// import { makeStyles } from '@material-ui/core/styles';
 
 import { Box, makeStyles } from '@material-ui/core';
 import { DataGrid, DataGridProps } from '@mui/x-data-grid';
@@ -83,19 +81,4 @@ export default function TableDataGrid({
       />
     </Box>
   );
-}
-
-{
-  /* <DataGrid
-  // className={classes.root}
-  rows={rows}
-  columns={columns}
-  // pageSizeOptions={pageSize || 10}
-  // autoHeight
-  // disableColumnMenu
-  // disableSelectionOnClick
-  // hideFooterPagination={hidePagination || false}
-  // hideFooter={hidePagination || false}
-  // {...rest}
-/> */
 }
