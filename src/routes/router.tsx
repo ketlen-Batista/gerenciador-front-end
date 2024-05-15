@@ -5,6 +5,7 @@ import EmployeeData from '@pages/EmployeeData';
 import Employees from '@pages/Employees';
 import HomePage from '@src/pages/HomePage';
 import ReportsPage from '@src/pages/ReportsPage';
+import SettingsPage from '@src/pages/SettingsPage';
 import ErrorPage from '@templates/ErrorPage';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
   {
     path: AvailableRoutes.reportsPage,
     element: <ReportsPage />,
+  },
+
+  {
+    path: AvailableRoutes.settingsPage,
+    element: <SettingsPage />,
   },
 
   //404 page

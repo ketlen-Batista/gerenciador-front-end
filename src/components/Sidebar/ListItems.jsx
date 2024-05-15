@@ -52,7 +52,7 @@ export const ListItems = () => {
       </ListItem>
       <ListItem
         button
-        onClick={() => handleNavigate(AvailableRoutes.documentsPage)}
+        onClick={() => handleNavigate(AvailableRoutes.settingsPage)}
       >
         <ListItemIcon>
           <SettingsIcon />
