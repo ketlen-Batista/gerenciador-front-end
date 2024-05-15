@@ -1,14 +1,19 @@
 //PÁGINA FUNCIONARIOS
 import React, { useState } from 'react';
-import TextInput from '../../components//TextInput';
-import SelectCustom from '../../components/SelectCustom';
-import SearchIcon from '@material-ui/icons/Search';
+
+import { Box } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
-import TableDocuments from './components/TableDocuments';
+import SearchIcon from '@material-ui/icons/Search';
+import DefaultPage from '@templates/DefaultPage';
+
+import TextInput from '../../components//TextInput';
+import SelectCustom from '../../components/SelectCustom';
+
+import TableDocuments from './TableDocuments';
+
 import * as S from './styles';
-import { Box } from '@material-ui/core';
 
 const recebidos = [
   {
@@ -109,13 +114,13 @@ function DocumentsPage() {
   const classes = S.useStyles();
   const [search, setSearch] = useState('');
 
-  const handleChangeFilter = (event) => {
+  const handleChangeFilter = (event: any) => {
     const { value, name } = event.target;
     setSearch(value);
   };
 
   return (
-    <>
+    <DefaultPage pageTitle="Documentos">
       <S.ContainerFilters>
         {' '}
         <S.ContainerInput>
@@ -124,7 +129,7 @@ function DocumentsPage() {
             label="Buscar"
             value={search}
             placeholder="Buscar"
-            onChange={(e) =>
+            onChange={(e: any) =>
               handleChangeFilter({
                 target: { name: 'search', value: e.target.value },
               })
@@ -167,7 +172,7 @@ function DocumentsPage() {
       </S.ContainerFilters>
 
       <TableDocuments />
-    </>
+    </DefaultPage>
   );
 }
 

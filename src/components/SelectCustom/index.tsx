@@ -1,6 +1,7 @@
 import React from 'react';
+
 import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+
 import * as S from './styles';
 
 const SelectCustom = ({ options, defautSelected }) => {

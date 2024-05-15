@@ -1,0 +1,39 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "jsdom",
+  "roots": ["<rootDir>"],
+  "moduleDirectories": ["node_modules", "src"],
+  "transform": {
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        "tsConfig": "tsconfig.json"
+      }
+    ]
+  },
+  "transformIgnorePatterns": ["<rootDir>/node_modules/"],
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+  "modulePathIgnorePatterns": ["<rootDir>/node_modules/"],
+  "collectCoverageFrom": ["<rootDir>/src/**/*.ts"],
+  "verbose": false,
+  "silent": false,
+  "clearMocks": true,
+  "collectCoverage": false,
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["json", "html"],
+  "moduleNameMapper": {
+    "@assets/(.*)": "<rootDir>/src/assets/$1",
+    "@components/(.*)": "<rootDir>/src/components/$1",
+    "@config/(.*)": "<rootDir>/src/config/$1",
+    "@contexts/(.*)": "<rootDir>/src/contexts/$1",
+    "@hooks/(.*)": "<rootDir>/src/hooks/$1",
+    "@interfaces/(.*)": "<rootDir>/src/interfaces/$1",
+    "@modules/(.*)": "<rootDir>/src/modules/$1",
+    "@routes/(.*)": "<rootDir>/src/routes/$1",
+    "@services/(.*)": "<rootDir>/src/services/$1",
+    "@styles/(.*)": "<rootDir>/src/styles/$1",
+    "@tests/(.*)": "<rootDir>/src/tests/$1",
+    "@utils/(.*)": "<rootDir>/src/utils/$1",
+    "\\.svg": "<rootDir>/src/tests/svgrMock.ts"
+  }
+}

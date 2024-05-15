@@ -1,21 +1,30 @@
-import React from 'react';
-import clsx from 'clsx';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React, { ReactNode, useState } from 'react';
+
+import { Switch } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import { Switch } from '@material-ui/core';
-import Container from '@material-ui/core/Container';
 import MenuIcon from '@material-ui/icons/Menu';
 import PersonOutlineTwoToneIcon from '@material-ui/icons/PersonOutlineTwoTone';
-import Employees from '../Employees';
-import DocumentsPage from '../DocumentsPage';
-import Sidebar from '../../components/Sidebar';
-import * as S from './styles';
-import EmployeeData from '../EmployeeData';
+import clsx from 'clsx';
 
-function Dashboard({ isDark, handleThemeMode }) {
+import Sidebar from '@components/Sidebar';
+
+import ErrorPage from '../ErrorPage';
+
+import './global.css';
+
+import * as S from './styles';
+
+type Props = {
+  children?: ReactNode;
+  pageTitle: string;
+};
+
+function DefaultPage({ children, pageTitle }: Props) {
   const classes = S.useStyles();
 
   const titlePages = {
@@ -24,23 +33,27 @@ function Dashboard({ isDark, handleThemeMode }) {
     dadosDoFuncionario: 'Dados do Funcionário',
   };
 
-  const [open, setOpen] = React.useState(false);
-  const [page, setPage] = React.useState(titlePages.documentos);
+  const [openSideBar, setOpenSideBar] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  const handleThemeMode = () => {
+    setIsDark(!isDark);
+  };
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setOpenSideBar(true);
   };
   const handleDrawerClose = () => {
-    setOpen(false);
+    setOpenSideBar(false);
   };
 
   return (
-    <div className={classes.root}>
+    <div theme-mode={isDark ? 'dark' : 'ligth'} className={classes.root}>
       {/* CABEÇALHO_SUPERIOR */}
       <CssBaseline />
       <AppBar
         position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
+        className={clsx(classes.appBar, openSideBar && classes.appBarShift)}
       >
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -50,7 +63,7 @@ function Dashboard({ isDark, handleThemeMode }) {
             onClick={handleDrawerOpen}
             className={clsx(
               classes.menuButton,
-              open && classes.menuButtonHidden
+              openSideBar && classes.menuButtonHidden,
             )}
           >
             <MenuIcon />
@@ -62,7 +75,7 @@ function Dashboard({ isDark, handleThemeMode }) {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            GIC
           </Typography>
           Cecília Silva Santos
           <IconButton color="inherit">
@@ -73,7 +86,7 @@ function Dashboard({ isDark, handleThemeMode }) {
       {/* SIDEBAR_LATERAL */}
       <Sidebar
         handleDrawerClose={handleDrawerClose}
-        open={open}
+        open={openSideBar}
         classes={classes}
       />
       {/* TELAS */}
@@ -94,11 +107,10 @@ function Dashboard({ isDark, handleThemeMode }) {
                 color: 'var(--ColorFont)',
               }}
             >
-              <h1>{page}</h1>
+              <h1>{pageTitle}</h1>
             </div>
             <div style={{ display: 'flex', flex: 2, justifyContent: 'end' }}>
               <Switch
-                // label={`${isDark} ? 'Dark Mode' : 'Ligth Mode'`}
                 checked={isDark}
                 onChange={handleThemeMode}
                 color="default"
@@ -106,18 +118,12 @@ function Dashboard({ isDark, handleThemeMode }) {
             </div>
           </div>
 
-          {/* TELA_DE_FUNCIONÁRIOS */}
-          {page === titlePages.funcionarios && <Employees />}
-
-          {/* TELA_DOCUMENTOS */}
-          {page === titlePages.documentos && <DocumentsPage />}
-
-          {/* DADOS_DO_FUNCIONÁRIO */}
-          {page === titlePages.dadosDoFuncionario && <EmployeeData />}
+          {/* TELAS */}
+          {children ?? <ErrorPage />}
         </Container>
       </main>
     </div>
   );
 }
 
-export default Dashboard;
+export default DefaultPage;
