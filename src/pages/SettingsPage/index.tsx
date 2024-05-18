@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Grid } from '@material-ui/core';
 import DefaultPage from '@templates/DefaultPage';
 
 import TableSettings from './TableSettings';
@@ -22,7 +23,18 @@ const SettingsPage = () => {
             <S.ButtonClick>TJ_SP</S.ButtonClick>
           </S.ContainerButtons>
         </S.Container>
-        <TableSettings />
+        <Grid container>
+          <Grid item xs={8}>
+            <TableSettings />
+          </Grid>
+          <Grid item xs={4}>
+            {' '}
+            <S.ContainerButtonsAdd>
+              <S.ButtonClick>+Adicionar Setor</S.ButtonClick>
+              <S.ButtonClick>+Adicionar Seção</S.ButtonClick>
+            </S.ContainerButtonsAdd>
+          </Grid>
+        </Grid>
       </div>
     </DefaultPage>
   );
