@@ -27,13 +27,6 @@ type Props = {
 function DefaultPage({ children, pageTitle }: Props) {
   const classes = S.useStyles();
 
-  const titlePages = {
-    documentos: 'Documentos',
-    funcionarios: 'Funcionários',
-    dadosDoFuncionario: 'Dados do Funcionário',
-    configuracoes: 'Configurações',
-  };
-
   const [openSideBar, setOpenSideBar] = useState(false);
   const [isDark, setIsDark] = useState(false);
 

@@ -18,15 +18,15 @@ export const SubTitle = styled.div`
 
 export const ButtonClick = styled(Button)`
   display: flex;
-  /* font-size: 35px; */
   background: var(--Dark) !important;
-  width: 90px;
+  width: auto;
   height: 50px;
   border-radius: 250px !important;
   color: #fff;
   cursor: pointer !important;
   margin-bottom: 20px;
   margin-left: 10px;
+  padding: 0px 20px !important;
 `;
 
 export const ContainerTitles = styled.div`
@@ -41,4 +41,13 @@ export const ContainerButtons = styled.div`
 export const Container = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+export const ContainerButtonsAdd = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0px 50px;
 `;
