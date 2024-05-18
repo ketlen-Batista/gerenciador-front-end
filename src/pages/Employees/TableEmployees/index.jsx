@@ -1,12 +1,25 @@
 import React from 'react';
-import TableDataGrid from '/src/components/TableDataGrid';
+
+import { Badge } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 // import TableDataGrid from '../../../../components/TableDataGrid';
 // import { DataGrid } from '@mui/x-data-grid';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import Tooltip from '@material-ui/core/Tooltip';
+import { AvailableRoutes } from '@src/routes/availableRoutes';
+import { useNavigate } from 'react-router-dom';
+
+import TableDataGrid from '/src/components/TableDataGrid';
+
 function TableEmployees() {
+  const navigate = useNavigate();
+
+  const handleNavigate = (page) => {
+    navigate(page || '');
+  };
+
   const rows = [
     {
       id: '9d5b884e-8d72-4f29-8e23-f06ebe2394d0',
@@ -96,48 +109,55 @@ function TableEmployees() {
       flex: 3,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
-
       renderCell: () => (
         <div
           style={{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-bectween',
+            justifyContent: 'space-around',
             height: '100%',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              color: 'var(--Primary)',
-            }}
-          >
-            <Tooltip title="Ver" placement="top">
-              <VisibilityOutlinedIcon fontSize="medium" />
-            </Tooltip>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              color: 'var(--Success)',
-            }}
-          >
-            <Tooltip title="Editar" placement="top">
-              <CreateOutlinedIcon fontSize="medium" />
-            </Tooltip>
-          </div>
+          <Tooltip title="Ver" placement="top">
+            <IconButton
+              onClick={() => handleNavigate(AvailableRoutes.employeesDataPage)}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  color: 'var(--Primary)',
+                }}
+              >
+                <VisibilityOutlinedIcon fontSize="medium" />
+              </div>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Editar" placement="top">
+            <IconButton>
+              <div
+                style={{
+                  display: 'flex',
+                  color: 'var(--GrayDark200)',
+                }}
+              >
+                <CreateOutlinedIcon fontSize="medium" />
+              </div>
+            </IconButton>
+          </Tooltip>
 
-          <div
-            style={{
-              display: 'flex',
-              color: 'var(--Danger)',
-            }}
-          >
-            <Tooltip title="Deletar" placement="top">
-              <DeleteOutlinedIcon fontSize="medium" />
-            </Tooltip>
-          </div>
+          <Tooltip title="Deletar" placement="top">
+            <IconButton>
+              <div
+                style={{
+                  display: 'flex',
+                  color: 'var(--Danger)',
+                }}
+              >
+                <DeleteOutlinedIcon fontSize="medium" />
+              </div>
+            </IconButton>
+          </Tooltip>
         </div>
       ),
     },

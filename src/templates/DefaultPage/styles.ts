@@ -2,7 +2,9 @@ import {
   // ThemeProvider,
   // createTheme,
   makeStyles,
-} from '@material-ui/core/styles'; // Also import ThemeProvider and createMuiTheme from @material-ui/core/styles
+} from '@material-ui/core/styles';
+
+// Also import ThemeProvider and createMuiTheme from @material-ui/core/styles
 
 // const theme = createTheme();
 

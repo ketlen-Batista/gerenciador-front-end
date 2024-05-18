@@ -7,14 +7,14 @@ const useStyles = makeStyles({
   root: {
     // border: 0,
     '& .table-header': {
-      fontWeight: 'bold',
-      color: 'var(--GrayDark100)',
+      fontWeight: 'bold !important',
+      color: 'var(--ColorFont) !important',
       background: 'var(--Light) !important',
     },
     '& .table-body': {
-      color: 'var(--GrayDark200)',
-      background: 'var(--Light)',
-      borderBottom: '1px solid var(--Secundary)',
+      color: 'var(--Dark) !important',
+      background: 'var(--Light) !important',
+      borderBottom: '1px solid var(--Secundary) !important',
     },
     '& .MuiDataGrid-withBorderColor': {
       color: 'var(--GrayDark200)',
@@ -76,7 +76,6 @@ export default function TableDataGrid({
         pageSizeOptions={[5]}
         // checkboxSelection
         disableRowSelectionOnClick
-        // className={classes}
         classes={classes}
       />
     </Box>

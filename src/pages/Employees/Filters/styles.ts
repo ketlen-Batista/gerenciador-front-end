@@ -53,10 +53,6 @@ export const FieldBox = styled('div')`
   }
 `;
 
-export const DateFilterContainer = styled('div')`
-  width: 260px;
-`;
-
 export const ContainerFilters = styled.div`
   display: flex;
   flex-direction: row;

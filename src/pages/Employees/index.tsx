@@ -10,6 +10,7 @@ import DefaultPage from '@templates/DefaultPage';
 import SelectCustom from '@components/SelectCustom';
 import TextInput from '@components/TextInput';
 
+import Filters from './Filters';
 import TableEmployees from './TableEmployees';
 
 import * as S from './styles';
@@ -82,7 +83,7 @@ function Employees() {
 
   return (
     <DefaultPage pageTitle="Funcionários">
-      <div
+      {/* <div
         style={{
           display: 'flex',
           flexDirection: 'row',
@@ -132,7 +133,9 @@ function Employees() {
             Adicionar Funcionário
           </S.ButtonAdd>{' '}
         </S.ContainerButton>
-      </div>
+      </div> */}
+
+      <Filters />
 
       {/* TABELA */}
       <TableEmployees />

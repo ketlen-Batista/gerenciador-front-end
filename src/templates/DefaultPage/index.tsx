@@ -93,7 +93,7 @@ function DefaultPage({ children, pageTitle }: Props) {
       {/* TELAS */}
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="xl" className={classes.container}>
           <div
             style={{
               display: 'flex',
