@@ -1,6 +1,12 @@
-import styled from 'styled-components';
-import { withStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
+
+export const FieldBox = styled('div')`
+  > div {
+    width: 100%;
+  }
+`;
 
 export const ContainerHeader = styled.div`
   display: flex;
@@ -42,7 +48,7 @@ export const ContainerButton = styled.div`
   background-color: var(--Success);
   margin-right: 56px;
   margin-left: auto;
-  margin-top: 16px;
+  margin-top: 50px;
 `;
 
 export const ButtonStyle = withStyles({

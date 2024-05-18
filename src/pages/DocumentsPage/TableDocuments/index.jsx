@@ -1,3 +1,4 @@
+import { IconButton } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
@@ -13,10 +14,10 @@ function TableEmployees() {
       id: '9d5b884e-8d72-4f29-8e23-f06ebe2394d0',
       documentName: 'documento1.pdf',
       sentIn: '21/04/2024-11-20',
-      sender: 'RG-GIC',
+      sender: 'GIC',
       recipient: 'Fulana da Silva',
-      received: '',
-      visa: '',
+      received: true,
+      visa: true,
       actions: '',
       office: 'Gerente',
       sector: 'Educação',
@@ -24,31 +25,31 @@ function TableEmployees() {
       status: 'Ativa',
     },
     {
-      id: 'aad0daa8-c985-4695-bd41-3100ab28002f',
-      name: 'Solange',
-      email: 'solange@gmail.com',
-      phone: '(61)991112254',
-      cpf: '00058205444',
-      andress: 'rua 3, california',
-      registration: '02',
-      dateOfBirth: '02-01-1990',
-      office: 'Diretor',
-      sector: 'Saúde',
-      section: 'Colégio Fátima',
-      status: 'licença a maternidade',
+      id: '9d5b884e-8d72-4f29-8e23-f06ebe2394h5',
+      documentName: 'documento2.pdf',
+      sentIn: '21/04/2024-11-20',
+      sender: 'GIC',
+      recipient: 'Ciclano da Silva',
+      received: true,
+      visa: true,
+      actions: '',
+      office: 'Gerente',
+      sector: 'Educação',
+      section: 'Colégio Fátima Rodrigues',
+      status: 'Ativa',
     },
     {
-      id: 'a13fa6e6-1e0b-4801-b233-db3726a00eb5',
-      name: 'Josefa',
-      email: 'josefa@gmail.com',
-      phone: '(61)991112254',
-      cpf: '00058205441',
-      andress: 'rua 5, california',
-      registration: '03',
-      dateOfBirth: '07-01-1980',
-      office: 'Auxiliar de serviços Gerais',
-      sector: 'TJ',
-      section: 'Colégio Fátima',
+      id: '9d5b884e-8d72-4f29-8e23-f06ebe2394f4',
+      documentName: 'documento3.pdf',
+      sentIn: '21/04/2024-11-20',
+      sender: 'GIC',
+      recipient: 'Fulana de Sousa',
+      received: true,
+      visa: false,
+      actions: '',
+      office: 'Gerente',
+      sector: 'Educação',
+      section: 'Colégio Fátima Rodrigues',
       status: 'Ativa',
     },
   ];
@@ -89,20 +90,34 @@ function TableEmployees() {
       flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
-      renderCell: () => (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            color: 'red',
-          }}
-        >
-          <CloseIcon color="inherit" />
-        </div>
-      ),
+      renderCell: (params) =>
+        params?.value ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              height: '100%',
+              color: 'green',
+              marginLeft: '15px',
+            }}
+          >
+            <CheckIcon color="inherit" />
+          </div>
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              height: '100%',
+              color: 'red',
+              marginLeft: '15px',
+            }}
+          >
+            <CloseIcon color="inherit" />
+          </div>
+        ),
     },
 
     {
@@ -111,21 +126,34 @@ function TableEmployees() {
       flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
-
-      renderCell: () => (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            color: 'green',
-          }}
-        >
-          <CheckIcon color="inherit" />
-        </div>
-      ),
+      renderCell: (params) =>
+        params?.value ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              height: '100%',
+              color: 'green',
+              marginLeft: '5px',
+            }}
+          >
+            <CheckIcon color="inherit" />
+          </div>
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              height: '100%',
+              color: 'red',
+              marginLeft: '5px',
+            }}
+          >
+            <CloseIcon color="inherit" />
+          </div>
+        ),
     },
 
     {
@@ -134,7 +162,6 @@ function TableEmployees() {
       flex: 3,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
-
       renderCell: () => (
         <div
           style={{
@@ -145,37 +172,43 @@ function TableEmployees() {
             height: '100%',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              color: 'var(--Primary)',
-            }}
-          >
-            <Tooltip title="Ver" placement="top">
-              <VisibilityOutlinedIcon fontSize="medium" />
-            </Tooltip>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              color: 'var(--GrayDark200)',
-            }}
-          >
-            <Tooltip title="Editar" placement="top">
-              <CreateOutlinedIcon fontSize="medium" />
-            </Tooltip>
-          </div>
+          <Tooltip title="Ver" placement="top">
+            <IconButton>
+              <div
+                style={{
+                  display: 'flex',
+                  color: 'var(--Primary)',
+                }}
+              >
+                <VisibilityOutlinedIcon fontSize="medium" />
+              </div>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Editar" placement="top">
+            <IconButton>
+              <div
+                style={{
+                  display: 'flex',
+                  color: 'var(--GrayDark200)',
+                }}
+              >
+                <CreateOutlinedIcon fontSize="medium" />
+              </div>
+            </IconButton>
+          </Tooltip>
 
-          <div
-            style={{
-              display: 'flex',
-              color: 'var(--Danger)',
-            }}
-          >
-            <Tooltip title="Deletar" placement="top">
-              <DeleteOutlinedIcon fontSize="medium" />
-            </Tooltip>
-          </div>
+          <Tooltip title="Deletar" placement="top">
+            <IconButton>
+              <div
+                style={{
+                  display: 'flex',
+                  color: 'var(--Danger)',
+                }}
+              >
+                <DeleteOutlinedIcon fontSize="medium" />
+              </div>
+            </IconButton>
+          </Tooltip>
         </div>
       ),
     },
