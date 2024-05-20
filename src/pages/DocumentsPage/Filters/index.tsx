@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 
 import { Grid, IconButton, InputAdornment } from '@material-ui/core';
-import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import SearchIcon from '@material-ui/icons/Search';
 import { cargos, recebidos, setores, seções } from '@src/utils/constants';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
@@ -20,8 +19,6 @@ const OptionEmpty = {
 };
 
 export const Filters = () => {
-  const classes = S.useStyles();
-
   const ref = useRef<DateFilterHandles>(null);
 
   const [search, setSearch] = useState('');
@@ -138,18 +135,6 @@ export const Filters = () => {
           </Grid>
         </Grid>
       </S.ContainerSelects>
-      <S.ContainerButton>
-        <S.ButtonAdd
-          variant="contained"
-          color="primary"
-          disableRipple
-          className={classes.button}
-          startIcon={<PostAddRoundedIcon />}
-          title="Enviar Documentos"
-        >
-          Enviar Documentos
-        </S.ButtonAdd>{' '}
-      </S.ContainerButton>
       <S.DateFilterContainer>
         <DateFilter
           ref={ref}

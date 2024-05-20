@@ -1,41 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Grid } from '@material-ui/core';
 import DefaultPage from '@templates/DefaultPage';
 
-import TableSettings from './TableSettings';
+import Tabs, { Tab } from '@src/components/Tabs';
 
-import * as S from './styles';
+import OfficesSettings from './OfficesSettings';
+import SectorSettings from './SectorSettings';
 
 const SettingsPage = () => {
+  const [currentTabId, setCurrentTabId] = useState<string>('sectors');
+
+  const tabs: Tab[] = [
+    {
+      id: 'sectors',
+      label: 'Setores',
+      content: <SectorSettings />,
+    },
+    {
+      id: 'offices',
+      label: 'Cargos',
+      content: <OfficesSettings />,
+    },
+  ];
+
   return (
     <DefaultPage pageTitle="Configurações">
-      <div>
-        <S.Container>
-          <S.ContainerTitles>
-            <S.Title>Setores e Seções</S.Title>
-            <S.SubTitle>Lista de seções</S.SubTitle>
-          </S.ContainerTitles>
-          <S.ContainerButtons>
-            <S.ButtonClick>Todos</S.ButtonClick>
-            <S.ButtonClick>Saúde</S.ButtonClick>
-            <S.ButtonClick>Educação</S.ButtonClick>
-            <S.ButtonClick>TJ_SP</S.ButtonClick>
-          </S.ContainerButtons>
-        </S.Container>
-        <Grid container>
-          <Grid item xs={8}>
-            <TableSettings />
-          </Grid>
-          <Grid item xs={4}>
-            {' '}
-            <S.ContainerButtonsAdd>
-              <S.ButtonClick>+Adicionar Setor</S.ButtonClick>
-              <S.ButtonClick>+Adicionar Seção</S.ButtonClick>
-            </S.ContainerButtonsAdd>
-          </Grid>
-        </Grid>
-      </div>
+      <Tabs
+        tabs={tabs}
+        currentTab={currentTabId}
+        onChangeTab={() => {
+          setCurrentTabId('');
+        }}
+      />
     </DefaultPage>
   );
 };

@@ -14,10 +14,6 @@ export const recebidos = [
 ];
 export const setores = [
   {
-    name: 'Setor',
-    value: 'setor',
-  },
-  {
     name: 'Todos',
     value: 'todos',
   },
@@ -36,10 +32,6 @@ export const setores = [
 ];
 
 export const cargos = [
-  {
-    name: 'Cargo',
-    value: 'cargo',
-  },
   {
     name: 'Todos',
     value: 'todos',
@@ -63,10 +55,6 @@ export const cargos = [
 ];
 
 export const seções = [
-  {
-    name: 'Seção',
-    value: 'seção',
-  },
   {
     name: 'Todos',
     value: 'todos',
