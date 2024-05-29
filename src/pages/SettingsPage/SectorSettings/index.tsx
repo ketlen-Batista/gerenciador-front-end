@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { Grid } from '@material-ui/core';
+import { basicNames } from '@src/utils/constants';
 
-import TableSettings from '../TableSettings';
+import Table from './Table';
 
 import * as S from '../styles';
 
@@ -11,8 +12,8 @@ const SectorSettings = () => {
     <div>
       <S.Container>
         <S.ContainerTitles>
-          <S.Title>Setores e Seções</S.Title>
-          <S.SubTitle>Lista de seções</S.SubTitle>
+          <S.Title>{`${basicNames.sector.plural} e ${basicNames.section.plural}`}</S.Title>
+          {/* <S.SubTitle>Lista de seções</S.SubTitle> */}
         </S.ContainerTitles>
         <S.ContainerButtons>
           <S.ButtonClick>Todos</S.ButtonClick>
@@ -23,13 +24,13 @@ const SectorSettings = () => {
       </S.Container>
       <Grid container>
         <Grid item xs={8}>
-          <TableSettings />
+          <Table />
         </Grid>
         <Grid item xs={4}>
           {' '}
           <S.ContainerButtonsAdd>
-            <S.ButtonClick>+Adicionar Setor</S.ButtonClick>
-            <S.ButtonClick>+Adicionar Seção</S.ButtonClick>
+            <S.ButtonClick>{`+Adicionar ${basicNames.sector.singular}`}</S.ButtonClick>
+            <S.ButtonClick>{`+Adicionar ${basicNames.section.singular}`}</S.ButtonClick>
           </S.ContainerButtonsAdd>
         </Grid>
       </Grid>

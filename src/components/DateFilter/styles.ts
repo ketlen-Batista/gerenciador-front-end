@@ -1,11 +1,12 @@
-import styled from 'styled-components';
-
+import { DateRangePicker } from '@mui/lab';
 import { Popover } from '@mui/material';
+import styled from 'styled-components';
 
 export const Container = styled('div')`
   position: relative;
   display: inline-flex;
   width: 100%;
+  z-index: 0;
 
   .MuiTextField-root {
     width: 100%;
@@ -28,6 +29,7 @@ export const CustomPopover = styled(Popover)`
     padding: 1rem;
     width: 360px;
     background-color: ${({ theme }) => theme.colors.basic.white};
+
     .groups {
       gap: 1rem;
       display: flex;
@@ -35,6 +37,7 @@ export const CustomPopover = styled(Popover)`
     .group {
       flex: 1;
       gap: 1rem;
+
       .MuiFormGroup-root {
         gap: 1rem;
       }
@@ -58,6 +61,7 @@ export const GroupContent = styled('div')`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  z-index: 1;
 
   .MuiFormControlLabel-root {
     margin: 0;

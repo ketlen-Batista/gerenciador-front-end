@@ -80,3 +80,55 @@ export const seções = [
     value: 'escola4',
   },
 ];
+
+export const basicNames = {
+  sector: {
+    singular: 'Contrato',
+    plural: 'Contratos',
+  },
+  section: {
+    singular: 'Setor',
+    plural: 'Setores',
+  },
+  permission: {
+    singular: 'Permissão',
+    plural: 'Permissões',
+  },
+};
+
+export const permissionsNames = [
+  {
+    id: 0,
+    name: 'Página Início',
+  },
+  {
+    id: 1,
+    name: 'Página Funcionários',
+  },
+  {
+    id: 2,
+    name: 'Página Relatórios',
+  },
+  {
+    id: 3,
+    name: 'Página Documentos',
+  },
+  {
+    id: 4,
+    name: 'Página Configurações',
+    subPermissions: [
+      {
+        id: 0,
+        name: 'Contratos e Setores',
+      },
+      {
+        id: 1,
+        name: 'Cargos',
+      },
+      {
+        id: 2,
+        name: 'Permissões',
+      },
+    ],
+  },
+];
