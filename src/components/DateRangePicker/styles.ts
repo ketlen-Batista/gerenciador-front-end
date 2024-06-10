@@ -1,4 +1,18 @@
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
+
+export const GlobalStyle = createGlobalStyle`
+   .ant-picker-dropdown {
+    z-index: 1650 !important;
+  }
+
+  .ant-picker-dropdown-hidden {
+    z-index: 1650 !important;
+  }
+
+  .ant-picker-dropdown-placement-bottomLeft {
+    z-index: 1650 !important;
+  }
+`;
 
 export const Container = styled('div')`
   .ant-picker {
@@ -18,5 +32,15 @@ export const Container = styled('div')`
       padding: 0 0.65rem;
       opacity: 1 !important;
     }
+
+    /* .ant-picker-dropdown {
+      z-index: 1650 !important;
+    }
+
+    :where(
+        .css-dev-only-do-not-override-1r287do
+      ).ant-picker-dropdown.ant-picker-dropdown-hidden {
+      z-index: 1650 !important;
+    } */
   }
 `;

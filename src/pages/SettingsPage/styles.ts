@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
 
 export const Title = styled.div`
   display: flex;
@@ -41,6 +41,9 @@ export const ContainerButtons = styled.div`
 export const Container = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
 `;
 
 export const ContainerButtonsAdd = styled.div`

@@ -1,9 +1,11 @@
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 
+import { colors } from '@styles/colors';
+
 export const ButtonClick = styled(Button)`
   display: flex;
-  background: var(--Dark) !important;
+  background: ${colors.text.disabled} !important;
   width: auto;
   height: 50px;
   border-radius: 250px !important;

@@ -266,6 +266,4 @@ function DateFilter(
   );
 }
 
-const ForwardDateFilter = forwardRef(DateFilter);
-
-export default ForwardDateFilter;
+export default forwardRef(DateFilter);

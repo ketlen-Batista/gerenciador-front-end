@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 
-import TableSettings from '../TableSettings';
+import Table from './Table';
 
 import * as S from '../styles';
 
@@ -12,7 +12,7 @@ const OfficesSettings = () => {
       <S.Container>
         <S.ContainerTitles>
           <S.Title>Cargos</S.Title>
-          <S.SubTitle>Lista de cargos</S.SubTitle>
+          {/* <S.SubTitle>Lista de cargos</S.SubTitle> */}
         </S.ContainerTitles>
         <S.ContainerButtons>
           <S.ButtonClick>Todos</S.ButtonClick>
@@ -23,7 +23,7 @@ const OfficesSettings = () => {
       </S.Container>
       <Grid container>
         <Grid item xs={8}>
-          <TableSettings />
+          <Table />
         </Grid>
         <Grid item xs={4}>
           {' '}

@@ -1,13 +1,8 @@
 import React from 'react';
-import TableDataGrid from '/src/components/TableDataGrid';
-// import TableDataGrid from '../../../../components/TableDataGrid';
-// import { DataGrid } from '@mui/x-data-grid';
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
-import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import Tooltip from '@material-ui/core/Tooltip';
 
-function TableSettings() {
+import TableDataGrid from '/src/components/TableDataGrid';
+
+function Table() {
   const rows = [
     {
       id: '9d5b884e-8d72-4f29-8e23-f06ebe2394d0',
@@ -58,22 +53,8 @@ function TableSettings() {
 
   const columns = [
     {
-      field: 'sector',
-      headerName: 'Setor',
-      flex: 1,
-      headerClassName: 'table-header',
-      cellClassName: 'table-body',
-    },
-    {
-      field: 'section',
-      headerName: 'Seção',
-      flex: 1,
-      headerClassName: 'table-header',
-      cellClassName: 'table-body',
-    },
-    {
-      field: 'employees',
-      headerName: ' Qtd de funcionários',
+      field: 'office',
+      headerName: 'Cargo',
       flex: 1,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
@@ -87,4 +68,4 @@ function TableSettings() {
   );
 }
 
-export default TableSettings;
+export default Table;

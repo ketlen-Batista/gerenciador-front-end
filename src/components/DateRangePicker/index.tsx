@@ -37,30 +37,34 @@ function DateRangePicker({
   const { RangePicker } = FormattedDatePicker;
 
   return (
-    <S.Container>
-      <RangePicker
-        allowClear={allowClear}
-        disabled={disabled}
-        format={format}
-        placeholder={placeholder}
-        separator={'-'}
-        size="large"
-        suffixIcon={<DateRangeIcon color="inherit" fontSize="inherit" />}
-        value={[startDate, endDate]}
-        onChange={(selectedRange) => {
-          if (selectedRange && onChange) {
-            onChange({
-              startDate: selectedRange?.[0],
-              endDate: selectedRange?.[1],
-            });
-          }
-        }}
-        onOpenChange={(status) => {
-          if (status && onOpen) onOpen();
-          if (!status && onClose) onClose();
-        }}
-      />
-    </S.Container>
+    <>
+      <S.GlobalStyle />
+
+      <S.Container>
+        <RangePicker
+          allowClear={allowClear}
+          disabled={disabled}
+          format={format}
+          placeholder={placeholder}
+          separator={'-'}
+          size="large"
+          suffixIcon={<DateRangeIcon color="inherit" fontSize="inherit" />}
+          value={[startDate, endDate]}
+          onChange={(selectedRange) => {
+            if (selectedRange && onChange) {
+              onChange({
+                startDate: selectedRange?.[0],
+                endDate: selectedRange?.[1],
+              });
+            }
+          }}
+          onOpenChange={(status) => {
+            if (status && onOpen) onOpen();
+            if (!status && onClose) onClose();
+          }}
+        />
+      </S.Container>
+    </>
   );
 }
 
