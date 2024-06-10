@@ -132,3 +132,30 @@ export const permissionsNames = [
     ],
   },
 ];
+
+export const sectorsData = [
+  {
+    quantity: 3,
+    namePlural: 'Contratos',
+    nameSingular: 'Contrato',
+    value: 'sector',
+  },
+  {
+    quantity: 16,
+    nameSingular: 'Setor',
+    namePlural: 'Setores',
+    value: 'section',
+  },
+  {
+    quantity: 500,
+    nameSingular: 'Funcionário',
+    namePlural: 'Funcionários',
+    value: 'employee',
+  },
+  {
+    quantity: 5,
+    nameSingular: 'Gerente',
+    namePlural: 'Gerentes',
+    value: 'manager',
+  },
+];
