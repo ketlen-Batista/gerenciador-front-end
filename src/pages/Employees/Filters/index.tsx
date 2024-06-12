@@ -4,7 +4,14 @@ import { Box, Grid, IconButton, InputAdornment } from '@material-ui/core';
 import PersonAddTwoToneIcon from '@material-ui/icons/PersonAddTwoTone';
 import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import SearchIcon from '@material-ui/icons/Search';
-import { cargos, recebidos, setores, seções } from '@src/utils/constants';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import {
+  basicNames,
+  cargos,
+  recebidos,
+  setores,
+  seções,
+} from '@src/utils/constants';
 
 import Select from '@src/components/Select';
 import SelectCustom from '@src/components/SelectCustom';
@@ -65,7 +72,7 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Cargo"
+                label={basicNames.office.singular}
                 options={cargos}
                 value={cargo?.value}
                 name={cargo.name}
@@ -78,7 +85,7 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Setor"
+                label={basicNames.sector.singular}
                 options={setores}
                 value={setor?.value}
                 name={setor.name}
@@ -91,7 +98,7 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Seção"
+                label={basicNames.section.singular}
                 options={seções}
                 value={seção?.value}
                 name={seção.name}
@@ -102,17 +109,15 @@ export const Filters = () => {
           </Grid>
         </Grid>
       </S.ContainerSelects>
-      <S.ContainerButton>
-        <S.ButtonAdd
-          variant="contained"
-          color="primary"
-          disableRipple
-          className={classes.button}
-          startIcon={<PersonAddTwoToneIcon />}
-        >
-          Adicionar Funcionário
-        </S.ButtonAdd>
-      </S.ContainerButton>
+      <S.ButtonAdd
+        variant="contained"
+        color="primary"
+        disableRipple
+        className={classes.button}
+        startIcon={<PersonAddAltRoundedIcon />}
+      >
+        Adicionar Funcionário
+      </S.ButtonAdd>
     </S.ContainerFilters>
   );
 };

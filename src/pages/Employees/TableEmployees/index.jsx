@@ -12,6 +12,7 @@ import { AvailableRoutes } from '@src/routes/availableRoutes';
 import { useNavigate } from 'react-router-dom';
 
 import TableDataGrid from '/src/components/TableDataGrid';
+import { basicNames } from '@src/utils/constants';
 
 function TableEmployees() {
   const navigate = useNavigate();
@@ -76,21 +77,21 @@ function TableEmployees() {
 
     {
       field: 'office',
-      headerName: 'Cargo',
+      headerName: basicNames.office.singular,
       flex: 6,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
     },
     {
       field: 'sector',
-      headerName: 'Setor',
+      headerName: basicNames.sector.singular,
       flex: 4,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
     },
     {
       field: 'section',
-      headerName: 'Seção',
+      headerName: basicNames.section.singular,
       flex: 5,
       headerClassName: 'table-header',
       cellClassName: 'table-body',

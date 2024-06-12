@@ -83,58 +83,7 @@ function Employees() {
 
   return (
     <DefaultPage pageTitle="Funcionários">
-      {/* <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          marginBottom: '20px',
-        }}
-      >
-        {' '}
-        <S.ContainerInput>
-          <TextInput
-            name="search"
-            label="Buscar"
-            value={search}
-            placeholder="Buscar"
-            onChange={(e) =>
-              handleChangeFilter({
-                target: { name: 'search', value: e.target.value },
-              })
-            }
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="Clique para buscar"
-                    onClick={handleChangeFilter}
-                  >
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            mini
-          />
-        </S.ContainerInput>
-        <S.ContainerSelects>
-          <SelectCustom options={setores} defautSelected={'todos'} />
-          <SelectCustom options={cargos} defautSelected={'gerente'} />
-          <SelectCustom options={seções} defautSelected={'escola1'} />
-        </S.ContainerSelects>
-        <S.ContainerButton>
-          <S.ButtonAdd
-            variant="contained"
-            color="primary"
-            disableRipple
-            className={classes.button}
-            startIcon={<PersonAddTwoToneIcon />}
-          >
-            Adicionar Funcionário
-          </S.ButtonAdd>{' '}
-        </S.ContainerButton>
-      </div> */}
-
+      {/* FILTROS */}
       <Filters />
 
       {/* TABELA */}

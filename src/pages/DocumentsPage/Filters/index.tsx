@@ -2,7 +2,13 @@ import React, { useRef, useState } from 'react';
 
 import { Grid, IconButton, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { cargos, recebidos, setores, seções } from '@src/utils/constants';
+import {
+  basicNames,
+  cargos,
+  recebidos,
+  setores,
+  seções,
+} from '@src/utils/constants';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
 
 import DateFilter, { type DateFilterHandles } from '@src/components/DateFilter';
@@ -86,7 +92,7 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Cargo"
+                label={basicNames.office.singular}
                 options={cargos}
                 value={cargo?.value}
                 name={cargo.name}
@@ -99,7 +105,7 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Setor"
+                label={basicNames.sector.singular}
                 options={setores}
                 value={setor?.value}
                 name={setor.name}
@@ -112,7 +118,7 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Seção"
+                label={basicNames.section.singular}
                 options={seções}
                 value={seção?.value}
                 name={seção.name}

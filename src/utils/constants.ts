@@ -94,6 +94,10 @@ export const basicNames = {
     singular: 'Permissão',
     plural: 'Permissões',
   },
+  office:  {
+    singular: 'Cargo',
+    plural: 'Cargos' ,
+  }
 };
 
 export const permissionsNames = [

@@ -8,7 +8,7 @@ import DateRangeOutlinedIcon from '@material-ui/icons/DateRangeOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import EqualizerOutlinedIcon from '@material-ui/icons/EqualizerOutlined';
-import { recebidos } from '@src/utils/constants';
+import { basicNames, recebidos } from '@src/utils/constants';
 import DefaultPage from '@templates/DefaultPage';
 
 import ImageAvatar from '../../components/ImageAvatar';
@@ -258,7 +258,7 @@ function EmployeeData() {
           <Grid item xs={4}>
             <S.FieldBox>
               <Select
-                label="Cargo"
+                label={basicNames.office.singular}
                 options={cargos}
                 value={office.value}
                 name={office.name}
@@ -271,7 +271,7 @@ function EmployeeData() {
           <Grid item xs={4}>
             <S.FieldBox>
               <Select
-                label="Setor"
+                label={basicNames.sector.singular}
                 options={setores}
                 value={setor.value}
                 name={setor.name}
@@ -284,7 +284,7 @@ function EmployeeData() {
           <Grid item xs={4}>
             <S.FieldBox>
               <Select
-                label="Seção"
+                label={basicNames.section.singular}
                 options={seções}
                 value={seção.value}
                 name={seção.name}
