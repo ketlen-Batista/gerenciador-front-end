@@ -1,56 +1,70 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Box, Grid, IconButton, InputAdornment } from '@material-ui/core';
+import { Grid, IconButton, InputAdornment } from '@material-ui/core';
 import PersonAddTwoToneIcon from '@material-ui/icons/PersonAddTwoTone';
-import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import SearchIcon from '@material-ui/icons/Search';
-import { cargos, recebidos, setores, seções } from '@src/utils/constants';
+import { AvailableRoutes } from '@src/routes/availableRoutes';
+import { useGetContracts } from '@src/services/contractsService/queries';
+import { useGetJobPositions } from '@src/services/jobPositions/queries';
+import { useGetSectors } from '@src/services/sectorService/queries';
+import { cargos, setores, seções } from '@src/utils/constants';
+import { useNavigate } from 'react-router-dom';
 
 import Select from '@src/components/Select';
-import SelectCustom from '@src/components/SelectCustom';
 import TextInput from '@src/components/TextInput';
 
 import * as S from './styles';
 
-// import { Container } from './styles';
-const OptionEmpty = {
-  value: '',
-  name: '',
-};
+// const OptionEmpty = { value: '', name: '' };
 
 export const Filters = () => {
   const classes = S.useStyles();
   const [search, setSearch] = useState('');
-  const [cargo, setCargo] = useState(OptionEmpty);
-  const [setor, setSetor] = useState(OptionEmpty);
-  const [recebido, setRecebido] = useState(OptionEmpty);
-  const [seção, setSeção] = useState(OptionEmpty);
+  const [cargo, setCargo] = useState(null);
+  const [setor, setSetor] = useState(null);
+  const [contrato, setContrato] = useState(null);
 
-  const handleChangeFilter = (event: any) => {
-    const { value, name } = event.target;
-    setSearch(value);
+  const { data: jobs, mutate: getJobs } = useGetJobPositions();
+  const { data: contracts, mutate: getContracts } = useGetContracts();
+  const { data: sectors, mutate: getSectors } = useGetSectors();
+
+  useEffect(() => {
+    getJobs({});
+    getContracts({});
+    getSectors({});
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handleNavigate = (page, employeeId = null) => {
+    navigate(page || '', { state: { employeeId } });
+  };
+
+  const handleChangeFilter = ({ target: { name, value } }) => {
+    if (name === 'search') {
+      setSearch(value);
+    }
   };
 
   return (
     <S.ContainerFilters>
-      {' '}
       <S.ContainerInput>
         <TextInput
           name="search"
           label="Buscar"
           value={search}
           placeholder="Buscar"
-          onChange={(e: any) =>
-            handleChangeFilter({
-              target: { name: 'search', value: e.target.value },
-            })
-          }
+          onChange={handleChangeFilter}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
                   aria-label="Clique para buscar"
-                  onClick={handleChangeFilter}
+                  onClick={() =>
+                    handleChangeFilter({
+                      target: { name: 'search', value: search },
+                    })
+                  }
                 >
                   <SearchIcon />
                 </IconButton>
@@ -66,36 +80,34 @@ export const Filters = () => {
             <S.FieldBox>
               <Select
                 label="Cargo"
-                options={cargos}
-                value={cargo?.value}
-                name={cargo.name}
-                onChange={setCargo}
+                options={jobs}
+                value={cargo}
+                name={jobs?.find((item) => item.value === cargo)?.name}
+                onChange={(e) => setCargo(e.value)}
                 clearable
               />
             </S.FieldBox>
           </Grid>
-
+          <Grid item xs={3}>
+            <S.FieldBox>
+              <Select
+                label="Contrato"
+                options={contracts}
+                value={contrato}
+                name={contracts?.find((item) => item.value === setor)?.name}
+                onChange={(e) => setContrato(e.value)}
+                clearable
+              />
+            </S.FieldBox>
+          </Grid>
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
                 label="Setor"
-                options={setores}
-                value={setor?.value}
-                name={setor.name}
-                onChange={setSetor}
-                clearable
-              />
-            </S.FieldBox>
-          </Grid>
-
-          <Grid item xs={3}>
-            <S.FieldBox>
-              <Select
-                label="Seção"
-                options={seções}
-                value={seção?.value}
-                name={seção.name}
-                onChange={setSeção}
+                options={sectors}
+                value={setor}
+                name={sectors?.find((item) => item.value === setor)?.name}
+                onChange={(e) => setSetor(e.value)}
                 clearable
               />
             </S.FieldBox>
@@ -109,6 +121,7 @@ export const Filters = () => {
           disableRipple
           className={classes.button}
           startIcon={<PersonAddTwoToneIcon />}
+          onClick={() => handleNavigate(AvailableRoutes.employeesDataPage)}
         >
           Adicionar Funcionário
         </S.ButtonAdd>
