@@ -2,7 +2,6 @@ import { IconButton } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 
@@ -168,7 +167,6 @@ function TableEmployees() {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-around',
             height: '100%',
           }}
         >
@@ -181,18 +179,6 @@ function TableEmployees() {
                 }}
               >
                 <VisibilityOutlinedIcon fontSize="medium" />
-              </div>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Editar" placement="top">
-            <IconButton>
-              <div
-                style={{
-                  display: 'flex',
-                  color: 'var(--GrayDark200)',
-                }}
-              >
-                <CreateOutlinedIcon fontSize="medium" />
               </div>
             </IconButton>
           </Tooltip>
