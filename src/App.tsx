@@ -1,37 +1,3 @@
-// import React from 'react';
-// import isPropValid from '@emotion/is-prop-valid';
-// import { ThemeProvider as MUIThemeProvider } from '@mui/material/styles';
-// import { router } from '@routes/router';
-// import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// import { RouterProvider } from 'react-router-dom';
-// import {
-//   StyleSheetManager,
-//   ThemeProvider as StyledThemeProvider,
-// } from 'styled-components';
-// import { defaultMUITheme, defaultStyledTheme } from '@styles/theme';
-// import './global.css';
-// function App() {
-//   const queryClient = new QueryClient();
-//   return (
-//     <QueryClientProvider client={queryClient}>
-//       <MUIThemeProvider theme={defaultMUITheme}>
-//         <StyleSheetManager
-//           enableVendorPrefixes
-//           shouldForwardProp={(propName, elementToBeRendered) => {
-//             return typeof elementToBeRendered === 'string'
-//               ? isPropValid(propName)
-//               : true;
-//           }}
-//         >
-//           <StyledThemeProvider theme={defaultStyledTheme}>
-//             <RouterProvider router={router} />
-//           </StyledThemeProvider>
-//         </StyleSheetManager>
-//       </MUIThemeProvider>
-//     </QueryClientProvider>
-//   );
-// }
-// export default App;
 import React, { ReactNode, createContext, useContext } from 'react';
 
 import isPropValid from '@emotion/is-prop-valid';

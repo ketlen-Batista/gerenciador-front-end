@@ -70,7 +70,7 @@ export const ContainerFilters = styled.div`
 
 export const ContainerInput = styled.div`
   display: flex;
-  flex: 2;
+  flex: 3;
   height: 45px;
   align-items: center;
   padding-right: 10px;
@@ -88,28 +88,19 @@ export const ContainerButton = styled.div`
   display: flex;
   color: var(--Success);
   height: 45px;
-  /* align-items: center; */
-  /* flex: 2; */
   justify-content: right;
-  /* margin-bottom: 20px;
-  margin-top: 50px; */
 `;
 
 export const SubTitle = styled.div`
   display: flex;
   font-size: 20px;
   color: var(--ColorFont);
-  /* flex: 10; */
-  /* padding-top: 10px; */
-  /* margin-bottom: 20px; */
 `;
 
 export const ContainerButtonAndTitle = styled.div`
   display: flex;
-  /* color: var(--Success); */
   height: 45px;
   align-items: center;
-  /* flex: 2; */
   justify-content: space-between;
   margin-bottom: 30px;
   margin-top: 50px;

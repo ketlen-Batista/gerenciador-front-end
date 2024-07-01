@@ -14,12 +14,6 @@ const OfficesSettings = () => {
           <S.Title>Cargos</S.Title>
           {/* <S.SubTitle>Lista de cargos</S.SubTitle> */}
         </S.ContainerTitles>
-        <S.ContainerButtons>
-          <S.ButtonClick>Todos</S.ButtonClick>
-          <S.ButtonClick>Saúde</S.ButtonClick>
-          <S.ButtonClick>Educação</S.ButtonClick>
-          <S.ButtonClick>TJ_SP</S.ButtonClick>
-        </S.ContainerButtons>
       </S.Container>
       <Grid container>
         <Grid item xs={8}>
@@ -28,8 +22,7 @@ const OfficesSettings = () => {
         <Grid item xs={4}>
           {' '}
           <S.ContainerButtonsAdd>
-            <S.ButtonClick>+Adicionar Setor</S.ButtonClick>
-            <S.ButtonClick>+Adicionar Seção</S.ButtonClick>
+            <S.ButtonClick>+Adicionar Cargo</S.ButtonClick>
           </S.ContainerButtonsAdd>
         </Grid>
       </Grid>

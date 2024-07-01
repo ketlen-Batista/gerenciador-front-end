@@ -1,57 +1,43 @@
-import { IconButton } from '@material-ui/core';
-import Tooltip from '@material-ui/core/Tooltip';
+import React, { useEffect } from 'react';
+
+import { Box, IconButton, Tooltip } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import { useDeleteDocument } from '@src/services/DocumentsService/queries';
+import { formatDate } from '@src/utils/dates';
+
+import CircularProgress from '@src/components/CircularProgress';
 
 import TableDataGrid from '@components/TableDataGrid';
 
-function TableEmployees() {
-  const rows = [
-    {
-      id: '9d5b884e-8d72-4f29-8e23-f06ebe2394d0',
-      documentName: 'documento1.pdf',
-      sentIn: '21/04/2024-11-20',
-      sender: 'GIC',
-      recipient: 'Fulana da Silva',
-      received: true,
-      visa: true,
-      actions: '',
-      office: 'Gerente',
-      sector: 'Educação',
-      section: 'Colégio Fátima Rodrigues',
-      status: 'Ativa',
-    },
-    {
-      id: '9d5b884e-8d72-4f29-8e23-f06ebe2394h5',
-      documentName: 'documento2.pdf',
-      sentIn: '21/04/2024-11-20',
-      sender: 'GIC',
-      recipient: 'Ciclano da Silva',
-      received: true,
-      visa: true,
-      actions: '',
-      office: 'Gerente',
-      sector: 'Educação',
-      section: 'Colégio Fátima Rodrigues',
-      status: 'Ativa',
-    },
-    {
-      id: '9d5b884e-8d72-4f29-8e23-f06ebe2394f4',
-      documentName: 'documento3.pdf',
-      sentIn: '21/04/2024-11-20',
-      sender: 'GIC',
-      recipient: 'Fulana de Sousa',
-      received: true,
-      visa: false,
-      actions: '',
-      office: 'Gerente',
-      sector: 'Educação',
-      section: 'Colégio Fátima Rodrigues',
-      status: 'Ativa',
-    },
-  ];
+interface TableDocumentsProps {
+  listDocuments: Document[];
+  getListDocuments: ({}) => void;
+  isPending: boolean;
+}
+
+function TableDocuments({
+  listDocuments,
+  getListDocuments,
+  isPending,
+}: TableDocumentsProps) {
+  const {
+    mutate: handleDeleteDocuments,
+    isPending: isPendingDeleteDocuments,
+    isSuccess: isSuccessDeleteDocument,
+  } = useDeleteDocument();
+
+  useEffect(() => {
+    if (isSuccessDeleteDocument) {
+      getListDocuments({});
+    }
+  }, [isSuccessDeleteDocument]);
+
+  useEffect(() => {
+    getListDocuments({});
+  }, []);
 
   const columns = [
     {
@@ -61,13 +47,14 @@ function TableEmployees() {
       headerClassName: 'table-header',
       cellClassName: 'table-body',
     },
-
     {
       field: 'sentIn',
       headerName: 'Enviado em:',
       flex: 4,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
+      renderCell: (params) =>
+        params?.value && <div>{formatDate(params.value)}</div>,
     },
     {
       field: 'sender',
@@ -118,7 +105,6 @@ function TableEmployees() {
           </div>
         ),
     },
-
     {
       field: 'visa',
       headerName: 'Visto',
@@ -154,14 +140,13 @@ function TableEmployees() {
           </div>
         ),
     },
-
     {
       field: 'actions',
       headerName: 'Ações',
       flex: 3,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
-      renderCell: () => (
+      renderCell: (params) => (
         <div
           style={{
             display: 'flex',
@@ -190,6 +175,7 @@ function TableEmployees() {
                   display: 'flex',
                   color: 'var(--Danger)',
                 }}
+                onClick={() => handleDeleteDocuments(params.row.id)}
               >
                 <DeleteOutlinedIcon fontSize="medium" />
               </div>
@@ -200,7 +186,25 @@ function TableEmployees() {
     },
   ];
 
-  return <TableDataGrid columns={columns} rows={rows} />;
+  const isLoading = isPending || isPendingDeleteDocuments;
+
+  return isLoading ? (
+    <Box
+      display="flex"
+      width="100%"
+      height="100%"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <CircularProgress size="large" color="primary" />
+    </Box>
+  ) : (
+    <TableDataGrid
+      columns={columns}
+      rows={listDocuments || []}
+      loading={isLoading}
+    />
+  );
 }
 
-export default TableEmployees;
+export default TableDocuments;

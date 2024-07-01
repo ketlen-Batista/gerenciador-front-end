@@ -1,7 +1,10 @@
 import React from 'react';
 
 import { Grid } from '@material-ui/core';
-import { basicNames } from '@src/utils/constants';
+import { Box } from '@mui/material';
+import { basicNames, setores } from '@src/utils/constants';
+
+import ButtonFilter from '@src/components/ButtonFilter';
 
 import Table from './Table';
 
@@ -16,10 +19,11 @@ const SectorSettings = () => {
           {/* <S.SubTitle>Lista de seções</S.SubTitle> */}
         </S.ContainerTitles>
         <S.ContainerButtons>
-          <S.ButtonClick>Todos</S.ButtonClick>
-          <S.ButtonClick>Saúde</S.ButtonClick>
-          <S.ButtonClick>Educação</S.ButtonClick>
-          <S.ButtonClick>TJ_SP</S.ButtonClick>
+          <Box display="flex" flexDirection="row" justifyContent="flex-end">
+            {setores?.map((item) => (
+              <ButtonFilter key={item.value} textButton={item.name} />
+            ))}
+          </Box>
         </S.ContainerButtons>
       </S.Container>
       <Grid container>

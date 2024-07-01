@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { IconButton } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -7,19 +7,18 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 // import TableDataGrid from '../../../../components/TableDataGrid';
 // import { DataGrid } from '@mui/x-data-grid';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import { useGetContracts } from '@src/services/contractsService/queries';
+import { useGetSectors } from '@src/services/sectorService/queries';
 import { basicNames } from '@src/utils/constants';
 
 import TableDataGrid from '/src/components/TableDataGrid';
 
 function Table() {
   // const { data: jobs, mutate: getJobs } = useGetJobPositions();
-  const { data: contracts, mutate: getContracts } = useGetContracts();
-  // const { data: sectors, mutate: getSectors } = useGetSectors();
+  const { data: sectors, mutate: getSectors, isPending } = useGetSectors();
 
   useEffect(() => {
-    // getJobs({});
-    getContracts({});
-    // getSectors({});
+    getSectors({});
   }, []);
 
   // const rows = [
@@ -72,23 +71,23 @@ function Table() {
 
   const columns = [
     {
-      field: 'sector',
-      headerName: basicNames.sector.singular,
-      flex: 3,
-      headerClassName: 'table-header',
-      cellClassName: 'table-body',
-    },
-    {
-      field: 'section',
+      field: 'name',
       headerName: basicNames.section.singular,
       flex: 3,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
     },
     {
-      field: 'employees',
+      field: 'contractName',
+      headerName: basicNames.sector.singular,
+      flex: 2,
+      headerClassName: 'table-header',
+      cellClassName: 'table-body',
+    },
+    {
+      field: 'quantityUsers',
       headerName: ' Qtd de funcionários',
-      flex: 1,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
     },
@@ -108,20 +107,6 @@ function Table() {
             height: '100%',
           }}
         >
-          <Tooltip title="Ver" placement="top">
-            <IconButton
-              onClick={() => handleNavigate(AvailableRoutes.employeesDataPage)}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  color: 'var(--Primary)',
-                }}
-              >
-                <VisibilityOutlinedIcon fontSize="medium" />
-              </div>
-            </IconButton>
-          </Tooltip>
           <Tooltip title="Editar" placement="top">
             <IconButton>
               <div
@@ -152,11 +137,11 @@ function Table() {
     },
   ];
 
-  return (
+  return !isPending && sectors?.length ? (
     <>
-      <TableDataGrid columns={columns} rows={rows} />
+      <TableDataGrid columns={columns} rows={sectors} />
     </>
-  );
+  ) : null;
 }
 
 export default Table;

@@ -13,7 +13,6 @@ import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { useGetSectors } from '@src/services/sectorService/queries';
 import { useGetUser } from '@src/services/users/queries';
-import { cargos, setores, seções } from '@src/utils/constants';
 import DefaultPage from '@templates/DefaultPage';
 import { useLocation } from 'react-router-dom';
 
@@ -221,6 +220,7 @@ function EmployeeData() {
                 mini
               />
             </Grid>
+
             <Grid item xs={4}>
               <S.FieldBox>
                 <Select

@@ -14,7 +14,7 @@ export const ButtonAdd = withStyles({
     boxShadow: 'none',
     textTransform: 'none',
     fontSize: 16,
-    padding: '6px 12px',
+    padding: '6px 25px' ,
     border: '1px solid',
     lineHeight: 1.5,
     backgroundColor: 'var(--GreenDark)',
@@ -77,11 +77,4 @@ export const ContainerSelects = styled.div`
   flex: 6;
 `;
 
-export const ContainerButton = styled.div`
-  display: flex;
-  color: var(--Success);
-  height: 45px;
-  align-items: center;
-  flex: 2;
-  justify-content: right;
-`;
+

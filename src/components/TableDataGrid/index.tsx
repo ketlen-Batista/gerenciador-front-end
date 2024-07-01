@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { Box, makeStyles } from '@material-ui/core';
-import { DataGrid, DataGridProps } from '@mui/x-data-grid';
+import { DataGrid, DataGridProps, GridValidRowModel } from '@mui/x-data-grid';
+import { colors } from '@src/styles/colors';
 
 const useStyles = makeStyles({
   root: {
     // border: 0,
     '& .table-header': {
       fontWeight: 'bold !important',
-      color: 'var(--ColorFont) !important',
+      color: `${colors.basic.black} !important`,
       background: 'var(--Light) !important',
     },
     '& .table-body': {
@@ -36,7 +37,7 @@ const useStyles = makeStyles({
 });
 
 interface TableProps extends DataGridProps {
-  rows: Array<any>;
+  rows: GridValidRowModel[];
   columns: Array<any>;
   pageSize?: number | any;
   //   hidePagination?: boolean;

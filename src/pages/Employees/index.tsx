@@ -9,6 +9,7 @@ import TableEmployees from './TableEmployees';
 function Employees() {
   return (
     <DefaultPage pageTitle="Funcionários">
+      {/* FILTROS */}
       <Filters />
 
       {/* TABELA */}
