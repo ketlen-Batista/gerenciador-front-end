@@ -68,9 +68,11 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('Nome é obrigatório'),
   email: Yup.string().email('Email inválido'),
   phone: Yup.string(),
-  cpf: Yup.string().required('CPF é obrigatório'),
+  cpf: Yup.string().max(14, 'CPF inválido').required('CPF é obrigatório'),
   address: Yup.string(),
-  registration: Yup.string().required('Matrícula é obrigatória'),
+  registration: Yup.string()
+    .min(6, 'Quantidade mínima de 6 dígitos')
+    .required('Matrícula é obrigatória'),
   dateOfBirth: Yup.string(),
   jobPosition_id: Yup.number().nullable(),
   contracts_value: Yup.number().nullable(),
@@ -121,7 +123,6 @@ export const EmployeeDataProvider = ({ children }) => {
           status: values.status,
           contracts_value: values.contracts_value,
           sector_value: values.sector_value,
-          // password: values.registration,
         });
         return;
       }

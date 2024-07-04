@@ -4,6 +4,7 @@ import { Grid } from '@material-ui/core';
 import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { useGetSectors } from '@src/services/sectorService/queries';
+import { maskCpf } from '@src/utils/mask';
 
 import Select from '@src/components/Select';
 
@@ -76,7 +77,7 @@ function BasicsData({ user }) {
         <TextInput
           name="cpf"
           label="CPF"
-          value={formik.values.cpf}
+          value={maskCpf(formik.values.cpf)}
           placeholder="CPF"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
