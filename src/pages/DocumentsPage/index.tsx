@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
+import { DocumentsFilterProvider } from '@pages/DocumentsPage/contexts/DocumentsFilterContext';
 import { useListDocuments } from '@src/services/DocumentsService/queries';
 import DefaultPage from '@templates/DefaultPage';
 
@@ -62,34 +63,35 @@ function DocumentsPage() {
 
   return (
     <DefaultPage pageTitle="Documentos">
-      <Filters onFilterChange={handleFilterChange} />
-      <S.ContainerButtonAndTitle>
-        <S.SubTitle>Lista de Documentos</S.SubTitle>
-        <S.ContainerButton>
-          <S.ButtonAdd
-            variant="contained"
-            color="primary"
-            disableRipple
-            className={classes.button}
-            startIcon={<PostAddRoundedIcon />}
-            title="Enviar Documentos"
-            onClick={handleOpenModal}
-          >
-            Enviar Documentos
-          </S.ButtonAdd>
-        </S.ContainerButton>
-      </S.ContainerButtonAndTitle>
+      <DocumentsFilterProvider>
+        <Filters />
 
-      {/* TABELA */}
-      <TableDocuments
-        listDocuments={filteredDocuments}
-        getListDocuments={getListDocuments}
-        isPending={isPending}
-      />
-      <ModalAddDocument
-        openDialog={openDialog}
-        handleClose={handleCloseModal}
-      />
+        <S.ContainerButtonAndTitle>
+          <S.SubTitle>Lista de Documentos</S.SubTitle>
+          <S.ContainerButton>
+            <S.ButtonAdd
+              variant="contained"
+              color="primary"
+              disableRipple
+              className={classes.button}
+              startIcon={<PostAddRoundedIcon />}
+              title="Enviar Documentos"
+              onClick={handleOpenModal}
+            >
+              Enviar Documentos
+            </S.ButtonAdd>
+          </S.ContainerButton>
+        </S.ContainerButtonAndTitle>
+
+        <TableDocuments />
+      </DocumentsFilterProvider>
+
+      {openDialog && (
+        <ModalAddDocument
+          openDialog={openDialog}
+          handleClose={handleCloseModal}
+        />
+      )}
     </DefaultPage>
   );
 }

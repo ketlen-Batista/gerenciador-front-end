@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Box, IconButton, Tooltip } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
@@ -9,36 +9,30 @@ import { useDeleteDocument } from '@src/services/DocumentsService/queries';
 import { formatDate } from '@src/utils/dates';
 
 import CircularProgress from '@src/components/CircularProgress';
+import ModalConfirm from '@src/components/ModalConfirm';
 
 import TableDataGrid from '@components/TableDataGrid';
 
-interface TableDocumentsProps {
-  listDocuments: Document[];
-  getListDocuments: ({}) => void;
-  isPending: boolean;
-}
+import { useDocumentsFilter } from '../hooks/useDocumentsFilter';
 
-function TableDocuments({
-  listDocuments,
-  getListDocuments,
-  isPending,
-}: TableDocumentsProps) {
-  const {
-    mutate: handleDeleteDocuments,
-    isPending: isPendingDeleteDocuments,
-    isSuccess: isSuccessDeleteDocument,
-  } = useDeleteDocument();
-
-  useEffect(() => {
-    if (isSuccessDeleteDocument) {
-      getListDocuments({});
-    }
-  }, [isSuccessDeleteDocument]);
-
-  useEffect(() => {
-    getListDocuments({});
-  }, []);
-
+function TableDocuments() {
+  const { documentsFiltered, loading } = useDocumentsFilter();
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [documentIdToDelete, setDocumentIdToDelete] = useState<number>(null);
+  const { mutate: handleDeleteDocuments, isPending: isPendingDeleteDocuments } =
+    useDeleteDocument();
+  const handleOpenModalDelete = (documentId: number) => {
+    setIsOpenModal(true);
+    setDocumentIdToDelete(documentId);
+  };
+  const handleCloseModalDelete = () => {
+    setIsOpenModal(false);
+    setDocumentIdToDelete(null);
+  };
+  const handleDelete = () => {
+    handleDeleteDocuments(documentIdToDelete);
+    handleCloseModalDelete();
+  };
   const columns = [
     {
       field: 'documentName',
@@ -167,7 +161,6 @@ function TableDocuments({
               </div>
             </IconButton>
           </Tooltip>
-
           <Tooltip title="Deletar" placement="top">
             <IconButton>
               <div
@@ -175,7 +168,7 @@ function TableDocuments({
                   display: 'flex',
                   color: 'var(--Danger)',
                 }}
-                onClick={() => handleDeleteDocuments(params.row.id)}
+                onClick={() => handleOpenModalDelete(params.row.id)}
               >
                 <DeleteOutlinedIcon fontSize="medium" />
               </div>
@@ -186,25 +179,31 @@ function TableDocuments({
     },
   ];
 
-  const isLoading = isPending || isPendingDeleteDocuments;
-
-  return isLoading ? (
-    <Box
-      display="flex"
-      width="100%"
-      height="100%"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <CircularProgress size="large" color="primary" />
-    </Box>
-  ) : (
-    <TableDataGrid
-      columns={columns}
-      rows={listDocuments || []}
-      loading={isLoading}
-    />
+  return (
+    <>
+      {isPendingDeleteDocuments && (
+        <Box display="flex" justifyContent="center" mt={2} mb={2}>
+          <CircularProgress size="medium" />
+        </Box>
+      )}
+      <Box>
+        <TableDataGrid
+          rows={documentsFiltered}
+          columns={columns}
+          loading={loading}
+          autoHeight
+          pageSize={10}
+        />
+      </Box>
+      <ModalConfirm
+        openDialog={isOpenModal}
+        handleClose={handleCloseModalDelete}
+        handleConfirm={handleDelete}
+        titleModal="Excluir Documento"
+        text="Tem certeza que deseja excluir este documento?"
+        textButtonConfirm="Excluir"
+      />
+    </>
   );
 }
-
 export default TableDocuments;

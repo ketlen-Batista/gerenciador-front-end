@@ -8,12 +8,6 @@ export const FieldBox = styled('div')`
   }
 `;
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 30px;
-`;
-
 export const ContainerHeader = styled.div`
   display: flex;
   flex-direction: row;

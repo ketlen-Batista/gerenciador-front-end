@@ -1,54 +1,34 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 import { Grid, IconButton, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { useGetContracts } from '@src/services/contractsService/queries';
-import { useGetJobPositions } from '@src/services/jobPositions/queries';
-import { useGetSectors } from '@src/services/sectorService/queries';
-import { basicNames, recebidos } from '@src/utils/constants';
+import { FormControl } from '@mui/material';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
 
-import DateFilter, { type DateFilterHandles } from '@src/components/DateFilter';
-import { DateRange } from '@src/components/DateFilter/interfaces';
+import DateFilter from '@src/components/DateFilter';
 import Select from '@src/components/Select';
 import TextInput from '@src/components/TextInput';
 
+import { useDocumentsFilter } from '../hooks/useDocumentsFilter';
+
 import * as S from '../styles';
 
-const OptionEmpty = {
-  value: '',
-  name: '',
-};
+const Filters = () => {
+  const {
+    search,
+    setFilterUserId,
+    filterUserId,
+    users,
+    handleDateFilter,
+    handleChangeSearch,
+  } = useDocumentsFilter();
 
-const Filters = ({ onFilterChange }) => {
-  const ref = useRef<DateFilterHandles>(null);
-
-  const [search, setSearch] = useState('');
-  const [recebido, setRecebido] = useState(null);
-
-  useEffect(() => {
-    onFilterChange({ search, recebido });
-  }, [search, recebido]);
-
-  const handleChangeFilter = (event) => {
-    setSearch(event.target.value);
-  };
-
-  const handleCloseFilter = () => ref?.current?.closeFilter();
-
-  const handleOnFilter = (value: DateRange) => {
-    const formattedDateRange = {
-      startDate: value?.startDate ?? INIT_DATE_RANGE.startDate,
-      endDate: value?.endDate ?? INIT_DATE_RANGE.endDate,
-    };
-
-    handleCloseFilter();
-  };
-
-  useEffect(() => {
-    setRecebido(null);
-    setSearch('');
-  }, []);
+  const usersCustomSelect = users
+    ? users.map((user) => ({
+        value: user.id,
+        name: user.name,
+      }))
+    : [];
 
   return (
     <S.ContainerFilters>
@@ -58,7 +38,7 @@ const Filters = ({ onFilterChange }) => {
           label="Buscar"
           value={search}
           placeholder="Buscar"
-          onChange={handleChangeFilter}
+          onChange={handleChangeSearch}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -72,28 +52,26 @@ const Filters = ({ onFilterChange }) => {
         />
       </S.ContainerInput>
       <S.ContainerSelects>
-        {/* <Grid container spacing={1}>
-          <Grid item xs={3}>
-            <S.FieldBox>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={6}>
+            <FormControl fullWidth>
               <Select
-                label="Status Documento"
-                options={recebidos}
-                value={recebido}
-                name={recebidos.find((item) => item.value === recebido)?.name}
-                onChange={(e) => setRecebido(e.value)}
+                label="Usuário"
+                options={usersCustomSelect}
+                value={typeof filterUserId !== 'undefined' ? filterUserId : ''}
+                onChange={(e) => setFilterUserId(e.value)}
                 clearable
               />
-            </S.FieldBox>
+            </FormControl>
           </Grid>
-        </Grid> */}
+          <Grid item xs={4}>
+            <DateFilter
+              initialRange={INIT_DATE_RANGE}
+              onFilter={handleDateFilter}
+            />
+          </Grid>
+        </Grid>
       </S.ContainerSelects>
-      <S.DateFilterContainer>
-        <DateFilter
-          ref={ref}
-          onFilter={handleOnFilter}
-          initialRange={INIT_DATE_RANGE}
-        />
-      </S.DateFilterContainer>
     </S.ContainerFilters>
   );
 };

@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { FormControl, Grid } from '@mui/material';
 import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
+import { INIT_DATE_RANGE } from '@src/utils/dates';
 
+import DateFilter from '@src/components/DateFilter';
 import Select from '@src/components/Select';
 
 const UserFilter = () => {
-  const { users, setFilterUserId, filterUserId } = useUserCheckpointsContext();
+  const ref = useRef(null);
+  const { users, setFilterUserId, filterUserId, handleDateFilter } =
+    useUserCheckpointsContext();
 
   const usersCustomSelect = users.map((user) => {
     return {
@@ -17,7 +21,7 @@ const UserFilter = () => {
 
   return (
     <Grid container spacing={2} alignItems="center">
-      <Grid item xs={6}>
+      <Grid item xs={4}>
         <FormControl fullWidth>
           <Select
             label="Usuário"
@@ -27,6 +31,14 @@ const UserFilter = () => {
             clearable
           />
         </FormControl>
+      </Grid>
+      <Grid item xs={4}></Grid>
+      <Grid item xs={4}>
+        <DateFilter
+          ref={ref}
+          initialRange={INIT_DATE_RANGE}
+          onFilter={handleDateFilter}
+        />
       </Grid>
     </Grid>
   );

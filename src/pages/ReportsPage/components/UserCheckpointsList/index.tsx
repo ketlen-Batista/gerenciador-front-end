@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
+import { colors } from '@src/styles/colors';
 import { formatDate } from '@src/utils/dates';
 
 import TableDataGrid from '@src/components/TableDataGrid';
@@ -31,7 +32,7 @@ const UserCheckpointsList = () => {
   ];
 
   return (
-    <Box height="400px" mt={5}>
+    <Box mt={5} bgcolor={colors.basic.white}>
       <TableDataGrid
         rows={userCheckpoints || []}
         columns={columns}

@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import { useListUserCheckpoints } from '@src/services/CheckinsPoints/queries';
 import { useGetUsers } from '@src/services/users/queries';
+import { useLocation } from 'react-router-dom';
 
 interface Checkpoint {
   id: string;
@@ -39,6 +40,11 @@ interface UserCheckpointsContextType {
   users: User[];
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  handleDateFilter: (dateRange: {
+    startDate: number | null;
+    endDate: number | null;
+  }) => void;
+  selectedDateRange: { startDate: number | null; endDate: number | null };
 }
 
 export const UserCheckpointsContext = createContext(
@@ -46,25 +52,56 @@ export const UserCheckpointsContext = createContext(
 );
 
 export const UserCheckpointsProvider = ({ children }) => {
-  const [filterUserId, setFilterUserId] = useState<string | number>('');
-  const [userCheckpoints, setUserCheckpoints] = useState([]);
-  const [users, setUsers] = useState([]);
+  const location = useLocation();
+  const { userId } = location.state || {};
+
+  const [filterUserId, setFilterUserId] = useState<string | number>(
+    userId ?? '',
+  );
+  const [userCheckpoints, setUserCheckpoints] = useState<Checkpoint[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState<{
+    startDate: number | null;
+    endDate: number | null;
+  }>({
+    startDate: null,
+    endDate: null,
+  });
 
   const { data: fetchedUsers, mutate: getUsers } = useGetUsers();
   const { data: fetchedCheckpoints, mutate: fetchUserCheckpoints } =
     useListUserCheckpoints();
 
   const checkpointsFiltered = () => {
+    if (!fetchedCheckpoints) return;
+
+    let filteredCheckpoints = fetchedCheckpoints;
+
     if (filterUserId) {
-      setUserCheckpoints(
-        fetchedCheckpoints?.filter(
-          (checkpoint) => checkpoint.userId === filterUserId,
-        ),
+      filteredCheckpoints = filteredCheckpoints.filter(
+        (checkpoint) => checkpoint.userId === filterUserId,
       );
-    } else {
-      setUserCheckpoints(fetchedCheckpoints);
     }
+
+    if (selectedDateRange.startDate && selectedDateRange.endDate) {
+      const startDate = selectedDateRange.startDate;
+      const endDate = selectedDateRange.endDate;
+
+      filteredCheckpoints = filteredCheckpoints.filter((checkpoint) => {
+        const checkpointDate = new Date(checkpoint.timestamp).getTime();
+        return checkpointDate >= startDate && checkpointDate <= endDate;
+      });
+    }
+
+    setUserCheckpoints(filteredCheckpoints);
+  };
+
+  const handleDateFilter = (dateRange: {
+    startDate: number | null;
+    endDate: number | null;
+  }) => {
+    setSelectedDateRange(dateRange);
   };
 
   useEffect(() => {
@@ -74,19 +111,13 @@ export const UserCheckpointsProvider = ({ children }) => {
 
   useEffect(() => {
     checkpointsFiltered();
-  }, [filterUserId]);
+  }, [filterUserId, selectedDateRange, fetchedCheckpoints]);
 
   useEffect(() => {
     if (fetchedUsers) {
       setUsers(fetchedUsers.users);
     }
   }, [fetchedUsers]);
-
-  useEffect(() => {
-    if (fetchedCheckpoints) {
-      setUserCheckpoints(fetchedCheckpoints);
-    }
-  }, [fetchedCheckpoints]);
 
   const value = useMemo(
     () => ({
@@ -96,8 +127,10 @@ export const UserCheckpointsProvider = ({ children }) => {
       users,
       loading,
       setLoading,
+      handleDateFilter,
+      selectedDateRange,
     }),
-    [filterUserId, userCheckpoints, users, loading],
+    [filterUserId, userCheckpoints, users, loading, selectedDateRange],
   );
 
   return (

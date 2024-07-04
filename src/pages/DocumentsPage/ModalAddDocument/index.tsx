@@ -53,7 +53,6 @@ const ModalAddDocument = ({
   useEffect(() => {
     if (!documentName) {
       setDocumentName(file?.name);
-      console.log({ file });
     }
   }, [file]);
 
@@ -97,7 +96,7 @@ const ModalAddDocument = ({
       onClose={handleClose}
       maxWidth={'lg'}
       closeButtonPosition={'right'}
-      title="Upload de Documento"
+      title="Enviar Documento"
       fullWidth
       extraFooterComponent={
         <Box display="flex" justifyContent="flex-end" width="100%">
@@ -108,7 +107,7 @@ const ModalAddDocument = ({
             {isLoading ? (
               <CircularProgress size="small" color="primary" />
             ) : (
-              'Upload'
+              'Enviar'
             )}
           </Button>
         </Box>

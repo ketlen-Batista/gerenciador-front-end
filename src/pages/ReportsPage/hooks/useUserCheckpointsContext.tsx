@@ -10,6 +10,8 @@ export const useUserCheckpointsContext = () => {
     users,
     loading,
     setLoading,
+    handleDateFilter,
+    selectedDateRange,
   } = useContext(UserCheckpointsContext);
 
   return {
@@ -19,5 +21,7 @@ export const useUserCheckpointsContext = () => {
     users,
     loading,
     setLoading,
+    handleDateFilter,
+    selectedDateRange,
   };
 };
