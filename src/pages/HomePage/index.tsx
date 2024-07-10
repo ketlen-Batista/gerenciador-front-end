@@ -1,46 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import GroupIcon from '@mui/icons-material/Group';
-import HailIcon from '@mui/icons-material/Hail';
+// import HailIcon from '@mui/icons-material/Hail';
 import StoreIcon from '@mui/icons-material/Store';
 import { Box, Chip, Grid } from '@mui/material';
+import { useGetItemsCountHome } from '@src/services/homeServices/queries';
 import { colors } from '@src/styles/colors';
 import DefaultPage from '@src/templates/DefaultPage';
-import { sectorsData, setores } from '@src/utils/constants';
+import { setores } from '@src/utils/constants';
 import Chart from 'react-apexcharts';
 
 import ButtonFilter from '@src/components/ButtonFilter';
 import Typography from '@src/components/Typography';
 
 const HomePage = () => {
-  // const options = {
-  //   series: [44, 100, 13, 43, 22],
-  //   chart: {
-  //     width: 400,
-  //     type: 'pie',
-  //   },
-  //   labels: [
-  //     'Licença Paternidade',
-  //     'Trabalhando',
-  //     'Licença Maternidade',
-  //     'Atestado',
-  //     'Férias',
-  //   ],
-  //   legend: {
-  //     show: true, // Ocultar legenda padrão
-  //   },
-  //   responsive: [
-  //     {
-  //       breakpoint: 480,
-  //       options: {
-  //         chart: {
-  //           width: 300,
-  //         },
-  //       },
-  //     },
-  //   ],
-  // };
+  const { data: itemsCountHome, mutateAsync: getItemsCountHome } =
+    useGetItemsCountHome();
 
   const options = {
     series: [44, 100, 13, 43, 22],
@@ -79,6 +55,10 @@ const HomePage = () => {
     ],
   };
 
+  useEffect(() => {
+    getItemsCountHome({});
+  }, []);
+  console.log({ itemsCountHome });
   return (
     <DefaultPage pageTitle="Início">
       <Grid container spacing={2} px={8}>
@@ -92,8 +72,8 @@ const HomePage = () => {
 
         <Grid item xs={6} p={10} mt={6}>
           <Grid container spacing={1}>
-            {sectorsData &&
-              sectorsData.map((item) => (
+            {itemsCountHome &&
+              itemsCountHome.map((item) => (
                 <Grid item xs={5}>
                   <Box
                     bgcolor={colors.basic.white}
@@ -105,23 +85,41 @@ const HomePage = () => {
                     flexDirection="column"
                     color={colors.basic.black}
                   >
-                    {item.value?.toLowerCase() === 'sector' && (
-                      <ApartmentIcon color="inherit" fontSize="large" />
+                    {item.type === 'contracts' && (
+                      <>
+                        <ApartmentIcon color="inherit" fontSize="large" />
+                        <Typography>
+                          {item.count > 1
+                            ? `${item.count} contratos`
+                            : `${item.count} contrato`}
+                        </Typography>
+                      </>
                     )}
-                    {item.value?.toLowerCase() === 'section' && (
-                      <StoreIcon color="inherit" fontSize="large" />
+                    {item.type === 'sectors' && (
+                      <>
+                        <StoreIcon color="inherit" fontSize="large" />
+                        <Typography>
+                          {item.count > 1
+                            ? `${item.count} setores`
+                            : `${item.count} setor`}
+                        </Typography>
+                      </>
                     )}
-                    {item.value?.toLowerCase() === 'employee' && (
-                      <GroupIcon color="inherit" fontSize="large" />
+
+                    {item.type === 'users' && (
+                      <>
+                        <GroupIcon color="inherit" fontSize="large" />
+
+                        <Typography>
+                          {item.count > 1
+                            ? `${item.count} funcionários`
+                            : `${item.count} funcionário`}
+                        </Typography>
+                      </>
                     )}
-                    {item.value?.toLowerCase() === 'manager' && (
+                    {/* {item === 'manager' && (
                       <HailIcon color="inherit" fontSize="large" />
-                    )}
-                    <Typography>
-                      {item.quantity > 1
-                        ? `${item.quantity} ${item.namePlural}`
-                        : `${item.quantity} ${item.nameSingular}`}
-                    </Typography>
+                    )} */}
                   </Box>
                 </Grid>
               ))}
