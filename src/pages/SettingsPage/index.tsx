@@ -8,14 +8,20 @@ import Tabs, { Tab } from '@src/components/Tabs';
 import OfficesSettings from './OfficesSettings';
 import PermissionsSettings from './PermissionsSettings';
 import SectorSettings from './SectorSettings';
+import SettingsContracts from './SettingsContracts';
 
 const SettingsPage = () => {
-  const [currentTabId, setCurrentTabId] = useState<string>('sectors');
+  const [currentTabId, setCurrentTabId] = useState<string>('contracts');
 
   const tabs: Tab[] = [
     {
+      id: 'contracts',
+      label: `${basicNames.sector.plural}`,
+      content: <SettingsContracts />,
+    },
+    {
       id: 'sectors',
-      label: `${basicNames.sector.plural} e ${basicNames.section.plural}`,
+      label: `${basicNames.section.plural}`,
       content: <SectorSettings />,
     },
 

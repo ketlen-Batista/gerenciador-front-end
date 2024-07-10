@@ -18,15 +18,18 @@ export const SubTitle = styled.div`
 
 export const ButtonClick = styled(Button)`
   display: flex;
-  background: var(--Dark) !important;
+  background: ${({ theme }) => theme.colors.primary.dark};
   width: auto;
   height: 50px;
   border-radius: 250px !important;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.basic.white};
   cursor: pointer !important;
   margin-bottom: 20px;
   margin-left: 10px;
   padding: 0px 20px !important;
+  &:hover {
+    background: ${({ theme }) => theme.colors.primary.light};
+  }
 `;
 
 export const ContainerTitles = styled.div`

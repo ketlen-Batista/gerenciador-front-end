@@ -14,6 +14,7 @@ export const useDocumentsFilter = () => {
     handleDateFilter,
     selectedDateRange,
     handleChangeSearch,
+    fetchDocuments,
   } = useContext(DocumentsFilterContext);
 
   return {
@@ -27,5 +28,6 @@ export const useDocumentsFilter = () => {
     handleDateFilter,
     selectedDateRange,
     handleChangeSearch,
+    fetchDocuments,
   };
 };

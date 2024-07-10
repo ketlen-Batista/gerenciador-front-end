@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import { useListDocuments } from '@src/services/DocumentsService/queries';
 import { useGetUsers } from '@src/services/users/queries';
+import { UseMutateFunction } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useLocation } from 'react-router-dom';
 
 interface Document {
@@ -28,6 +30,12 @@ interface DocumentsFilterContextType {
   }) => void;
   selectedDateRange: { startDate: number | null; endDate: number | null };
   handleChangeSearch: (event: any) => void;
+  fetchDocuments: UseMutateFunction<
+    any,
+    AxiosError<unknown, any>,
+    unknown,
+    unknown
+  >;
 }
 
 export const DocumentsFilterContext = createContext<DocumentsFilterContextType>(
@@ -120,6 +128,7 @@ export const DocumentsFilterProvider = ({ children }) => {
       handleDateFilter,
       selectedDateRange,
       handleChangeSearch,
+      fetchDocuments,
     }),
     [
       filterUserId,
