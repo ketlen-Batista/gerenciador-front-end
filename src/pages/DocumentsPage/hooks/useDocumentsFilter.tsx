@@ -15,6 +15,9 @@ export const useDocumentsFilter = () => {
     selectedDateRange,
     handleChangeSearch,
     fetchDocuments,
+    openDialogAdd,
+    handleCloseModalAdd,
+    handleOpenModalAdd,
   } = useContext(DocumentsFilterContext);
 
   return {
@@ -29,5 +32,8 @@ export const useDocumentsFilter = () => {
     selectedDateRange,
     handleChangeSearch,
     fetchDocuments,
+    openDialogAdd,
+    handleCloseModalAdd,
+    handleOpenModalAdd,
   };
 };

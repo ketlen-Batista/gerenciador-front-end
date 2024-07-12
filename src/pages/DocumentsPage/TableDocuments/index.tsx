@@ -6,6 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import { useDeleteDocument } from '@src/services/DocumentsService/queries';
+import { colors } from '@src/styles/colors';
 import { formatDate } from '@src/utils/dates';
 
 import CircularProgress from '@src/components/CircularProgress';
@@ -195,14 +196,17 @@ function TableDocuments() {
           pageSize={10}
         />
       </Box>
-      <ModalConfirm
-        openDialog={isOpenModal}
-        handleClose={handleCloseModalDelete}
-        handleConfirm={handleDelete}
-        titleModal="Excluir Documento"
-        text="Tem certeza que deseja excluir este documento?"
-        textButtonConfirm="Excluir"
-      />
+      {isOpenModal && (
+        <ModalConfirm
+          openDialog={isOpenModal}
+          handleClose={handleCloseModalDelete}
+          handleConfirm={handleDelete}
+          titleModal="Excluir Documento"
+          text="Tem certeza que deseja excluir este documento?"
+          textButtonConfirm="Excluir"
+          colorButtonConfirm={colors.error.dark}
+        />
+      )}
     </>
   );
 }

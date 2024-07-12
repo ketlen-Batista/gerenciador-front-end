@@ -11,7 +11,7 @@ export interface UpdateUser {
   address?: string;
   registration?: string;
   dateOfBirth?: string;
-  status?: string;
+  status_value?: number;
   jobPosition_id?: number;
   sector_value?: number;
   contracts_value?: number;

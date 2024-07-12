@@ -91,6 +91,7 @@ function TableEmployees() {
       flex: 5,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
+      renderCell: (params) => <div>{params.row?.status?.name}</div>,
     },
     {
       field: 'actions',

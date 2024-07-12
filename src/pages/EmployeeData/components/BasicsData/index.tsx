@@ -4,6 +4,7 @@ import { Grid } from '@material-ui/core';
 import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { useGetSectors } from '@src/services/sectorService/queries';
+import { useGetStatus } from '@src/services/status/queries';
 import { maskCpf } from '@src/utils/mask';
 
 import Select from '@src/components/Select';
@@ -22,6 +23,7 @@ function BasicsData({ user }) {
   const { data: jobs, mutate: getJobs } = useGetJobPositions();
   const { data: contracts, mutate: getContracts } = useGetContracts();
   const { data: sectors, mutate: getSectors } = useGetSectors();
+  const { data: status, mutate: getStatus } = useGetStatus();
 
   const { formik } = useEmployeeData();
 
@@ -29,6 +31,7 @@ function BasicsData({ user }) {
     getJobs({});
     getContracts({});
     getSectors({});
+    getStatus({});
   }, []);
 
   return (
@@ -129,6 +132,26 @@ function BasicsData({ user }) {
           helperText={formik.touched.address && formik.errors.address}
           mini
         />
+      </Grid>
+      <Grid item xs={4}>
+        <S.FieldBox>
+          <Select
+            label="Status"
+            options={status}
+            value={formik.values.status_value}
+            name={
+              status?.find((item) => item.value === formik.values.status_value)
+                ?.name
+            }
+            onChange={(e) => formik.setFieldValue('status_value', e.value)}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.status_value && Boolean(formik.errors.status_value)
+            }
+            //   helperText={formik.touched.jobPosition_id && formik.errors.jobPosition_id}
+            clearable
+          />
+        </S.FieldBox>
       </Grid>
       <Grid item xs={4}>
         <S.FieldBox>

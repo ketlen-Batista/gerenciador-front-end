@@ -4,6 +4,7 @@ import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import { DocumentsFilterProvider } from '@pages/DocumentsPage/contexts/DocumentsFilterContext';
 import DefaultPage from '@templates/DefaultPage';
 
+import DocumentsList from './DocumentsList';
 import Filters from './Filters';
 import ModalAddDocument from './ModalAddDocument';
 import TableDocuments from './TableDocuments';
@@ -14,49 +15,15 @@ import * as S from './styles';
 function DocumentsPage() {
   const classes = S.useStyles();
 
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const { fetchDocuments } = useDocumentsFilter();
+  const { handleCloseModalAdd, handleOpenModalAdd, openDialogAdd } =
+    useDocumentsFilter();
 
-  const handleCloseModal = () => {
-    setOpenDialog(false);
-    fetchDocuments({});
-  };
-
-  const handleOpenModal = () => {
-    setOpenDialog(true);
-  };
-
+  console.log({ openDialogAdd });
   return (
     <DefaultPage pageTitle="Documentos">
       <DocumentsFilterProvider>
-        <Filters />
-
-        <S.ContainerButtonAndTitle>
-          <S.SubTitle>Lista de Documentos</S.SubTitle>
-          <S.ContainerButton>
-            <S.ButtonAdd
-              variant="contained"
-              color="primary"
-              disableRipple
-              className={classes.button}
-              startIcon={<PostAddRoundedIcon />}
-              title="Enviar Documentos"
-              onClick={handleOpenModal}
-            >
-              Enviar Documentos
-            </S.ButtonAdd>
-          </S.ContainerButton>
-        </S.ContainerButtonAndTitle>
-
-        <TableDocuments />
+        <DocumentsList />
       </DocumentsFilterProvider>
-
-      {openDialog && (
-        <ModalAddDocument
-          openDialog={openDialog}
-          handleClose={handleCloseModal}
-        />
-      )}
     </DefaultPage>
   );
 }

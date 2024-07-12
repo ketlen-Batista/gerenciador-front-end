@@ -36,6 +36,9 @@ interface DocumentsFilterContextType {
     unknown,
     unknown
   >;
+  openDialogAdd: boolean;
+  handleCloseModalAdd: () => void;
+  handleOpenModalAdd: () => void;
 }
 
 export const DocumentsFilterContext = createContext<DocumentsFilterContextType>(
@@ -49,7 +52,7 @@ export const DocumentsFilterProvider = ({ children }) => {
   const [filterUserId, setFilterUserId] = useState<string | number>(
     userId ? userId : '',
   );
-
+  const [openDialogAdd, setOpenDialogAdd] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [documentsFiltered, setDocumentsFiltered] = useState<Document[]>([]);
@@ -105,6 +108,15 @@ export const DocumentsFilterProvider = ({ children }) => {
     setSearch(event.target.value);
   };
 
+  const handleCloseModalAdd = () => {
+    setOpenDialogAdd(false);
+    fetchDocuments({});
+  };
+
+  const handleOpenModalAdd = () => {
+    setOpenDialogAdd(true);
+  };
+
   useEffect(() => {
     fetchDocuments({});
     getUsers({});
@@ -129,6 +141,9 @@ export const DocumentsFilterProvider = ({ children }) => {
       selectedDateRange,
       handleChangeSearch,
       fetchDocuments,
+      openDialogAdd,
+      handleCloseModalAdd,
+      handleOpenModalAdd,
     }),
     [
       filterUserId,
@@ -139,6 +154,9 @@ export const DocumentsFilterProvider = ({ children }) => {
       handleDateFilter,
       selectedDateRange,
       handleChangeSearch,
+      openDialogAdd,
+      handleCloseModalAdd,
+      handleOpenModalAdd,
     ],
   );
 

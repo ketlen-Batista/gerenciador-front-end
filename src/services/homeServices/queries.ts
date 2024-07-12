@@ -9,3 +9,11 @@ export function useGetItemsCountHome(handleReturn?: HandleReturn) {
     handleReturn,
   });
 }
+
+export function useGetStatusCountHome(handleReturn?: HandleReturn) {
+  return useCustomMutation({
+    key: 'getStatusCountHome',
+    request: API.getStatusCountHome,
+    handleReturn,
+  });
+}

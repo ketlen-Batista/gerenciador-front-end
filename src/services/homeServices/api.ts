@@ -9,3 +9,13 @@ export async function getItemsCountHome() {
     throw error;
   }
 }
+
+export async function getStatusCountHome() {
+  try {
+    const { data } = await api.get(`/home/status/count`);
+    return data;
+  } catch (error) {
+    console.error('Erro ao obter quantidade de status:', error);
+    throw error;
+  }
+}
