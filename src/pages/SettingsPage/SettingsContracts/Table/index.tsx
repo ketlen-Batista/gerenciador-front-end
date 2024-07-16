@@ -61,8 +61,8 @@ function Table({ contracts, getContracts, isPending }: TableContractsProps) {
     setContractIdToDelete(null);
   };
 
-  const handleDelete = () => {
-    deleteContract({ id: contractIdToDelete });
+  const handleDelete = async () => {
+    await deleteContract({ id: contractIdToDelete });
     handleCloseModalDelete();
   };
 
