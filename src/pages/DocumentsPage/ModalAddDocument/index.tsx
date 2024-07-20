@@ -24,7 +24,7 @@ const ModalAddDocument = ({
 }: ModalAddDocumentProps) => {
   const GIC_ID = '8112e4ba-fee1-489f-b1c3-f1b7e691a114';
 
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const [documentName, setDocumentName] = useState('');
 
   const [recipientId, setRecipientId] = useState<string[]>([]);
@@ -42,12 +42,16 @@ const ModalAddDocument = ({
     isSuccess: isSuccessLinkDocumentToUsers,
   } = useLinkDocumentToUsers();
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+  console.log({ file });
+
+  const handleFileChange = (files: File[]) => {
+    if (files && files.length > 0) {
+      setFile(files[0]);
+    }
   };
 
-  const handleDocumentNameChange = (event) => {
-    setDocumentName(event.target.value);
+  const handleDocumentNameChange = (text: string) => {
+    setDocumentName(text);
   };
 
   useEffect(() => {

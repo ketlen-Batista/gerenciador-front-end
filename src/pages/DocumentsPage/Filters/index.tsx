@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
-import { Grid, IconButton, InputAdornment } from '@material-ui/core';
+import { IconButton, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { FormControl } from '@mui/material';
+import { Box, FormControl, Grid } from '@mui/material';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
 
 import DateFilter from '@src/components/DateFilter';
@@ -14,6 +14,7 @@ import { useDocumentsFilter } from '../hooks/useDocumentsFilter';
 import * as S from '../styles';
 
 const Filters = () => {
+  const ref = useRef(null);
   const {
     search,
     setFilterUserId,
@@ -31,48 +32,49 @@ const Filters = () => {
     : [];
 
   return (
-    <S.ContainerFilters>
-      <S.ContainerInput>
-        <TextInput
-          name="search"
-          label="Buscar"
-          value={search}
-          placeholder="Buscar"
-          onChange={handleChangeSearch}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton aria-label="Clique para buscar">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          mini
+    <Grid container spacing={2} alignItems="center" mt={2}>
+      <Grid item xs={4}>
+        <S.ContainerInput>
+          <TextInput
+            name="search"
+            label="Buscar"
+            value={search}
+            placeholder="Buscar"
+            onChange={handleChangeSearch}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="Clique para buscar">
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            mini
+          />
+        </S.ContainerInput>
+      </Grid>
+
+      <Grid item xs={4}>
+        <FormControl fullWidth>
+          <Select
+            label="Usuário"
+            options={usersCustomSelect}
+            value={typeof filterUserId !== 'undefined' ? filterUserId : ''}
+            onChange={(e) => setFilterUserId(e.value)}
+            clearable
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={1} />
+      <Grid item xs={3}>
+        <DateFilter
+          ref={ref}
+          initialRange={INIT_DATE_RANGE}
+          onFilter={handleDateFilter}
         />
-      </S.ContainerInput>
-      <S.ContainerSelects>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <Select
-                label="Usuário"
-                options={usersCustomSelect}
-                value={typeof filterUserId !== 'undefined' ? filterUserId : ''}
-                onChange={(e) => setFilterUserId(e.value)}
-                clearable
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <DateFilter
-              initialRange={INIT_DATE_RANGE}
-              onFilter={handleDateFilter}
-            />
-          </Grid>
-        </Grid>
-      </S.ContainerSelects>
-    </S.ContainerFilters>
+      </Grid>
+    </Grid>
   );
 };
 

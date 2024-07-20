@@ -12,6 +12,10 @@ export const useUserCheckpointsContext = () => {
     setLoading,
     handleDateFilter,
     selectedDateRange,
+    handleOpenModalLocalization,
+    coordinates,
+    openModalLocalization,
+    handleCloseModalLocalization,
   } = useContext(UserCheckpointsContext);
 
   return {
@@ -23,5 +27,9 @@ export const useUserCheckpointsContext = () => {
     setLoading,
     handleDateFilter,
     selectedDateRange,
+    handleOpenModalLocalization,
+    coordinates,
+    openModalLocalization,
+    handleCloseModalLocalization,
   };
 };

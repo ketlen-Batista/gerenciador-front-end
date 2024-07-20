@@ -7,8 +7,20 @@ import { formatDate } from '@src/utils/dates';
 
 import TableDataGrid from '@src/components/TableDataGrid';
 
+import LocalizationModal from '../LocalizationModal';
+
 const UserCheckpointsList = () => {
-  const { userCheckpoints, users, loading } = useUserCheckpointsContext();
+  const {
+    userCheckpoints,
+    users,
+    loading,
+    handleOpenModalLocalization,
+    openModalLocalization,
+    handleCloseModalLocalization,
+    coordinates,
+  } = useUserCheckpointsContext();
+
+  console.log({ openModalLocalization });
 
   const columns = [
     {
@@ -27,6 +39,30 @@ const UserCheckpointsList = () => {
         params?.value && <div>{formatDate(params.value)}</div>,
     },
     { field: 'checkpointType', headerName: 'Tipo', flex: 3 },
+    {
+      field: 'localization',
+      headerName: 'Localização',
+      flex: 3,
+      renderCell: (params) =>
+        params.row.latitude &&
+        params.row.longitude && (
+          <div
+            onClick={() =>
+              handleOpenModalLocalization(
+                params.row.latitude,
+                params.row.longitude,
+              )
+            }
+            style={{
+              cursor: 'pointer',
+              color: 'blue',
+              fontWeight: '500',
+            }}
+          >
+            Ver localização
+          </div>
+        ),
+    },
     { field: 'status', headerName: 'Status', flex: 3 },
     { field: 'justification', headerName: 'Justificativa', flex: 3 },
   ];
@@ -38,6 +74,14 @@ const UserCheckpointsList = () => {
         columns={columns}
         loading={loading}
       />
+      {openModalLocalization && (
+        <LocalizationModal
+          openDialog={openModalLocalization}
+          handleClose={handleCloseModalLocalization}
+          latitude={coordinates?.latitude}
+          longitude={coordinates?.longitude}
+        />
+      )}
     </Box>
   );
 };

@@ -45,6 +45,10 @@ interface UserCheckpointsContextType {
     endDate: number | null;
   }) => void;
   selectedDateRange: { startDate: number | null; endDate: number | null };
+  handleOpenModalLocalization: (lat: number, lngt: number) => void;
+  coordinates: { latitude: number; longitude: number };
+  openModalLocalization: boolean;
+  handleCloseModalLocalization: () => void;
 }
 
 export const UserCheckpointsContext = createContext(
@@ -55,6 +59,15 @@ export const UserCheckpointsProvider = ({ children }) => {
   const location = useLocation();
   const { userId } = location.state || {};
 
+  const [coordinates, setCoordinates] = useState<{
+    latitude: number;
+    longitude: number;
+  }>({
+    latitude: 0,
+    longitude: 0,
+  });
+  const [openModalLocalization, setOpenModalLocalization] =
+    useState<boolean>(false);
   const [filterUserId, setFilterUserId] = useState<string | number>(
     userId ?? '',
   );
@@ -72,6 +85,15 @@ export const UserCheckpointsProvider = ({ children }) => {
   const { data: fetchedUsers, mutate: getUsers } = useGetUsers();
   const { data: fetchedCheckpoints, mutate: fetchUserCheckpoints } =
     useListUserCheckpoints();
+
+  const handleOpenModalLocalization = (lat: number, lngt: number) => {
+    setOpenModalLocalization(true);
+    setCoordinates({ latitude: lat, longitude: lngt });
+  };
+
+  const handleCloseModalLocalization = () => {
+    setOpenModalLocalization(false);
+  };
 
   const checkpointsFiltered = () => {
     if (!fetchedCheckpoints) return;
@@ -129,8 +151,19 @@ export const UserCheckpointsProvider = ({ children }) => {
       setLoading,
       handleDateFilter,
       selectedDateRange,
+      handleOpenModalLocalization,
+      coordinates,
+      openModalLocalization,
+      handleCloseModalLocalization,
     }),
-    [filterUserId, userCheckpoints, users, loading, selectedDateRange],
+    [
+      filterUserId,
+      userCheckpoints,
+      users,
+      loading,
+      selectedDateRange,
+      openModalLocalization,
+    ],
   );
 
   return (

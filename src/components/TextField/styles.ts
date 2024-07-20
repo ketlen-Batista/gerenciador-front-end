@@ -6,6 +6,7 @@ import { colors } from '@styles/colors';
 export const TextField = MUIStyled(MUITextField)({
   '& .MuiInputBase-root': {
     background: colors.basic.white,
+    height: 'auto',
     '& > fieldset': {
       transition: 'border-color 0.3s ease',
       borderColor: colors.text.disabled,
