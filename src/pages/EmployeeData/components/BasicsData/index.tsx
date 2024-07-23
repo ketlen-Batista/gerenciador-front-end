@@ -5,7 +5,7 @@ import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { useGetSectors } from '@src/services/sectorService/queries';
 import { useGetStatus } from '@src/services/status/queries';
-import { maskCpf } from '@src/utils/mask';
+import { maskCpf, maskDate } from '@src/utils/mask';
 
 import Select from '@src/components/Select';
 
@@ -109,7 +109,7 @@ function BasicsData({ user }) {
         <TextInput
           name="dateOfBirth"
           label="Data de Nascimento"
-          value={formik.values.dateOfBirth}
+          value={maskDate(formik.values.dateOfBirth)}
           placeholder="Data de nascimento"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}

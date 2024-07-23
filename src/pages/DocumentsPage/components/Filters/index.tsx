@@ -3,15 +3,13 @@ import React, { useRef } from 'react';
 import { IconButton, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { Box, FormControl, Grid } from '@mui/material';
+import { useDocumentsFilter } from '@pages/DocumentsPage/hooks/useDocumentsFilter';
+import * as S from '@pages/DocumentsPage/styles';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
 
 import DateFilter from '@src/components/DateFilter';
 import Select from '@src/components/Select';
 import TextInput from '@src/components/TextInput';
-
-import { useDocumentsFilter } from '../hooks/useDocumentsFilter';
-
-import * as S from '../styles';
 
 const Filters = () => {
   const ref = useRef(null);

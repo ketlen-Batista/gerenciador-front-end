@@ -22,12 +22,13 @@ const ModalAddDocument = ({
   openDialog,
   handleClose,
 }: ModalAddDocumentProps) => {
-  const GIC_ID = '8112e4ba-fee1-489f-b1c3-f1b7e691a114';
+  const GIC_ID = 'e22776ae-c251-4fb4-923b-1ccd1bfac99c';
 
   const [file, setFile] = useState<File | null>(null);
   const [documentName, setDocumentName] = useState('');
 
   const [recipientId, setRecipientId] = useState<string[]>([]);
+  const [typeDocument, setTypeDocument] = useState<string | number>('');
   const [senderId, setSenderId] = useState(GIC_ID);
 
   const {
@@ -69,6 +70,7 @@ const ModalAddDocument = ({
         documentName,
         senderId,
         recipientId,
+        typeDocumentValue: typeDocument as number,
       });
     }
   }, [responseUpload]);
@@ -106,7 +108,9 @@ const ModalAddDocument = ({
         <Box display="flex" justifyContent="flex-end" width="100%">
           <Button
             onClick={handleUpload}
-            disabled={!file || isLoading || !recipientId.length}
+            disabled={
+              !file || isLoading || !recipientId.length || !typeDocument
+            }
           >
             {isLoading ? (
               <CircularProgress size="small" color="primary" />
@@ -117,7 +121,7 @@ const ModalAddDocument = ({
         </Box>
       }
     >
-      <Box display="flex" flexDirection="row" justifyContent="space-around">
+      <Box display="flex" flexDirection="row">
         <SelectUsersDocument
           recipientId={recipientId}
           setRecipientId={setRecipientId}
@@ -127,6 +131,8 @@ const ModalAddDocument = ({
           documentName={documentName}
           handleDocumentNameChange={handleDocumentNameChange}
           handleFileChange={handleFileChange}
+          typeDocument={typeDocument}
+          setTypeDocument={setTypeDocument}
         />
       </Box>
     </FullScreenDialog>

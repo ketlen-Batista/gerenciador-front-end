@@ -76,9 +76,9 @@ const SelectUsersDocument = ({
       display="flex"
       flexDirection="column"
       gap={3}
-      my={2}
-      mx={3}
-      width="600px"
+      py={3}
+      px={5}
+      width="100%"
     >
       <S.ContainerSelects>
         <Grid container spacing={1}>

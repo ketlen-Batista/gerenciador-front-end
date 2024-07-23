@@ -4,9 +4,10 @@ import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import { DocumentsFilterProvider } from '@pages/DocumentsPage/contexts/DocumentsFilterContext';
 import DefaultPage from '@templates/DefaultPage';
 
-import Filters from './Filters';
-import ModalAddDocument from './ModalAddDocument';
-import TableDocuments from './TableDocuments';
+import Filters from './components/Filters';
+import ModalAddDocument from './components/ModalAddDocument';
+import TableDocuments from './components/TableDocuments';
+
 import { useDocumentsFilter } from './hooks/useDocumentsFilter';
 
 import * as S from './styles';
@@ -17,7 +18,6 @@ function DocumentsList() {
   const { handleCloseModalAdd, handleOpenModalAdd, openDialogAdd } =
     useDocumentsFilter();
 
-  console.log({ openDialogAdd });
   return (
     <>
       <Filters />

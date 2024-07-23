@@ -2,8 +2,10 @@ import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import { useListDocuments } from '@src/services/DocumentsService/queries';
 import { useGetUsers } from '@src/services/users/queries';
+import { INIT_DATE_RANGE } from '@src/utils/dates';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { getTime, parseISO } from 'date-fns';
 import { useLocation } from 'react-router-dom';
 
 interface Document {
@@ -110,23 +112,57 @@ export const DocumentsFilterProvider = ({ children }) => {
 
   const handleCloseModalAdd = () => {
     setOpenDialogAdd(false);
-    fetchDocuments({});
+
+    fetchDocuments({
+      startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
+      endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
+    });
   };
 
   const handleOpenModalAdd = () => {
     setOpenDialogAdd(true);
   };
 
+  const convertTimestampsToISO = (dateRange: {
+    startDate: number | null;
+    endDate: number | null;
+  }) => {
+    return {
+      startDate: dateRange.startDate
+        ? new Date(dateRange.startDate).toISOString()
+        : null,
+      endDate: dateRange.endDate
+        ? new Date(dateRange.endDate).toISOString()
+        : null,
+    };
+  };
+
   useEffect(() => {
-    fetchDocuments({});
+    const dateRangeISO = convertTimestampsToISO(selectedDateRange);
+
+    if (dateRangeISO.startDate && dateRangeISO.endDate) {
+      fetchDocuments(dateRangeISO);
+
+      getUsers({});
+    }
+    fetchDocuments({
+      startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
+      endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
+    });
+
     getUsers({});
-  }, []);
+  }, [selectedDateRange]);
 
   useEffect(() => {
     if (fetchedDocuments) {
       filterDocuments();
     }
-  }, [filterUserId, search, fetchedDocuments, selectedDateRange]);
+  }, [
+    filterUserId,
+    search,
+    fetchedDocuments,
+    // , selectedDateRange
+  ]);
 
   const value = useMemo(
     () => ({

@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import Tabs, { Tab } from '@src/components/Tabs';
 
 import PointCheckins from './pages/PointCheckins';
+import ServiceRegister from './pages/ServiceRegister';
 
 const ReportsPage = () => {
   const location = useLocation();
@@ -19,6 +20,11 @@ const ReportsPage = () => {
       id: 'pointCheckins',
       label: 'Folha de Ponto',
       content: <PointCheckins />,
+    },
+    {
+      id: 'serviceRegister',
+      label: 'Registros de serviço',
+      content: <ServiceRegister />,
     },
   ];
   return (

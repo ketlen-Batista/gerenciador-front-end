@@ -1,5 +1,12 @@
-import React, { ReactNode, createContext, useContext, useMemo } from 'react';
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react';
 
+import useSnackbar from '@src/hooks/useSnackbar';
 import {
   useGetUser,
   useRegisterUser,
@@ -9,6 +16,8 @@ import { AxiosError } from 'axios';
 import { useFormik } from 'formik';
 import { UseMutateFunction } from 'react-query';
 import * as Yup from 'yup';
+
+import Snackbar from '@src/components/Snackbar';
 
 interface GetUser {
   userId: string;
@@ -80,8 +89,10 @@ const validationSchema = Yup.object().shape({
 });
 
 export const EmployeeDataProvider = ({ children }) => {
-  const { mutate: registerUser } = useRegisterUser();
-  const { mutate: updateUser } = useUpdateUser();
+  const { showSnackbar } = useSnackbar();
+  const { mutate: registerUser, isSuccess: isSuccessRegister } =
+    useRegisterUser();
+  const { mutate: updateUser, isSuccess: isSuccessUpdate } = useUpdateUser();
   const {
     data: user,
     mutate: getUser,
@@ -143,6 +154,15 @@ export const EmployeeDataProvider = ({ children }) => {
       });
     },
   });
+
+  useEffect(() => {
+    if (isSuccessRegister || isSuccessUpdate) {
+      showSnackbar({
+        message: `${isSuccessUpdate ? 'Atualização feita com sucesso.' : 'Usuário criado com sucesso.'}`,
+        type: 'success',
+      });
+    }
+  }, [isSuccessRegister, isSuccessUpdate]);
 
   const value = useMemo(
     () => ({

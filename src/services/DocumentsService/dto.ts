@@ -13,6 +13,7 @@ export interface LinkDocumentToUsersDTO {
   received?: boolean;
   visa?: boolean;
   documentName?: string;
+  typeDocumentValue?: number;
 }
 
 export interface UploadDocumentDTO {

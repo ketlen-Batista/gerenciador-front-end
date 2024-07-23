@@ -67,6 +67,7 @@ import isPropValid from '@emotion/is-prop-valid';
 import { ThemeProvider as MUIThemeProvider } from '@mui/material/styles';
 import { router } from '@routes/router';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { SnackbarProvider } from 'notistack';
 import { RouterProvider } from 'react-router-dom';
 import {
   StyleSheetManager,
@@ -113,22 +114,24 @@ export const useAuthContext = () => useContext(AuthContext);
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <MUIThemeProvider theme={defaultMUITheme}>
-          <StyleSheetManager
-            enableVendorPrefixes
-            shouldForwardProp={(propName, elementToBeRendered) => {
-              return typeof elementToBeRendered === 'string'
-                ? isPropValid(propName)
-                : true;
-            }}
-          >
-            <StyledThemeProvider theme={defaultStyledTheme}>
-              <RouterProvider router={router} />
-            </StyledThemeProvider>
-          </StyleSheetManager>
-        </MUIThemeProvider>
-      </AuthProvider>
+      <SnackbarProvider maxSnack={3}>
+        <AuthProvider>
+          <MUIThemeProvider theme={defaultMUITheme}>
+            <StyleSheetManager
+              enableVendorPrefixes
+              shouldForwardProp={(propName, elementToBeRendered) => {
+                return typeof elementToBeRendered === 'string'
+                  ? isPropValid(propName)
+                  : true;
+              }}
+            >
+              <StyledThemeProvider theme={defaultStyledTheme}>
+                <RouterProvider router={router} />
+              </StyledThemeProvider>
+            </StyleSheetManager>
+          </MUIThemeProvider>
+        </AuthProvider>
+      </SnackbarProvider>
     </QueryClientProvider>
   );
 }

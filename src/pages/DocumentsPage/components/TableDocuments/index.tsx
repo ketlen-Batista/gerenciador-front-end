@@ -5,35 +5,58 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import { useDocumentsFilter } from '@pages/DocumentsPage/hooks/useDocumentsFilter';
 import { useDeleteDocument } from '@src/services/DocumentsService/queries';
+import { useGetDocumentById } from '@src/services/DocumentsService/queries';
 import { colors } from '@src/styles/colors';
-import { formatDate } from '@src/utils/dates';
+import { INIT_DATE_RANGE, formatDate } from '@src/utils/dates';
 
 import CircularProgress from '@src/components/CircularProgress';
 import ModalConfirm from '@src/components/ModalConfirm';
 
 import TableDataGrid from '@components/TableDataGrid';
 
-import { useDocumentsFilter } from '../hooks/useDocumentsFilter';
-
 function TableDocuments() {
-  const { documentsFiltered, loading } = useDocumentsFilter();
+  const { documentsFiltered, loading, fetchDocuments } = useDocumentsFilter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [documentIdToDelete, setDocumentIdToDelete] = useState<number>(null);
   const { mutate: handleDeleteDocuments, isPending: isPendingDeleteDocuments } =
     useDeleteDocument();
+  const { mutate: getDocumentById } = useGetDocumentById(); // Use o hook para obter o documento pelo ID
+
   const handleOpenModalDelete = (documentId: number) => {
     setIsOpenModal(true);
     setDocumentIdToDelete(documentId);
   };
+
   const handleCloseModalDelete = () => {
     setIsOpenModal(false);
     setDocumentIdToDelete(null);
+    fetchDocuments({
+      startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
+      endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
+    });
   };
-  const handleDelete = () => {
-    handleDeleteDocuments(documentIdToDelete);
+
+  const handleDelete = async () => {
+    await handleDeleteDocuments(documentIdToDelete);
     handleCloseModalDelete();
   };
+
+  const handleViewDocument = (documentId: number) => {
+    getDocumentById(documentId, {
+      onSuccess: (data) => {
+        console.log('data134', data);
+        const blob = new Blob([data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        window.open(url);
+      },
+      onError: (error) => {
+        console.error('Failed to fetch document', error);
+      },
+    });
+  };
+
   const columns = [
     {
       field: 'documentName',
@@ -151,7 +174,7 @@ function TableDocuments() {
           }}
         >
           <Tooltip title="Ver" placement="top">
-            <IconButton>
+            <IconButton onClick={() => handleViewDocument(params.row.id)}>
               <div
                 style={{
                   display: 'flex',
@@ -163,13 +186,12 @@ function TableDocuments() {
             </IconButton>
           </Tooltip>
           <Tooltip title="Deletar" placement="top">
-            <IconButton>
+            <IconButton onClick={() => handleOpenModalDelete(params.row.id)}>
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--Danger)',
                 }}
-                onClick={() => handleOpenModalDelete(params.row.id)}
               >
                 <DeleteOutlinedIcon fontSize="medium" />
               </div>

@@ -3,17 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import FileDownloadIcon from '@material-ui/icons/CloudDownload';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
+import { useListTypesDocuments } from '@src/services/typesDocuments/queries';
 import { colors } from '@src/styles/colors';
 import { useDropzone } from 'react-dropzone';
 
+import Select from '@src/components/Select';
 import TableDataGrid from '@src/components/TableDataGrid';
 import TextField from '@src/components/TextField';
+import TextInput from '@src/components/TextInput';
 
 const useStyles = makeStyles((theme) => ({
   dropzone: {
@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     border: `2px dashed #00B4AA`,
     borderRadius: '5px',
-    padding: '30px',
+    padding: '30px 0px',
     cursor: 'pointer',
-    width: 'auto',
+    width: '100%',
   },
   dropzoneIcon: {
     fontSize: '48px',
@@ -42,15 +42,22 @@ interface UploadDocumentProps {
   documentName: string;
   handleDocumentNameChange: (text: string) => void;
   handleFileChange: (files: File[]) => void;
+  typeDocument: string | number;
+  setTypeDocument: React.Dispatch<React.SetStateAction<string | number>>;
 }
 
 const UploadDocument = ({
   documentName,
   handleDocumentNameChange,
   handleFileChange,
+  typeDocument,
+  setTypeDocument,
 }: UploadDocumentProps) => {
   const classes = useStyles();
   const [files, setFiles] = useState([]);
+
+  const { data: listTypesDocuments, mutateAsync: getTypesDocuments } =
+    useListTypesDocuments();
 
   const handleDrop = (acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map((file) => ({
@@ -63,18 +70,22 @@ const UploadDocument = ({
     handleFileChange(acceptedFiles);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop: handleDrop });
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: handleDrop,
+    maxFiles: 1,
+    accept: {
+      'application/pdf': ['.pdf'],
+      'application/msword': ['.doc'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+        ['.docx'],
+    },
+    multiple: false,
+  });
 
   const handleDelete = (id: number) => {
     setFiles((prevFiles) => prevFiles.filter((file) => file.id !== id));
     handleDocumentNameChange('');
   };
-
-  //   useEffect(() => {
-  // if(files?.file) {
-
-  // }
-  //   },[files])
 
   const columns = [
     { field: 'date', headerName: 'Data de upload', flex: 1 },
@@ -86,12 +97,6 @@ const UploadDocument = ({
       // eslint-disable-next-line react/display-name
       renderCell: (params) => (
         <Box>
-          {/* <IconButton onClick={() => handleView(params.row.file)}>
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDownload(params.row.file)}>
-            <FileDownloadIcon />
-          </IconButton> */}
           <IconButton onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon />
           </IconButton>
@@ -100,7 +105,9 @@ const UploadDocument = ({
     },
   ];
 
-  // console.log({ files });
+  useEffect(() => {
+    getTypesDocuments({});
+  }, []);
 
   return (
     <Box
@@ -111,29 +118,31 @@ const UploadDocument = ({
       alignItems="center"
       justifyContent="center"
       gap={2}
-      my={2}
-      mx={2}
-      width="600px"
+      py={3}
+      px={5}
+      width="100%"
     >
       <Box fontSize="18px" fontWeight={500}>
         Faça upload do arquivo desejado:
       </Box>
 
-      <TextField
+      <TextInput
         type="text"
         placeholder="Nome do Documento"
         value={documentName}
         onChange={(event) => handleDocumentNameChange(event.target.value)}
       />
 
-      {/* <Select
-                options={jobs}
-                value={cargo}
-                name={jobs?.find((item) => item.value === cargo)?.name}
-                onChange={(e) => setDocumentType(e.value)}
-                label="Tipo de Documento"
-                clearable
-              /> */}
+      <Select
+        options={listTypesDocuments}
+        value={typeDocument}
+        name={
+          listTypesDocuments?.find((item) => item.value === typeDocument)?.name
+        }
+        onChange={(e) => setTypeDocument(e.value)}
+        label="Tipo de Documento"
+        clearable
+      />
 
       {/* <Box fontSize="80px">
         <DriveFolderUploadIcon color="primary" fontSize="inherit" />
@@ -141,7 +150,12 @@ const UploadDocument = ({
 
       {files.length === 0 ? (
         <div {...getRootProps({ className: classes.dropzone })}>
-          <input {...getInputProps()} type="file" accept="application/pdf" />
+          <input
+            {...getInputProps()}
+            type="file"
+            required
+            accept="application/pdf"
+          />
           <CloudUploadIcon className={classes.dropzoneIcon} />
           <Typography variant="h6" color="textSecondary">
             Clique ou arraste o arquivo até aqui
@@ -153,17 +167,9 @@ const UploadDocument = ({
             className={classes.dataGrid}
             rows={files}
             columns={columns}
-            pageSize={5}
-            editMode="cell"
-            onCellEditStart={(params) => {
-              handleDocumentNameChange(params.row.name);
-            }}
-            isCellEditable={(params) => params.field === 'name'}
-            // rowsPerPageOptions={[5]}
           />
         </Box>
       )}
-      {/* <TextField type="file" onChange={handleFileChange} /> */}
     </Box>
   );
 };
