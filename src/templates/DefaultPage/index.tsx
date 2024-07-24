@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import PersonOutlineTwoToneIcon from '@material-ui/icons/PersonOutlineTwoTone';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import clsx from 'clsx';
 
 import Sidebar from '@components/Sidebar';
@@ -73,7 +73,7 @@ function DefaultPage({ children, pageTitle }: Props) {
           </Typography>
           Cecília Silva Santos
           <IconButton color="inherit">
-            <PersonOutlineTwoToneIcon />
+            <AccountCircleIcon />
           </IconButton>
         </Toolbar>
       </AppBar>

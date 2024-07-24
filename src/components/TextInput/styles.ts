@@ -1,11 +1,12 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { colors } from '@src/styles/colors';
 
 export const useStyles = makeStyles((theme) =>
   createStyles({
     styledInput: {
-      heigth: '100% !important',
+      heigth: 'auto !important',
       backgroundColor: 'var(--Light)',
-      border: 'var(--Secondary)',
+      border: `1px solid ${colors.extra.avatarFill}`,
       borderRadius: 4,
       'box-sizing': 'border-box',
       '&:after': {
@@ -34,5 +35,5 @@ export const useStyles = makeStyles((theme) =>
         color: theme.palette.primary.main,
       },
     },
-  })
+  }),
 );

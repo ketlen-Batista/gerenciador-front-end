@@ -5,14 +5,18 @@ import DefaultPage from '@templates/DefaultPage';
 
 import Filters from './Filters';
 import TableEmployees from './TableEmployees';
+import { EmployeesFilterProvider } from './contexts/employeesContext';
 
 function Employees() {
   return (
     <DefaultPage pageTitle="Funcionários">
-      <Filters />
+      <EmployeesFilterProvider>
+        {/* FILTROS */}
+        <Filters />
 
-      {/* TABELA */}
-      <TableEmployees />
+        {/* TABELA */}
+        <TableEmployees />
+      </EmployeesFilterProvider>
     </DefaultPage>
   );
 }

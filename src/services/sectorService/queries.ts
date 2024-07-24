@@ -9,3 +9,27 @@ export function useGetSectors(handleReturn?: HandleReturn) {
     handleReturn,
   });
 }
+
+export function useCreateSector(handleReturn?: HandleReturn) {
+  return useCustomMutation({
+    key: 'createSector',
+    request: API.createSector,
+    handleReturn,
+  });
+}
+
+export function useUpdateSector(handleReturn?: HandleReturn) {
+  return useCustomMutation({
+    key: 'updateSector',
+    request: API.updateSector,
+    handleReturn,
+  });
+}
+
+export function useDeleteSector(handleReturn?: HandleReturn) {
+  return useCustomMutation({
+    key: 'deleteSector',
+    request: API.deleteSector,
+    handleReturn,
+  });
+}

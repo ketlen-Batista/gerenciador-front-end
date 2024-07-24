@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from '@material-ui/core';
 import { DeleteOutline } from '@material-ui/icons';
@@ -28,7 +28,7 @@ interface Props extends CustomSelectProps {
   value: SelectValue;
   name?: string;
   placeholder?: string;
-  heigthSelect?: number | string;
+  heightSelect?: number | string;
 }
 
 function Select({
@@ -41,25 +41,30 @@ function Select({
   placeholder,
   value,
   name,
-  heigthSelect,
+  heightSelect,
   ...props
 }: Props) {
+  const [shrink, setShrink] = useState(false);
+
+  useEffect(() => {
+    if (value) {
+      setShrink(true);
+    }
+  }, [value]);
+
   const customId = `select-${label}-${Math.random()}`;
   const emptyOptions = !options?.length;
 
-  const handleOnChange = (event) => {
-    const typed = event.target?.value as string;
-
+  const handleOnChange = (event: SelectChangeEvent<SelectValue>) => {
+    const typed = event.target.value as string;
     const formatted = typed?.length
       ? JSON.parse(typed)
       : { name: '', value: '' };
-
-    return onChange(formatted);
+    onChange(formatted);
   };
 
-  const handleRenderValue = (selected) => {
+  const handleRenderValue = (selected: SelectValue) => {
     const initReturn = placeholder ?? '-';
-
     if (!selected) return initReturn;
 
     const typed = selected as string;
@@ -70,8 +75,12 @@ function Select({
   };
 
   return (
-    <S.FormControl className="custom-select">
-      {label && <InputLabel id={`${customId}-label`}>{label}</InputLabel>}
+    <S.FormControl className="custom-select" variant="outlined" fullWidth>
+      {label && (
+        <InputLabel id={`${customId}-label`} shrink={shrink}>
+          {label}
+        </InputLabel>
+      )}
       <S.Select
         displayEmpty={!!placeholder}
         id={customId}
@@ -83,12 +92,28 @@ function Select({
         renderValue={handleRenderValue}
         value={value}
         name={name}
-        variant="outlined"
-        style={{ height: `${heigthSelect ?? '45px'}` }}
+        style={{ height: `${heightSelect ?? '45px'}`, padding: '0 8px' }}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              maxHeight: 48 * 4.5,
+              width: 250,
+              // marginLeft: '15px',
+            },
+          },
+        }}
         {...props}
       >
         {clearable && !emptyOptions && value && (
-          <MenuItem value="" className="select-button-item">
+          <MenuItem
+            value=""
+            className="select-button-item"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '10px',
+            }}
+          >
             <Button
               variant="outlined"
               startIcon={<DeleteOutline className="select-button-icon" />}
@@ -98,7 +123,14 @@ function Select({
           </MenuItem>
         )}
         {!!emptyOptions && (
-          <MenuItem disabled value="">
+          <MenuItem
+            disabled
+            value=""
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             {emptyLabel}
           </MenuItem>
         )}
@@ -107,6 +139,12 @@ function Select({
             <MenuItem
               key={`${label}-option-${index}`}
               value={JSON.stringify(option)}
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                paddingLeft: '15px',
+              }}
             >
               {option.name}
             </MenuItem>

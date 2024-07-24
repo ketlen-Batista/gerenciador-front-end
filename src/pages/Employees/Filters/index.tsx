@@ -1,49 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Grid, IconButton, InputAdornment } from '@material-ui/core';
-import PersonAddTwoToneIcon from '@material-ui/icons/PersonAddTwoTone';
 import SearchIcon from '@material-ui/icons/Search';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
-import { useGetContracts } from '@src/services/contractsService/queries';
-import { useGetJobPositions } from '@src/services/jobPositions/queries';
-import { useGetSectors } from '@src/services/sectorService/queries';
-import { cargos, setores, seções } from '@src/utils/constants';
+import { basicNames } from '@src/utils/constants';
 import { useNavigate } from 'react-router-dom';
 
 import Select from '@src/components/Select';
 import TextInput from '@src/components/TextInput';
 
-import * as S from './styles';
+import { useEmployeesFilter } from '../contexts/employeesContext';
 
-// const OptionEmpty = { value: '', name: '' };
+import * as S from './styles';
 
 export const Filters = () => {
   const classes = S.useStyles();
-  const [search, setSearch] = useState('');
-  const [cargo, setCargo] = useState(null);
-  const [setor, setSetor] = useState(null);
-  const [contrato, setContrato] = useState(null);
-
-  const { data: jobs, mutate: getJobs } = useGetJobPositions();
-  const { data: contracts, mutate: getContracts } = useGetContracts();
-  const { data: sectors, mutate: getSectors } = useGetSectors();
-
-  useEffect(() => {
-    getJobs({});
-    getContracts({});
-    getSectors({});
-  }, []);
-
   const navigate = useNavigate();
+  const {
+    search,
+    setSearch,
+    cargo,
+    setCargo,
+    setSetor,
+    setContrato,
+    setor,
+    contrato,
+    jobs,
+    filteredSectors,
+    filteredContracts,
+  } = useEmployeesFilter();
 
-  const handleNavigate = (page, employeeId = null) => {
-    navigate(page || '', { state: { employeeId } });
+  const handleChangeFilter = (name: string, value?: number | string | null) => {
+    switch (name) {
+      case 'search':
+        setSearch(value);
+        break;
+      case 'cargo':
+        setCargo(value);
+        break;
+      case 'setor':
+        setSetor(value);
+        break;
+      case 'contrato':
+        setContrato(value);
+        break;
+      default:
+        break;
+    }
   };
 
-  const handleChangeFilter = ({ target: { name, value } }) => {
-    if (name === 'search') {
-      setSearch(value);
-    }
+  const handleAddEmployee = () => {
+    navigate(AvailableRoutes.employeesDataPage, {
+      state: { employeeId: null },
+    });
   };
 
   return (
@@ -52,19 +62,15 @@ export const Filters = () => {
         <TextInput
           name="search"
           label="Buscar"
-          value={search}
           placeholder="Buscar"
-          onChange={handleChangeFilter}
+          value={search || ''}
+          onChange={(e) => handleChangeFilter('search', e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
                   aria-label="Clique para buscar"
-                  onClick={() =>
-                    handleChangeFilter({
-                      target: { name: 'search', value: search },
-                    })
-                  }
+                  onClick={() => handleChangeFilter('search', search)}
                 >
                   <SearchIcon />
                 </IconButton>
@@ -79,11 +85,10 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Cargo"
                 options={jobs}
                 value={cargo}
-                name={jobs?.find((item) => item.value === cargo)?.name}
-                onChange={(e) => setCargo(e.value)}
+                onChange={(e) => handleChangeFilter('cargo', e.value)}
+                label={basicNames.office.singular}
                 clearable
               />
             </S.FieldBox>
@@ -91,11 +96,10 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Contrato"
-                options={contracts}
+                options={filteredContracts}
                 value={contrato}
-                name={contracts?.find((item) => item.value === setor)?.name}
-                onChange={(e) => setContrato(e.value)}
+                onChange={(e) => handleChangeFilter('contrato', e.value)}
+                label={basicNames.sector.singular}
                 clearable
               />
             </S.FieldBox>
@@ -103,29 +107,27 @@ export const Filters = () => {
           <Grid item xs={3}>
             <S.FieldBox>
               <Select
-                label="Setor"
-                options={sectors}
+                options={filteredSectors}
                 value={setor}
-                name={sectors?.find((item) => item.value === setor)?.name}
-                onChange={(e) => setSetor(e.value)}
+                onChange={(e) => handleChangeFilter('setor', e.value)}
+                label={basicNames.section.singular}
                 clearable
               />
             </S.FieldBox>
           </Grid>
         </Grid>
       </S.ContainerSelects>
-      <S.ContainerButton>
-        <S.ButtonAdd
-          variant="contained"
-          color="primary"
-          disableRipple
-          className={classes.button}
-          startIcon={<PersonAddTwoToneIcon />}
-          onClick={() => handleNavigate(AvailableRoutes.employeesDataPage)}
-        >
-          Adicionar Funcionário
-        </S.ButtonAdd>
-      </S.ContainerButton>
+
+      <S.ButtonAdd
+        variant="contained"
+        color="primary"
+        disableRipple
+        className={classes.button}
+        startIcon={<PersonAddAltRoundedIcon />}
+        onClick={handleAddEmployee}
+      >
+        Adicionar Funcionário
+      </S.ButtonAdd>
     </S.ContainerFilters>
   );
 };

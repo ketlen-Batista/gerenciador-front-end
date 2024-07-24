@@ -1,57 +1,61 @@
-import { IconButton } from '@material-ui/core';
-import Tooltip from '@material-ui/core/Tooltip';
+import React, { useState } from 'react';
+
+import { Box, IconButton, Tooltip } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import { useDocumentsFilter } from '@pages/DocumentsPage/hooks/useDocumentsFilter';
+import { useDeleteDocument } from '@src/services/DocumentsService/queries';
+import { useGetDocumentById } from '@src/services/DocumentsService/queries';
+import { colors } from '@src/styles/colors';
+import { INIT_DATE_RANGE, formatDate } from '@src/utils/dates';
+
+import CircularProgress from '@src/components/CircularProgress';
+import ModalConfirm from '@src/components/ModalConfirm';
 
 import TableDataGrid from '@components/TableDataGrid';
 
-function TableEmployees() {
-  const rows = [
-    {
-      id: '9d5b884e-8d72-4f29-8e23-f06ebe2394d0',
-      documentName: 'documento1.pdf',
-      sentIn: '21/04/2024-11-20',
-      sender: 'GIC',
-      recipient: 'Fulana da Silva',
-      received: true,
-      visa: true,
-      actions: '',
-      office: 'Gerente',
-      sector: 'Educação',
-      section: 'Colégio Fátima Rodrigues',
-      status: 'Ativa',
-    },
-    {
-      id: '9d5b884e-8d72-4f29-8e23-f06ebe2394h5',
-      documentName: 'documento2.pdf',
-      sentIn: '21/04/2024-11-20',
-      sender: 'GIC',
-      recipient: 'Ciclano da Silva',
-      received: true,
-      visa: true,
-      actions: '',
-      office: 'Gerente',
-      sector: 'Educação',
-      section: 'Colégio Fátima Rodrigues',
-      status: 'Ativa',
-    },
-    {
-      id: '9d5b884e-8d72-4f29-8e23-f06ebe2394f4',
-      documentName: 'documento3.pdf',
-      sentIn: '21/04/2024-11-20',
-      sender: 'GIC',
-      recipient: 'Fulana de Sousa',
-      received: true,
-      visa: false,
-      actions: '',
-      office: 'Gerente',
-      sector: 'Educação',
-      section: 'Colégio Fátima Rodrigues',
-      status: 'Ativa',
-    },
-  ];
+function TableDocuments() {
+  const { documentsFiltered, loading, fetchDocuments } = useDocumentsFilter();
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [documentIdToDelete, setDocumentIdToDelete] = useState<number>(null);
+  const { mutate: handleDeleteDocuments, isPending: isPendingDeleteDocuments } =
+    useDeleteDocument();
+  const { mutate: getDocumentById } = useGetDocumentById(); // Use o hook para obter o documento pelo ID
+
+  const handleOpenModalDelete = (documentId: number) => {
+    setIsOpenModal(true);
+    setDocumentIdToDelete(documentId);
+  };
+
+  const handleCloseModalDelete = () => {
+    setIsOpenModal(false);
+    setDocumentIdToDelete(null);
+    fetchDocuments({
+      startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
+      endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
+    });
+  };
+
+  const handleDelete = async () => {
+    await handleDeleteDocuments(documentIdToDelete);
+    handleCloseModalDelete();
+  };
+
+  const handleViewDocument = (documentId: number) => {
+    getDocumentById(documentId, {
+      onSuccess: (data) => {
+        console.log('data134', data);
+        const blob = new Blob([data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        window.open(url);
+      },
+      onError: (error) => {
+        console.error('Failed to fetch document', error);
+      },
+    });
+  };
 
   const columns = [
     {
@@ -61,13 +65,14 @@ function TableEmployees() {
       headerClassName: 'table-header',
       cellClassName: 'table-body',
     },
-
     {
       field: 'sentIn',
       headerName: 'Enviado em:',
       flex: 4,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
+      renderCell: (params) =>
+        params?.value && <div>{formatDate(params.value)}</div>,
     },
     {
       field: 'sender',
@@ -118,7 +123,6 @@ function TableEmployees() {
           </div>
         ),
     },
-
     {
       field: 'visa',
       headerName: 'Visto',
@@ -154,14 +158,13 @@ function TableEmployees() {
           </div>
         ),
     },
-
     {
       field: 'actions',
       headerName: 'Ações',
       flex: 3,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
-      renderCell: () => (
+      renderCell: (params) => (
         <div
           style={{
             display: 'flex',
@@ -171,7 +174,7 @@ function TableEmployees() {
           }}
         >
           <Tooltip title="Ver" placement="top">
-            <IconButton>
+            <IconButton onClick={() => handleViewDocument(params.row.id)}>
               <div
                 style={{
                   display: 'flex',
@@ -182,9 +185,8 @@ function TableEmployees() {
               </div>
             </IconButton>
           </Tooltip>
-
           <Tooltip title="Deletar" placement="top">
-            <IconButton>
+            <IconButton onClick={() => handleOpenModalDelete(params.row.id)}>
               <div
                 style={{
                   display: 'flex',
@@ -200,7 +202,34 @@ function TableEmployees() {
     },
   ];
 
-  return <TableDataGrid columns={columns} rows={rows} />;
+  return (
+    <>
+      {isPendingDeleteDocuments && (
+        <Box display="flex" justifyContent="center" mt={2} mb={2}>
+          <CircularProgress size="medium" />
+        </Box>
+      )}
+      <Box>
+        <TableDataGrid
+          rows={documentsFiltered}
+          columns={columns}
+          loading={loading}
+          autoHeight
+          pageSize={10}
+        />
+      </Box>
+      {isOpenModal && (
+        <ModalConfirm
+          openDialog={isOpenModal}
+          handleClose={handleCloseModalDelete}
+          handleConfirm={handleDelete}
+          titleModal="Excluir Documento"
+          text="Tem certeza que deseja excluir este documento?"
+          textButtonConfirm="Excluir"
+          colorButtonConfirm={colors.error.dark}
+        />
+      )}
+    </>
+  );
 }
-
-export default TableEmployees;
+export default TableDocuments;

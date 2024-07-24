@@ -1,13 +1,10 @@
-// import { formatObjectToSearchParams } from '@/utils/functions';
-import { apiGic } from '.';
+import { api } from '@src/lib/axios';
 
 import * as DTO from './dto';
 
-const API_GIC_ENDPOINT = `http://localhost:3333`;
-
 export async function getUsers() {
   try {
-    const { data } = await apiGic.get(`${API_GIC_ENDPOINT}/users`);
+    const { data } = await api.get(`/users`);
     return data;
   } catch (error) {
     console.error('Erro ao obter usuários:', error);
@@ -16,15 +13,25 @@ export async function getUsers() {
 }
 
 export async function getUser(params: DTO.GetUser) {
-  // try {
-  const { data } = await apiGic.get(`${API_GIC_ENDPOINT}/user`, {
-    params: {
-      userId: params.userId,
-    },
-  });
+  const { data } = await api.get(`/user/${params.userId}`, {});
   return data;
-  // } catch (error) {
-  //   console.error('Erro ao obter usuários:', error);
-  //   throw error;
-  // }
+}
+
+export async function deleteUser(userId: string) {
+  try {
+    await api.delete(`/user/delete/${userId}`);
+  } catch (error) {
+    console.error(`Erro ao deletar usuário com ID ${userId}:`, error);
+    throw error;
+  }
+}
+
+export async function updateUser(params: DTO.UpdateUser) {
+  const { data } = await api.patch(`/user/update`, params);
+  return data;
+}
+
+export async function registerUser(params: DTO.UpdateUser) {
+  const { data } = await api.post(`/user`, params);
+  return data;
 }

@@ -1,16 +1,40 @@
-// import { formatObjectToSearchParams } from '@/utils/functions';
-import { apiGic } from '.';
-
-import * as DTO from './dto';
-
-const API_GIC_ENDPOINT = `http://localhost:3333`;
+import { api } from '@src/lib/axios';
 
 export async function getJobPositions() {
   try {
-    const { data } = await apiGic.get(`${API_GIC_ENDPOINT}/job-positions`);
+    const { data } = await api.get(`/job-positions`);
     return data;
   } catch (error) {
     console.error('Erro ao obter cargos:', error);
+    throw error;
+  }
+}
+
+export async function createJobPosition(name: string) {
+  try {
+    const { data } = await api.post(`/job-positions`, { name });
+    return data;
+  } catch (error) {
+    console.error('Erro ao criar cargo:', error);
+    throw error;
+  }
+}
+
+export async function updateJobPosition(id: number, name: string) {
+  try {
+    const { data } = await api.patch(`/job-positions/${id}`, { name });
+    return data;
+  } catch (error) {
+    console.error('Erro ao atualizar cargo:', error);
+    throw error;
+  }
+}
+
+export async function deleteJobPosition(id: number) {
+  try {
+    await api.delete(`/job-positions/${id}`);
+  } catch (error) {
+    console.error('Erro ao deletar cargo:', error);
     throw error;
   }
 }

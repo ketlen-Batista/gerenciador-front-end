@@ -4,10 +4,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
@@ -17,8 +15,6 @@ import { AvailableRoutes } from '@src/routes/availableRoutes';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '../../App';
-
-// Importe o contexto de autenticação
 
 function Copyright(props: any) {
   return (
@@ -30,7 +26,7 @@ function Copyright(props: any) {
     >
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        gic
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -52,10 +48,10 @@ export default function SignIn() {
 
     try {
       await login(email, password);
-      navigate(AvailableRoutes.home); // Redirecione para a página inicial ou para onde desejar após o login bem-sucedido
+      navigate(AvailableRoutes.home);
     } catch (error) {
       console.error('Erro ao fazer login:', error);
-      // Exiba uma mensagem de erro para o usuário, se necessário
+      // Exibir mensagem de erro para o usuário, se necessário
     }
   };
 
@@ -103,10 +99,6 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Lembre de mim"
-            /> */}
             <Button
               type="submit"
               fullWidth

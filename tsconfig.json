@@ -18,6 +18,7 @@
     "diagnostics": true,
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": true,
+    "types": ["node", "vite/client"],
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"],
