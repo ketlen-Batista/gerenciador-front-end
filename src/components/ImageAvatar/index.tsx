@@ -14,7 +14,7 @@ type Props = {
 const ImageAvatar = ({ imageAvatar, mt, mb }: Props) => {
   // Função para converter bytes em URL válida para exibição
   const getImageUrl = () => {
-    if (imageAvatar && imageAvatar.length > 0) {
+    if (imageAvatar && imageAvatar?.length > 0) {
       const blob = new Blob([new Uint8Array(imageAvatar)], {
         type: 'image/jpeg',
       });
@@ -25,7 +25,7 @@ const ImageAvatar = ({ imageAvatar, mt, mb }: Props) => {
 
   return (
     <div>
-      {imageAvatar && imageAvatar.length > 0 ? (
+      {imageAvatar && imageAvatar?.length > 0 ? (
         <S.Image
           style={{
             marginTop: mt ?? '32px',

@@ -181,7 +181,7 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
     },
   ];
 
-  return !isPending && sectors?.length ? (
+  return !isPending ? (
     <>
       <TableDataGrid columns={columns} rows={sectors} />
 

@@ -46,7 +46,7 @@ const ModalAddDocument = ({
   console.log({ file });
 
   const handleFileChange = (files: File[]) => {
-    if (files && files.length > 0) {
+    if (files && files?.length > 0) {
       setFile(files[0]);
     }
   };
@@ -109,7 +109,7 @@ const ModalAddDocument = ({
           <Button
             onClick={handleUpload}
             disabled={
-              !file || isLoading || !recipientId.length || !typeDocument
+              !file || isLoading || !recipientId?.length || !typeDocument
             }
           >
             {isLoading ? (

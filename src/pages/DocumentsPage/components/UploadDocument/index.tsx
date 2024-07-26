@@ -148,7 +148,7 @@ const UploadDocument = ({
         <DriveFolderUploadIcon color="primary" fontSize="inherit" />
       </Box> */}
 
-      {files.length === 0 ? (
+      {files?.length === 0 ? (
         <div {...getRootProps({ className: classes.dropzone })}>
           <input
             {...getInputProps()}
