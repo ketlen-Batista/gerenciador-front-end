@@ -9,7 +9,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Box, Menu, MenuItem, MenuList } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
+import { AvailableRoutes } from '@src/routes/availableRoutes';
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 
 import Sidebar from '@components/Sidebar';
 
@@ -26,6 +30,7 @@ type Props = {
 
 function DefaultPage({ children, pageTitle }: Props) {
   const classes = S.useStyles();
+  const { user } = useAuth();
 
   const [openSideBar, setOpenSideBar] = useState(false);
   const [isDark, setIsDark] = useState(false);
@@ -39,6 +44,21 @@ function DefaultPage({ children, pageTitle }: Props) {
   };
   const handleDrawerClose = () => {
     setOpenSideBar(false);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const navigate = useNavigate();
+
+  const handleNavigate = (page) => {
+    navigate(page || '');
   };
 
   return (
@@ -71,10 +91,36 @@ function DefaultPage({ children, pageTitle }: Props) {
           >
             GIC
           </Typography>
-          Cecília Silva Santos
-          <IconButton color="inherit">
+          {user.name}
+          <IconButton
+            color="inherit"
+            id="basic-button"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+          >
             <AccountCircleIcon />
           </IconButton>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <Box display="flex" flexDirection="column" px={2}>
+              <MenuItem
+                onClick={() => handleNavigate(AvailableRoutes.profilePage)}
+              >
+                Meu perfil
+              </MenuItem>
+              {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
+              <MenuItem onClick={handleClose}>Sair</MenuItem>
+            </Box>
+          </Menu>
         </Toolbar>
       </AppBar>
       {/* SIDEBAR_LATERAL */}

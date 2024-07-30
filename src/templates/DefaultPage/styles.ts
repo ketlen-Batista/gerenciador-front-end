@@ -91,4 +91,10 @@ export const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  popover: {
+    pointerEvents: 'none',
+  },
+  paperPopover: {
+    padding: theme.spacing(1),
+  },
 }));

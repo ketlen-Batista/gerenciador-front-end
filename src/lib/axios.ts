@@ -1,5 +1,5 @@
 import { env } from '@src/env';
-import useAuth from '@src/hooks/useAuth';
+import {useAuth} from '@src/hooks/useAuth';
 import axios from 'axios';
 
 export const api = axios.create({
@@ -35,7 +35,7 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${token}`;
         return axios(originalRequest);
       } catch (refreshError) {
-        useAuth().logout();
+        // useAuth().logout();
       }
     }
     return Promise.reject(error);

@@ -51,6 +51,7 @@ import DocumentsPage from '@pages/DocumentsPage';
 import EmployeeData from '@pages/EmployeeData';
 import Employees from '@pages/Employees';
 import HomePage from '@src/pages/HomePage';
+import ProfilePage from '@src/pages/ProfilePage';
 import ReportsPage from '@src/pages/ReportsPage';
 import SettingsPage from '@src/pages/SettingsPage';
 import SignIn from '@src/pages/SignIn';
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
       {
         path: AvailableRoutes.settingsPage,
         element: <SettingsPage />,
+      },
+      {
+        path: AvailableRoutes.profilePage,
+        element: <ProfilePage />,
       },
     ],
   },

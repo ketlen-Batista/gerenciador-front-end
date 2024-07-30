@@ -1,5 +1,6 @@
 import { makeStyles, withStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import { colors } from '@src/styles/colors';
 import styled from 'styled-components';
 
 export const useStyles = makeStyles((theme) => ({
@@ -17,7 +18,7 @@ export const ButtonAdd = withStyles({
       padding: '6px 12px',
       border: '1px solid',
       lineHeight: 1.5,
-      backgroundColor: 'var(--GreenDark)',
+      backgroundColor:` ${colors.info.main} !important`,
       borderColor: '',
       fontFamily: [
         '-apple-system',
@@ -49,7 +50,7 @@ export const ButtonAdd = withStyles({
 
   export const ButtonClick = styled(Button)`
   display: flex;
-  background: ${({ theme }) => theme.colors.primary.dark};
+  background: ${({ theme }) => theme.colors.info.main};
   width: auto;
   height: 50px;
   border-radius: 250px !important;
@@ -59,6 +60,6 @@ export const ButtonAdd = withStyles({
   margin-left: 10px;
   padding: 0px 20px !important;
   &:hover {
-    background: ${({ theme }) => theme.colors.primary.light};
+    background: ${({ theme }) => theme.colors.info.light};
   }
 `;
