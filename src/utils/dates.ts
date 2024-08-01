@@ -19,6 +19,12 @@ export const INIT_DATE_RANGE = {
   endDate: TODAY_END_DAY.getTime(),
 };
 
+export const timestampToISO = (timestamp: number): string => {
+      const date = new Date(timestamp);
+      return date.toISOString();
+    };
+
+
 export const formatDate = (isoDate: string) => {
   const date = new Date(isoDate);
 
