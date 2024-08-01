@@ -10,16 +10,23 @@ import { useDeleteDocument } from '@src/services/DocumentsService/queries';
 import { useGetDocumentById } from '@src/services/DocumentsService/queries';
 import { colors } from '@src/styles/colors';
 import { INIT_DATE_RANGE, formatDate } from '@src/utils/dates';
+import { getPdfUrlServer } from '@src/utils/functions';
 
 import CircularProgress from '@src/components/CircularProgress';
 import ModalConfirm from '@src/components/ModalConfirm';
 
 import TableDataGrid from '@components/TableDataGrid';
 
+import ModalPdf from '../ModalPdf';
+
 function TableDocuments() {
   const { documentsFiltered, loading, fetchDocuments } = useDocumentsFilter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [documentIdToDelete, setDocumentIdToDelete] = useState<number>(null);
+  const [openModalPdf, setOpenModalPdf] = useState(false);
+  const [urlPdf, setUrlPdf] = useState('');
+  const [documentName, setDocumentName] = useState('');
+
   const { mutate: handleDeleteDocuments, isPending: isPendingDeleteDocuments } =
     useDeleteDocument();
   const { mutate: getDocumentById } = useGetDocumentById(); // Use o hook para obter o documento pelo ID
@@ -43,18 +50,43 @@ function TableDocuments() {
     handleCloseModalDelete();
   };
 
-  const handleViewDocument = (documentId: number) => {
-    getDocumentById(documentId, {
-      onSuccess: (data) => {
-        console.log('data134', data);
-        const blob = new Blob([data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        window.open(url);
-      },
-      onError: (error) => {
-        console.error('Failed to fetch document', error);
-      },
-    });
+  // const handleViewDocument = (documentId: number) => {
+  //   getDocumentById(documentId, {
+  //     onSuccess: (data) => {
+  //       console.log('data134', data);
+  //       const blob = new Blob([data], { type: 'application/pdf' });
+  //       const url = URL.createObjectURL(blob);
+  //       setUrlPdf(url);
+  //       setOpenModalPdf(true);
+  //       // window.open(url);
+  //     },
+  //     onError: (error) => {
+  //       console.error('Failed to fetch document', error);
+  //     },
+  //   });
+  // };
+
+  const handleViewDocument = (documentId: number, nameDocument: string) => {
+    setUrlPdf(getPdfUrlServer(documentId));
+    setDocumentName(nameDocument);
+    setOpenModalPdf(true);
+
+    // getDocumentById(documentId, {
+    //   onSuccess: (response) => {
+    //     const contentType = response.headers.get('Content-Type');
+    //     if (contentType === 'application/pdf') {
+    //       const blob = new Blob([response.data], { type: 'application/pdf' });
+    //       const url = URL.createObjectURL(blob);
+    //       setUrlPdf(url);
+    //       setOpenModalPdf(true);
+    //     } else {
+    //       console.error('Unexpected content type:', contentType);
+    //     }
+    //   },
+    //   onError: (error) => {
+    //     console.error('Failed to fetch document', error);
+    //   },
+    // });
   };
 
   const columns = [
@@ -174,7 +206,11 @@ function TableDocuments() {
           }}
         >
           <Tooltip title="Ver" placement="top">
-            <IconButton onClick={() => handleViewDocument(params.row.id)}>
+            <IconButton
+              onClick={() =>
+                handleViewDocument(params.row.id, params.row.documentName)
+              }
+            >
               <div
                 style={{
                   display: 'flex',
@@ -227,6 +263,14 @@ function TableDocuments() {
           text="Tem certeza que deseja excluir este documento?"
           textButtonConfirm="Excluir"
           colorButtonConfirm={colors.error.dark}
+        />
+      )}
+      {openModalPdf && (
+        <ModalPdf
+          openDialog={openModalPdf}
+          handleClose={() => setOpenModalPdf(false)}
+          urlPdf={urlPdf}
+          documentName={documentName}
         />
       )}
     </>
