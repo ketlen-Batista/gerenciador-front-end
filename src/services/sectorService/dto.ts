@@ -6,6 +6,8 @@ export interface CreateSector {
   linkLocation?: string;
   latitude?: number;
   longitude?: number;
+  email?: string;
+  signatureDate?: number;
 }
 
 export interface UpdateSector {
@@ -17,6 +19,8 @@ export interface UpdateSector {
   linkLocation?: string;
   latitude?: number;
   longitude?: number;
+  email?: string;
+  signatureDate?: number;
 }
 
 export interface DeleteSector {

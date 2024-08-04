@@ -228,6 +228,7 @@ import Button from '@src/components/Button';
 import CircularProgress from '@src/components/CircularProgress';
 import FullScreenDialog from '@src/components/FullScreenDialog';
 import Select from '@src/components/Select';
+import { SelectOption } from '@src/components/Select/interfaces';
 import TextField from '@src/components/TextField';
 
 import MapComponent from '@components/MapComponent';
@@ -237,6 +238,8 @@ interface ModalSectorsProps {
   handleClose: () => void;
   sectorName?: string;
   idContract?: number | string | null;
+  email?: string;
+  daySignature?: number | null;
   linkLocation?: string;
   sectorId?: number;
   getSectors?: UseMutateFunction<
@@ -252,6 +255,8 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
   handleClose,
   sectorName,
   idContract,
+  email,
+  daySignature,
   linkLocation,
   sectorId,
   getSectors,
@@ -266,6 +271,14 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
   const { data: contracts, mutate: getContracts } = useGetContracts();
   const [locationLink, setLocationLink] = useState<string>('');
 
+  const optionsDaySignature: SelectOption[] = Array.from(
+    { length: 30 },
+    (_, index) => ({
+      name: (index + 1).toString(),
+      value: index + 1,
+    }),
+  );
+
   const isCompleteGoogleMapsUrl = (url: string) => {
     const completeUrlPattern =
       /https:\/\/www\.google\.com\/maps\/place\/[^@]+@(-?\d+\.\d+),(-?\d+\.\d+)/;
@@ -277,6 +290,10 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
   };
 
   const extractCoordinatesFromUrl = useCallback((url: string) => {
+    if (!url) {
+      return;
+    }
+
     // Handle complete URLs
     let match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
     if (match) {
@@ -301,6 +318,8 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
   const validationSchema = Yup.object({
     name: Yup.string().required('Nome do setor é obrigatório'),
     contractId: Yup.string().optional(),
+    email: Yup.string().optional(),
+    daySignature: Yup.number().optional(),
     locationLink: Yup.string().optional(),
     // .test(
     //   'is-complete-url',
@@ -313,20 +332,29 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
     initialValues: {
       name: sectorName ?? '',
       contractId: idContract ?? '',
+      email: email ?? '',
+      daySignature: daySignature ?? null,
       locationLink: linkLocation ?? '',
     },
     validationSchema,
     onSubmit: async (values) => {
       const coordinates = await extractCoordinatesFromUrl(values.locationLink);
-      if (!coordinates) {
-        formik.setFieldError(
-          'locationLink',
-          'Invalid location link. Please provide a valid Google Maps link.',
-        );
-        return;
+      // const { lat, lng } = coordinates;
+
+      // if (!coordinates) {
+      //   formik.setFieldError(
+      //     'locationLink',
+      //     'Invalid location link. Please provide a valid Google Maps link.',
+      //   );
+      //   return;
+      // }
+
+      let lat, lng;
+      if (coordinates) {
+        lat = coordinates.lat;
+        lng = coordinates.lng;
       }
 
-      const { lat, lng } = coordinates;
       console.log('location', values);
       if (sectorId) {
         await updateSector({
@@ -334,6 +362,8 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
           name: values.name,
           linkLocation: values.locationLink,
           contracts_value: values.contractId,
+          email: values.email,
+          signatureDate: values.daySignature,
           latitude: lat,
           longitude: lng,
         });
@@ -342,6 +372,8 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
           name: values.name,
           linkLocation: values.locationLink,
           contracts_value: values.contractId,
+          email: values.email,
+          signatureDate: values.daySignature,
           latitude: lat,
           longitude: lng,
         });
@@ -351,7 +383,7 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
       getSectors && getSectors({});
     },
   });
-
+  console.log({ formik });
   useEffect(() => {
     getContracts({});
   }, []);
@@ -411,6 +443,34 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
                 onChange={(e) => formik.setFieldValue('contractId', e.value)}
                 error={
                   formik.touched.contractId && Boolean(formik.errors.contractId)
+                }
+                heightSelect={'100%'}
+                fullWidth
+                clearable
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Email do responsável"
+                name="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.errors.email && formik.errors.email}
+                fullWidth
+                // required
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Select
+                label="Dia de envio do código"
+                options={optionsDaySignature || []}
+                name="daySignature"
+                value={formik.values.daySignature}
+                onChange={(e) => formik.setFieldValue('daySignature', e.value)}
+                error={
+                  formik.touched.daySignature &&
+                  Boolean(formik.errors.daySignature)
                 }
                 heightSelect={'100%'}
                 fullWidth
