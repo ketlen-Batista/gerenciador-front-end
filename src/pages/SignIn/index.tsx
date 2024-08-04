@@ -11,8 +11,9 @@
 // import Typography from '@mui/material/Typography';
 // import { ThemeProvider, createTheme } from '@mui/material/styles';
 // import { AvailableRoutes } from '@src/routes/availableRoutes';
+// import { colors } from '@src/styles/colors';
 // import { useNavigate } from 'react-router-dom';
-// import { useAuthContext } from '../../App';
+// import { useAuth } from '@hooks/useAuth';
 // function Copyright(props: any) {
 //   return (
 //     <Typography
@@ -32,7 +33,7 @@
 // }
 // const defaultTheme = createTheme();
 // export default function SignIn() {
-//   const { login } = useAuthContext();
+//   const { signIn } = useAuth();
 //   const navigate = useNavigate();
 //   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 //     event.preventDefault();
@@ -40,7 +41,7 @@
 //     const email = data.get('email') as string;
 //     const password = data.get('password') as string;
 //     try {
-//       await login(email, password);
+//       await signIn(email, password);
 //       navigate(AvailableRoutes.home);
 //     } catch (error) {
 //       console.error('Erro ao fazer login:', error);
@@ -59,7 +60,7 @@
 //             alignItems: 'center',
 //           }}
 //         >
-//           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+//           <Avatar sx={{ m: 1, bgcolor: colors.primary.dark }}>
 //             <LockOutlinedIcon />
 //           </Avatar>
 //           <Typography component="h1" variant="h5">
@@ -99,7 +100,7 @@
 //             >
 //               Entrar
 //             </Button>
-//             <Grid container>
+//             {/* <Grid container>
 //               <Grid item xs>
 //                 <Link href="#" variant="body2">
 //                   Esqueceu sua senha?
@@ -110,7 +111,7 @@
 //                   {'Não tem uma conta? Inscrever-se'}
 //                 </Link>
 //               </Grid>
-//             </Grid>
+//             </Grid> */}
 //           </Box>
 //         </Box>
 //         <Copyright sx={{ mt: 8, mb: 4 }} />
@@ -118,7 +119,7 @@
 //     </ThemeProvider>
 //   );
 // }
-////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 import * as React from 'react';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -127,13 +128,15 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
+import { colors } from '@src/styles/colors';
+import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
 import { useAuth } from '@hooks/useAuth';
 
@@ -157,25 +160,31 @@ function Copyright(props: any) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+const SignIn = () => {
   const { signIn } = useAuth();
-
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get('email') as string;
-    const password = data.get('password') as string;
-
-    try {
-      await signIn(email, password);
-      navigate(AvailableRoutes.home);
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      // Exibir mensagem de erro para o usuário, se necessário
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email('Email inválido').required('Obrigatório'),
+      password: Yup.string()
+        .min(6, 'A senha deve ter no mínimo 6 caracteres')
+        .required('Obrigatório'),
+    }),
+    onSubmit: async (values) => {
+      try {
+        await signIn(values.email, values.password);
+        navigate(AvailableRoutes.home);
+      } catch (error) {
+        console.error('Erro ao fazer login:', error);
+        // Exibir mensagem de erro para o usuário, se necessário
+      }
+    },
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -189,7 +198,7 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: colors.primary.dark }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -197,7 +206,7 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={formik.handleSubmit}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -210,6 +219,11 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
             <TextField
               margin="normal"
@@ -220,6 +234,11 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
             />
             <Button
               type="submit"
@@ -229,22 +248,12 @@ export default function SignIn() {
             >
               Entrar
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Esqueceu sua senha?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {'Não tem uma conta? Inscrever-se'}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
-}
+};
+
+export default SignIn;

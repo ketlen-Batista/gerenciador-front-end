@@ -6,6 +6,7 @@ import HouseIcon from '@material-ui/icons/House';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import WorkRoundedIcon from '@material-ui/icons/WorkRounded';
+import { Tooltip } from '@mui/material';
 import { AvailableRoutes } from '@routes/availableRoutes';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -17,12 +18,16 @@ export const ListItems = () => {
   };
   return (
     <div>
+        <Tooltip title="Início" placement='right' >
       <ListItem button onClick={() => handleNavigate(AvailableRoutes.home)}>
+
         <ListItemIcon>
           <HouseIcon />
         </ListItemIcon>
         <ListItemText primary="Início" />
       </ListItem>
+        </Tooltip>
+        <Tooltip title="Funcionários" placement='right' >
       <ListItem
         button
         onClick={() => handleNavigate(AvailableRoutes.employeesPage)}
@@ -32,6 +37,8 @@ export const ListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Funcionários" />
       </ListItem>
+      </Tooltip>
+      <Tooltip title="Relatórios" placement='right' >
       <ListItem
         button
         onClick={() => handleNavigate(AvailableRoutes.reportsPage)}
@@ -41,6 +48,8 @@ export const ListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Relatórios" />
       </ListItem>
+      </Tooltip>
+      <Tooltip title="Documentos" placement='right' >
       <ListItem
         button
         onClick={() => handleNavigate(AvailableRoutes.documentsPage)}
@@ -50,6 +59,8 @@ export const ListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Documentos" />
       </ListItem>
+      </Tooltip>
+      <Tooltip title="Configurações" placement='right' >
       <ListItem
         button
         onClick={() => handleNavigate(AvailableRoutes.settingsPage)}
@@ -59,6 +70,7 @@ export const ListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Configurações" />
       </ListItem>
+      </Tooltip>
     </div>
   );
 };
