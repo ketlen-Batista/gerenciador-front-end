@@ -30,7 +30,7 @@ type Props = {
 
 function DefaultPage({ children, pageTitle }: Props) {
   const classes = S.useStyles();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const [openSideBar, setOpenSideBar] = useState(false);
   const [isDark, setIsDark] = useState(false);
@@ -118,7 +118,7 @@ function DefaultPage({ children, pageTitle }: Props) {
                 Meu perfil
               </MenuItem>
               {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
-              <MenuItem onClick={handleClose}>Sair</MenuItem>
+              <MenuItem onClick={signOut}>Sair</MenuItem>
             </Box>
           </Menu>
         </Toolbar>

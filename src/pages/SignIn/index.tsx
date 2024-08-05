@@ -218,7 +218,7 @@ const SignIn = () => {
               label="Email"
               name="email"
               autoComplete="email"
-              autoFocus
+              // autoFocus
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

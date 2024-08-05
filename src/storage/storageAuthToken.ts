@@ -15,18 +15,18 @@
 // }
 
 
-import { USER_STORAGE } from "./storageConfig";
+import { AUTH_TOKEN_STORAGE } from "./storageConfig";
 
 type StorageAuthTokenProps = {
   token: string;
   refresh_token: string;
 }
 export async function storageAuthTokenSave({token, refresh_token}: StorageAuthTokenProps) {
-  await localStorage.setItem(USER_STORAGE, JSON.stringify({token, refresh_token}) );
+  await localStorage.setItem(AUTH_TOKEN_STORAGE, JSON.stringify({token, refresh_token}) );
 }
 
 export async function storageAuthTokenGet() {
-  const response = await localStorage.getItem(USER_STORAGE);
+  const response = await localStorage.getItem(AUTH_TOKEN_STORAGE);
 
   const {token, refresh_token}: StorageAuthTokenProps = response ? JSON.parse(response) : {}
 
@@ -34,5 +34,5 @@ export async function storageAuthTokenGet() {
 }
 
 export async function storageAuthTokenRemove() {
-  await localStorage.removeItem(USER_STORAGE);
+  await localStorage.removeItem(AUTH_TOKEN_STORAGE);
 }
