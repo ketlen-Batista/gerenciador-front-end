@@ -8,13 +8,15 @@ import {
   DescriptionOutlined as DescriptionOutlinedIcon,
   EqualizerOutlined as EqualizerOutlinedIcon,
 } from '@material-ui/icons';
-import { useEmployeeData } from '@pages/EmployeeData/contexts/EmployeeDataContext';
+import { useProfilePage } from '@pages/ProfilePage/contexts/ProfilePageContext';
+import { useAuth } from '@src/hooks/useAuth';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
 import { useDeleteUser, useGetUser } from '@src/services/users/queries';
 import { colors } from '@src/styles/colors';
+import { getImageUrlServer } from '@src/utils/functions';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import BasicsData from '@pages/EmployeeData/components/BasicsData';
+import BasicsData from '@pages/ProfilePage/components/BasicsData';
 import AccordionCustom from '@src/components/AccordionCustom';
 import ModalConfirm from '@src/components/ModalConfirm';
 
@@ -39,21 +41,22 @@ const IconTooltip = ({ title, icon, onClick }: IconTooltipProps) => (
 function Form() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { employeeId } = location.state || {};
   const [expanded, setExpanded] = useState<string | boolean>('panel1');
   const [isNewEmployee, setIsNewEmployee] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
 
-  const { formik, getUser, isLoadingUser, user } = useEmployeeData();
+  const { user } = useAuth();
 
+  const { formik, getUser, isLoadingUser } = useProfilePage();
+  console.log({ user });
   const { mutate: handleDeleteUser, isPending: isPendingDeleteUser } =
     useDeleteUser();
 
-  const handleOpenModalDelete = () => {
-    setIsOpenModal(true);
-    setUserIdToDelete(user?.user?.id);
-  };
+  // const handleOpenModalDelete = () => {
+  //   setIsOpenModal(true);
+  //   setUserIdToDelete(user?.user?.id);
+  // };
 
   const handleCloseModalDelete = () => {
     setIsOpenModal(false);
@@ -75,21 +78,26 @@ function Form() {
   };
 
   useEffect(() => {
-    if (employeeId) {
-      getUser({ userId: employeeId });
+    if (user?.id) {
+      getUser({ userId: user?.id });
     } else {
       setIsNewEmployee(true);
     }
-  }, [employeeId, getUser]);
+  }, [user?.id, getUser]);
 
   return (
     <>
       <S.Container>
         <S.ContainerHeader>
           <ImageAvatar
-            imageAvatar={user?.user?.photo?.photoFile.data ?? null}
+            // imageAvatar={user?.photo_avatar_id ? getImageUrlServer(user?.photo_avatar_id) : null}
+            imageSrc={
+              user?.photo_avatar_id
+                ? getImageUrlServer(user?.photo_avatar_id)
+                : null
+            }
           />
-          {employeeId ? (
+          {user?.id ? (
             <S.ContainerIcons>
               {/* <IconTooltip
               title="Relatórios"
@@ -98,12 +106,19 @@ function Form() {
               <IconTooltip
                 title="Registro de Serviços"
                 icon={<CameraAltOutlinedIcon fontSize="medium" />}
+                onClick={() =>
+                  handleNavigate(
+                    AvailableRoutes.reportsPage,
+                    user?.id,
+                    'serviceRegister',
+                  )
+                }
               />
               <IconTooltip
                 title="Documentos"
                 icon={<DescriptionOutlinedIcon fontSize="medium" />}
                 onClick={() =>
-                  handleNavigate(AvailableRoutes.documentsPage, employeeId)
+                  handleNavigate(AvailableRoutes.documentsPage, user?.id)
                 }
               />
               <IconTooltip
@@ -112,16 +127,16 @@ function Form() {
                 onClick={() =>
                   handleNavigate(
                     AvailableRoutes.reportsPage,
-                    employeeId,
+                    user?.id,
                     'pointCheckins',
                   )
                 }
               />
-              <IconTooltip
+              {/* <IconTooltip
                 title="Deletar"
                 icon={<DeleteOutlineIcon fontSize="medium" />}
                 onClick={handleOpenModalDelete}
-              />
+              /> */}
             </S.ContainerIcons>
           ) : null}
         </S.ContainerHeader>

@@ -2,9 +2,8 @@ import React, { useRef } from 'react';
 
 import { IconButton, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { Box, FormControl, Grid } from '@mui/material';
+import { FormControl, Grid } from '@mui/material';
 import { useDocumentsFilter } from '@pages/DocumentsPage/hooks/useDocumentsFilter';
-import * as S from '@pages/DocumentsPage/styles';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
 
 import DateFilter from '@src/components/DateFilter';
@@ -30,29 +29,26 @@ const Filters = () => {
     : [];
 
   return (
-    <Grid container spacing={2} alignItems="center" mt={2}>
+    <Grid container spacing={2} alignItems="center">
       <Grid item xs={4}>
-        <S.ContainerInput>
-          <TextInput
-            name="search"
-            label="Buscar"
-            value={search}
-            placeholder="Buscar"
-            onChange={handleChangeSearch}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton aria-label="Clique para buscar">
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            mini
-          />
-        </S.ContainerInput>
+        <TextInput
+          name="search"
+          label="Buscar"
+          value={search}
+          placeholder="Buscar"
+          onChange={handleChangeSearch}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton aria-label="Clique para buscar">
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          mini
+        />
       </Grid>
-
       <Grid item xs={4}>
         <FormControl fullWidth>
           <Select
@@ -64,7 +60,7 @@ const Filters = () => {
           />
         </FormControl>
       </Grid>
-      <Grid item xs={1} />
+      <Grid item xs={1}></Grid>
       <Grid item xs={3}>
         <DateFilter
           ref={ref}

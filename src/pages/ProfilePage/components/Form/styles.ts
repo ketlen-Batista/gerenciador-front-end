@@ -23,7 +23,7 @@ export const ContainerHeader = styled.div`
 
 export const ContainerIcons = styled.div`
   display: flex;
-  width: 300px;
+  width: 10rem;
   justify-content: space-between;
 `;
 
