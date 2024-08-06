@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box } from '@mui/material';
@@ -9,12 +9,13 @@ type Props = {
   imageAvatar?: number[] | null; // Tipo ajustado para array de bytes
   mt?: string;
   mb?: string;
+  imageSrc?: string;
 };
 
-const ImageAvatar = ({ imageAvatar, mt, mb }: Props) => {
+const ImageAvatar = ({ imageAvatar, mt, mb, imageSrc }: Props) => {
   // Função para converter bytes em URL válida para exibição
   const getImageUrl = () => {
-    if (imageAvatar && imageAvatar.length > 0) {
+    if (imageAvatar && imageAvatar?.length > 0) {
       const blob = new Blob([new Uint8Array(imageAvatar)], {
         type: 'image/jpeg',
       });
@@ -25,13 +26,13 @@ const ImageAvatar = ({ imageAvatar, mt, mb }: Props) => {
 
   return (
     <div>
-      {imageAvatar && imageAvatar.length > 0 ? (
+      {imageAvatar && imageAvatar?.length > 0 ? (
         <S.Image
           style={{
             marginTop: mt ?? '32px',
             marginBottom: mb ?? '32px',
           }}
-          src={getImageUrl()}
+          src={imageSrc ?? getImageUrl()}
         />
       ) : (
         <Box mt={mt ?? '32px'} mb={mb ?? '32px'} fontSize={120}>

@@ -22,7 +22,7 @@ const ModalAddDocument = ({
   openDialog,
   handleClose,
 }: ModalAddDocumentProps) => {
-  const GIC_ID = 'e22776ae-c251-4fb4-923b-1ccd1bfac99c';
+  const GIC_ID = 'dedb4210-f594-4e5d-893f-670c7c02692a';
 
   const [file, setFile] = useState<File | null>(null);
   const [documentName, setDocumentName] = useState('');
@@ -46,7 +46,7 @@ const ModalAddDocument = ({
   console.log({ file });
 
   const handleFileChange = (files: File[]) => {
-    if (files && files.length > 0) {
+    if (files && files?.length > 0) {
       setFile(files[0]);
     }
   };
@@ -109,7 +109,7 @@ const ModalAddDocument = ({
           <Button
             onClick={handleUpload}
             disabled={
-              !file || isLoading || !recipientId.length || !typeDocument
+              !file || isLoading || !recipientId?.length || !typeDocument
             }
           >
             {isLoading ? (

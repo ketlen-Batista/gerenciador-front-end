@@ -53,6 +53,7 @@ function Tabs({
               label={tab.label}
               disabled={tab?.disabled}
               wrapped
+              style={{ paddingLeft: '10px', paddingRight: '10px' }}
             />
           ))}
         </S.TabList>

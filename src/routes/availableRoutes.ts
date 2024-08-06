@@ -17,5 +17,8 @@ export enum AvailableRoutes {
   employeesPage = `${rootPath}/funcionarios`,
 
   //PÁGINA DE CONFIGURAÇÕES
-  settingsPage = `${rootPath}/configuracoes`,
+  settingsPage = `${rootPath}/configuracoes`, 
+
+  //PÁGINA MEU PERFIL
+  profilePage = `${rootPath}/meu-perfil`
 }

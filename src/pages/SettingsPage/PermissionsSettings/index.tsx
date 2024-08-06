@@ -30,14 +30,17 @@ const PermissionsSettings = () => {
           <S.Title>{basicNames.permission.plural}</S.Title>
           {/* <S.SubTitle>Lista de seções</S.SubTitle> */}
         </S.ContainerTitles>
-        <Select
-          label="Cargo"
-          options={cargos}
-          value={cargo?.value}
-          name={cargo.name}
-          onChange={setCargo}
-          clearable
-        />
+
+        <Box width={'30%'}>
+          <Select
+            label="Cargo"
+            options={cargos}
+            value={cargo?.value}
+            name={cargo.name}
+            onChange={setCargo}
+            clearable
+          />
+        </Box>
       </S.Container>
       {cargo?.value !== '' && cargo?.value !== 'todos' ? (
         <Grid container>

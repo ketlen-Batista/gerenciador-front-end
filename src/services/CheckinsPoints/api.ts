@@ -1,16 +1,11 @@
-// api/userCheckpoints.ts
-import axios from 'axios';
-
-import { apiGic } from '.';
+import { api } from '@src/lib/axios';
 
 import * as DTO from './dto';
 
-const API_GIC_ENDPOINT = `http://localhost:3333`;
-
 export async function createUserCheckpoint(data: DTO.CreateUserCheckpointDTO) {
   try {
-    const { data: responseData } = await apiGic.post(
-      `${API_GIC_ENDPOINT}/user-checkpoints/create`,
+    const { data: responseData } = await api.post(
+      `/user-checkpoints/create`,
       data,
     );
     return responseData;
@@ -25,8 +20,8 @@ export async function updateUserCheckpoint(
   data: DTO.UpdateUserCheckpointDTO,
 ) {
   try {
-    await apiGic.put(
-      `${API_GIC_ENDPOINT}/user-checkpoints/update/${userCheckpointId}`,
+    await api.put(
+      `/user-checkpoints/update/${userCheckpointId}`,
       data,
     );
   } catch (error) {
@@ -40,8 +35,8 @@ export async function updateUserCheckpoint(
 
 export async function deleteUserCheckpoint(userCheckpointId: number) {
   try {
-    await apiGic.delete(
-      `${API_GIC_ENDPOINT}/user-checkpoints/delete/${userCheckpointId}`,
+    await api.delete(
+      `/user-checkpoints/delete/${userCheckpointId}`,
     );
   } catch (error) {
     console.error(
@@ -56,7 +51,7 @@ export async function listUserCheckpoints(
   filters: DTO.UserCheckpointFiltersDTO,
 ) {
   try {
-    const { data } = await apiGic.get(`${API_GIC_ENDPOINT}/list-checkpoints`, {
+    const { data } = await api.get(`/list-checkpoints`, {
       params: filters,
     });
     return data;
@@ -68,8 +63,8 @@ export async function listUserCheckpoints(
 
 export async function getUserCheckpointById(userCheckpointId: number) {
   try {
-    const { data } = await apiGic.get(
-      `${API_GIC_ENDPOINT}/user-checkpoints/${userCheckpointId}`,
+    const { data } = await api.get(
+      `/user-checkpoints/${userCheckpointId}`,
     );
     return data;
   } catch (error) {

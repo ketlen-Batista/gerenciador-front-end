@@ -146,9 +146,14 @@ function Table({ contracts, getContracts, isPending }: TableContractsProps) {
     },
   ];
 
-  return !isPending && contracts?.length ? (
+  return !isPending ? (
     <>
-      <TableDataGrid columns={columns} rows={contracts} pageSize={8} />
+      <TableDataGrid
+        columns={columns}
+        rows={contracts}
+        pageSize={8}
+        messageNoRows="Sem contratos para exibir"
+      />
       {openDialog && (
         <ModalContracts
           openDialog={openDialog}

@@ -49,14 +49,14 @@ function TableEmployees() {
     {
       field: 'name',
       headerName: 'Nome',
-      flex: 5,
+      flex: 3,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
     },
     {
       field: 'jobPosition_id',
       headerName: basicNames.office.singular,
-      flex: 6,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
       renderCell: (params) => (
@@ -66,7 +66,7 @@ function TableEmployees() {
     {
       field: 'contracts_value',
       headerName: basicNames.sector.singular,
-      flex: 4,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
       renderCell: (params) => (
@@ -78,7 +78,7 @@ function TableEmployees() {
     {
       field: 'sector_value',
       headerName: basicNames.section.singular,
-      flex: 5,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
       renderCell: (params) => (
@@ -88,7 +88,7 @@ function TableEmployees() {
     {
       field: 'status',
       headerName: 'Status',
-      flex: 5,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
       renderCell: (params) => <div>{params.row?.status?.name}</div>,
@@ -96,7 +96,7 @@ function TableEmployees() {
     {
       field: 'actions',
       headerName: 'Ações',
-      flex: 3,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
       renderCell: (params) => (

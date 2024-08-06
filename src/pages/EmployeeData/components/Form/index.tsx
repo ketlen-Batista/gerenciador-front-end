@@ -98,6 +98,13 @@ function Form() {
               <IconTooltip
                 title="Registro de Serviços"
                 icon={<CameraAltOutlinedIcon fontSize="medium" />}
+                onClick={() =>
+                  handleNavigate(
+                    AvailableRoutes.reportsPage,
+                    employeeId,
+                    'serviceRegister',
+                  )
+                }
               />
               <IconTooltip
                 title="Documentos"

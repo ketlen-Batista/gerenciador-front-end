@@ -32,6 +32,9 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
   const [contractId, setContractId] = useState(null);
   const [linkLocation, setLinkLocation] = useState('');
   const [sectorId, setSectorId] = useState(null);
+
+  const [email, setEmail] = useState('');
+  const [daySignature, setDaySignature] = useState(null);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
   const [sectorIdToDelete, setSectorIdToDelete] = useState<number | null>(null);
 
@@ -45,10 +48,18 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
     setOpenDialog(false);
   };
 
-  const handleOpenModal = (name, id, idContract, locationLink) => {
+  const handleOpenModal = (
+    name,
+    id,
+    idContract,
+    locationLink,
+    email,
+    daySignature,
+  ) => {
     setOpenDialog(true);
     setSectorName(name);
-
+    setEmail(email);
+    setDaySignature(daySignature);
     setLinkLocation(locationLink);
     setSectorId(id);
     setContractId(idContract);
@@ -155,6 +166,8 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
                     params.row.id,
                     params.row.contractId,
                     params.row.linkLocation,
+                    params.row.email,
+                    params.row.signatureDate,
                   )
                 }
               >
@@ -181,7 +194,7 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
     },
   ];
 
-  return !isPending && sectors?.length ? (
+  return !isPending ? (
     <>
       <TableDataGrid columns={columns} rows={sectors} />
 
@@ -193,6 +206,8 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
           idContract={contractId}
           linkLocation={linkLocation}
           sectorId={sectorId}
+          email={email}
+          daySignature={daySignature}
           getSectors={getSectors}
         />
       )}

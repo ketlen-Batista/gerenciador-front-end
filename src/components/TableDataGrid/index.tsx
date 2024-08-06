@@ -1,8 +1,12 @@
 import React, { ReactNode } from 'react';
 
-import { Box, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import { InfoOutlined } from '@mui/icons-material';
+import { Box } from '@mui/material';
 import { DataGrid, DataGridProps, GridValidRowModel } from '@mui/x-data-grid';
 import { colors } from '@src/styles/colors';
+
+import Typography from '../Typography';
 
 const useStyles = makeStyles({
   root: {
@@ -40,6 +44,7 @@ interface TableProps extends DataGridProps {
   rows: GridValidRowModel[];
   columns: Array<any>;
   pageSize?: number | any;
+  messageNoRows?: string;
   //   hidePagination?: boolean;
   //   [propName: string]: any;
 }
@@ -48,37 +53,61 @@ export default function TableDataGrid({
   rows,
   columns,
   pageSize,
+  messageNoRows,
   //   hidePagination,
   //   extraStyles = {},
   //   ...rest
 }: TableProps): JSX.Element {
   const classes = useStyles();
 
+  const CustomNoRowsOverlay = () => (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+      }}
+    >
+      <Typography variant="h6">Sem dados para exibir</Typography>
+    </Box>
+  );
+
   return (
     // <div style={{ width: '100%', ...extraStyles }}>
 
     <Box width="100%">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        autoHeight
-        disableColumnMenu
-        // hideFooterPagination={hidePagination || false}
-        // hideFooter={hidePagination || false}
-        // pageSize={pageSize || 10}
-        // disableSelectionOnClick
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: pageSize || 5,
+      {!rows?.length ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          gap={1}
+          height="200px"
+        >
+          <InfoOutlined color="warning" sx={{ height: 28, width: 28 }} />
+          <Typography variant="body1" fontSize={17} color="warning.main">
+            {messageNoRows ?? 'Sem dados para exibir'}
+          </Typography>
+        </Box>
+      ) : (
+        <DataGrid
+          rows={rows || []}
+          columns={columns}
+          autoHeight
+          disableColumnMenu
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: pageSize || 5,
+              },
             },
-          },
-        }}
-        pageSizeOptions={[5]}
-        // checkboxSelection
-        disableRowSelectionOnClick
-        classes={classes}
-      />
+          }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+          classes={classes}
+        />
+      )}
     </Box>
   );
 }
