@@ -11,6 +11,7 @@ import TableDocuments from './components/TableDocuments';
 import { useDocumentsFilter } from './hooks/useDocumentsFilter';
 
 import * as S from './styles';
+import { Box } from '@mui/material';
 
 function DocumentsList() {
   const classes = S.useStyles();
@@ -19,7 +20,7 @@ function DocumentsList() {
     useDocumentsFilter();
 
   return (
-    <>
+    <Box mt={2}>
       <Filters />
 
       <S.ContainerButtonAndTitle>
@@ -47,7 +48,7 @@ function DocumentsList() {
           handleClose={handleCloseModalAdd}
         />
       )}
-    </>
+    </Box>
   );
 }
 

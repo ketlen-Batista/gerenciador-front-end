@@ -9,6 +9,7 @@ import WorkRoundedIcon from '@material-ui/icons/WorkRounded';
 import { Tooltip } from '@mui/material';
 import { AvailableRoutes } from '@routes/availableRoutes';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 
 export const ListItems = () => {
   const navigate = useNavigate();
@@ -27,6 +28,19 @@ export const ListItems = () => {
         <ListItemText primary="Início" />
       </ListItem>
         </Tooltip>
+
+        <Tooltip title="Dados da empresa" placement='right' >
+      <ListItem
+        button
+        onClick={() => handleNavigate(AvailableRoutes.company)}
+      >
+        <ListItemIcon>
+        <ApartmentIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dados da empresa" />
+      </ListItem>
+      </Tooltip>
+
         <Tooltip title="Funcionários" placement='right' >
       <ListItem
         button

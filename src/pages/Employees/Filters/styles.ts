@@ -58,7 +58,7 @@ export const ContainerFilters = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 30px;
-  margin-top: 30px;
+  margin-top: 20px;
 `;
 
 export const ContainerInput = styled.div`
