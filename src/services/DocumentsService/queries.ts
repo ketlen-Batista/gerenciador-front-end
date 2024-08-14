@@ -43,3 +43,11 @@ export function useLinkDocumentToUsers(handleReturn?: HandleReturn) {
     handleReturn,
   });
 }
+
+export function useAddDocument(handleReturn?: HandleReturn) {
+  return useCustomMutation({
+    key: 'uploadDocument',
+    request: (data: DTO.AddDocumentDTO) => API.addDocument(data),
+    handleReturn,
+  });
+}

@@ -74,18 +74,18 @@ export const useEmployeeData = () => {
 };
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Nome é obrigatório'),
-  email: Yup.string().email('Email inválido'),
-  phone: Yup.string(),
+  name: Yup.string().required('Nome é obrigatório').optional(),
+  email: Yup.string().email('Email inválido').optional(),
+  phone: Yup.string().optional(),
   cpf: Yup.string().max(14, 'CPF inválido').required('CPF é obrigatório'),
-  address: Yup.string(),
+  address: Yup.string().optional(),
   registration: Yup.string()
     .min(6, 'Quantidade mínima de 6 dígitos')
     .required('Matrícula é obrigatória'),
-  dateOfBirth: Yup.string(),
-  jobPosition_id: Yup.number().nullable(),
-  contracts_value: Yup.number().nullable(),
-  sector_value: Yup.number().nullable(),
+  dateOfBirth: Yup.string().optional(),
+  jobPosition_id: Yup.number().nullable().optional(),
+  contracts_value: Yup.number().nullable().optional(),
+  sector_value: Yup.number().nullable().optional(),
 });
 
 export const EmployeeDataProvider = ({ children }) => {
@@ -131,7 +131,7 @@ export const EmployeeDataProvider = ({ children }) => {
           registration: values.registration,
           dateOfBirth: values.dateOfBirth,
           jobPosition_id: values.jobPosition_id,
-          status_value: values.status_value,
+          status_value: values.status_value ?? null,
           contracts_value: values.contracts_value,
           sector_value: values.sector_value,
         });

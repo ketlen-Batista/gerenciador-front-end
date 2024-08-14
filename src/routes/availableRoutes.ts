@@ -20,5 +20,8 @@ export enum AvailableRoutes {
   settingsPage = `${rootPath}/configuracoes`, 
 
   //PÁGINA MEU PERFIL
-  profilePage = `${rootPath}/meu-perfil`
+  profilePage = `${rootPath}/meu-perfil`,
+
+  //PÁGINA DADOS DA EMPRESA
+  company = `${rootPath}/empresa`
 }

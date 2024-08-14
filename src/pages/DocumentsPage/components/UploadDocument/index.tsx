@@ -55,7 +55,7 @@ const UploadDocument = ({
 }: UploadDocumentProps) => {
   const classes = useStyles();
   const [files, setFiles] = useState([]);
-
+  console.log({ files });
   const { data: listTypesDocuments, mutateAsync: getTypesDocuments } =
     useListTypesDocuments();
 

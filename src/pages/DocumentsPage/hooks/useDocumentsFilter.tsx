@@ -19,7 +19,6 @@ export const useDocumentsFilter = () => {
     handleCloseModalAdd,
     handleOpenModalAdd,
   } = useContext(DocumentsFilterContext);
-
   return {
     filterUserId,
     setFilterUserId,

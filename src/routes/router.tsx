@@ -62,6 +62,7 @@ import { Navigate, createBrowserRouter } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 // O caminho correto para o componente
 import { AvailableRoutes } from './availableRoutes';
+import CompanyData from '@src/pages/CompanyData';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: AvailableRoutes.profilePage,
         element: <ProfilePage />,
+      },
+      {
+        path: AvailableRoutes.company,
+        element: <CompanyData />,
       },
     ],
   },
