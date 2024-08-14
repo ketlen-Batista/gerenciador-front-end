@@ -94,6 +94,7 @@ export const ContainerButton = styled.div`
 export const SubTitle = styled.div`
   display: flex;
   font-size: 20px;
+  font-weight: 500;
   color: var(--ColorFont);
 `;
 

@@ -1,8 +1,6 @@
 // import { formatObjectToSearchParams } from '@/utils/functions';
 import { api } from '@src/lib/axios';
 
-import { apiGic } from '.';
-
 import * as DTO from './dto';
 
 export async function getSectors() {

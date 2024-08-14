@@ -17,7 +17,6 @@ interface Document {
   received: boolean;
   visa: boolean;
 }
-
 interface DocumentsFilterContextType {
   filterUserId: string | number;
   setFilterUserId: (userId: string | number) => void;
@@ -42,15 +41,12 @@ interface DocumentsFilterContextType {
   handleCloseModalAdd: () => void;
   handleOpenModalAdd: () => void;
 }
-
 export const DocumentsFilterContext = createContext<DocumentsFilterContextType>(
   {} as DocumentsFilterContextType,
 );
-
 export const DocumentsFilterProvider = ({ children }) => {
   const location = useLocation();
   const { userId, tab } = location.state || {};
-
   const [filterUserId, setFilterUserId] = useState<string | number>(
     userId ? userId : '',
   );
@@ -65,13 +61,10 @@ export const DocumentsFilterProvider = ({ children }) => {
     startDate: null,
     endDate: null,
   });
-
   const { data: fetchedDocuments, mutate: fetchDocuments } = useListDocuments();
   const { data: users, mutate: getUsers } = useGetUsers();
-
   const filterDocuments = () => {
     let filteredDocs = fetchedDocuments || [];
-
     if (filterUserId) {
       filteredDocs = filteredDocs.filter(
         (doc) =>
@@ -79,50 +72,40 @@ export const DocumentsFilterProvider = ({ children }) => {
           doc.senderId === filterUserId,
       );
     }
-
     if (search) {
       filteredDocs = filteredDocs.filter((doc) =>
         doc.documentName.toLowerCase().includes(search.toLowerCase()),
       );
     }
-
     if (selectedDateRange.startDate && selectedDateRange.endDate) {
       const startDate = selectedDateRange.startDate;
       const endDate = selectedDateRange.endDate;
-
       filteredDocs = filteredDocs.filter((doc) => {
         const docDate = new Date(doc.sentIn).getTime();
         return docDate >= startDate && docDate <= endDate;
       });
     }
-
     setDocumentsFiltered(filteredDocs);
   };
-
   const handleDateFilter = (dateRange: {
     startDate: number | null;
     endDate: number | null;
   }) => {
     setSelectedDateRange(dateRange);
   };
-
   const handleChangeSearch = (event) => {
     setSearch(event.target.value);
   };
-
   const handleCloseModalAdd = () => {
     setOpenDialogAdd(false);
-
     fetchDocuments({
       startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
       endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
     });
   };
-
   const handleOpenModalAdd = () => {
     setOpenDialogAdd(true);
   };
-
   const convertTimestampsToISO = (dateRange: {
     startDate: number | null;
     endDate: number | null;
@@ -136,23 +119,18 @@ export const DocumentsFilterProvider = ({ children }) => {
         : null,
     };
   };
-
   useEffect(() => {
     const dateRangeISO = convertTimestampsToISO(selectedDateRange);
-
     if (dateRangeISO.startDate && dateRangeISO.endDate) {
       fetchDocuments(dateRangeISO);
-
       getUsers({});
     }
     fetchDocuments({
       startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
       endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
     });
-
     getUsers({});
   }, [selectedDateRange]);
-
   useEffect(() => {
     if (fetchedDocuments) {
       filterDocuments();
@@ -163,7 +141,6 @@ export const DocumentsFilterProvider = ({ children }) => {
     fetchedDocuments,
     // , selectedDateRange
   ]);
-
   const value = useMemo(
     () => ({
       filterUserId,
@@ -195,7 +172,6 @@ export const DocumentsFilterProvider = ({ children }) => {
       handleOpenModalAdd,
     ],
   );
-
   return (
     <DocumentsFilterContext.Provider value={value}>
       {children}

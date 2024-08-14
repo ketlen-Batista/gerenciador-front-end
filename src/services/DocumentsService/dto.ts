@@ -46,3 +46,16 @@ export interface GetDocumentDTO {
 //   visa?: boolean;
 //   documentName?: string;
 // }
+
+export interface AddDocumentDTO {
+  file?: File | any;
+  documentName?: string;
+  senderId?: string;
+  received?: boolean;
+  visa?: boolean;
+  recipientId?: string;
+  typeDocumentValue?: number;
+  dateJustification?: string;
+  dateStartCertificate?: string;
+  dateEndCertificate?: string;
+}
