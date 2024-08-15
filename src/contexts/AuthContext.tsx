@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 
 import { UserDTO } from '@dtos/UserDTO';
 import { api } from '@src/lib/axios';
+import { useGetPermissions } from '@src/services/permissions/queries';
 import {
   storageAuthTokenGet,
   storageAuthTokenRemove,
@@ -21,6 +22,7 @@ export type AuthContextDataProps = {
   isLoadingStorageData: boolean;
   signOut: () => Promise<void>;
   userPhoto: string;
+  permissions: any;
 };
 
 type AuthContextProviderProps = {
@@ -35,6 +37,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
   const [isLoadingStorageData, setIsLoadingStorageData] = useState(true);
   const [userPhoto, setUserPhoto] = useState<string>('');
+  const [permissions, setPermissions] = useState<any>();
 
   async function headerUserAndTokenUpdate(userData: UserDTO, token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -106,6 +109,16 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     setUserPhoto(getImageUrlServer(imageAvatarId));
   }
 
+  async function getPermissions(jobPositionId: number) {
+    try {
+      const { data } = await api.get(`/permissions/${jobPositionId}`);
+      setPermissions(data);
+    } catch (error) {
+      console.error('Erro ao obter permissões:', error);
+      throw error;
+    }
+  }
+
   useEffect(() => {
     if (user.photo_avatar_id) {
       getPhotoUser(user.photo_avatar_id);
@@ -123,6 +136,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     };
   }, [signOut]);
 
+  useEffect(() => {
+    if (user.jobPosition_id) {
+      getPermissions(Number(user.jobPosition_id));
+    }
+  }, [user]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -131,6 +150,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         signIn,
         signOut,
         userPhoto,
+        permissions,
       }}
     >
       {children}

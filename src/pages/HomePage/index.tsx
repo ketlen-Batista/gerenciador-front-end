@@ -5,6 +5,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import GroupIcon from '@mui/icons-material/Group';
 import StoreIcon from '@mui/icons-material/Store';
 import { Box, Grid } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import {
   useGetItemsCountHome,
   useGetStatusCountHome,
@@ -25,6 +26,8 @@ const HomePage = () => {
   const { data: statusCountHome, mutateAsync: getStatusCountHome } =
     useGetStatusCountHome();
 
+  const { permissions } = useAuth();
+  console.log({ permissions });
   const options = {
     series: statusCountHome
       ? statusCountHome.map((item) => item?.count || 0)
