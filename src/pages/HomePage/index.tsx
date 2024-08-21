@@ -172,7 +172,7 @@ const HomePage = () => {
               Status de funcionários
             </Typography>
 
-            {options.series ? (
+            {!statusCountHome ? (
               <Box
                 display="flex"
                 alignItems="center"

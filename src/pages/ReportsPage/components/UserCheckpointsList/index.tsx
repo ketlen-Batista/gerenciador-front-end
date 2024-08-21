@@ -64,7 +64,7 @@ const UserCheckpointsList = () => {
         ),
     },
     { field: 'status', headerName: 'Status', flex: 3 },
-    { field: 'justification', headerName: 'Justificativa', flex: 3 },
+    // { field: 'justification', headerName: 'Justificativa', flex: 3 },
   ];
 
   return (

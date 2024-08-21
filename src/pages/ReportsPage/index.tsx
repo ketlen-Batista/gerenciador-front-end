@@ -45,6 +45,8 @@ import Tabs, { Tab } from '@src/components/Tabs';
 
 import { useAuth } from '@hooks/useAuth';
 
+import CertificatesPage from './pages/CertificatesPage';
+import JustificationsPage from './pages/JustificationsPage';
 import PointCheckins from './pages/PointCheckins';
 import ServiceRegister from './pages/ServiceRegister';
 
@@ -68,6 +70,18 @@ const ReportsPage = () => {
       label: 'Registros de serviço',
       content: <ServiceRegister />,
       isVisible: permissions?.servicesRegister ? true : false, // Verifica a permissão
+    },
+    {
+      id: 'justifications',
+      label: 'Justificativas',
+      content: <JustificationsPage />,
+      isVisible: true, // Verifica a permissão
+    },
+    {
+      id: 'certificates',
+      label: 'Atestados',
+      content: <CertificatesPage />,
+      isVisible: true, // Verifica a permissão
     },
   ].filter((tab) => tab.isVisible); // Filtra as abas com base na visibilidade
 

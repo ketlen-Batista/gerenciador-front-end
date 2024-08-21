@@ -103,7 +103,6 @@ export async function addDocument({
   try {
     const formData = new FormData();
     // if (file) formData.append('file', file);
-    
 
     if (file) {
       // const blob = new Blob([file], { type: 'application/pdf' });

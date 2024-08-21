@@ -8,6 +8,7 @@ import {
   DescriptionOutlined as DescriptionOutlinedIcon,
   EqualizerOutlined as EqualizerOutlinedIcon,
 } from '@material-ui/icons';
+import { Box, Grid } from '@mui/material';
 import { useEmployeeData } from '@pages/EmployeeData/contexts/EmployeeDataContext';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
 import { useDeleteUser, useGetUser } from '@src/services/users/queries';
@@ -16,6 +17,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import BasicsData from '@pages/EmployeeData/components/BasicsData';
 import AccordionCustom from '@src/components/AccordionCustom';
+import HourSchedule from '@src/components/HourSchedule';
 import ModalConfirm from '@src/components/ModalConfirm';
 
 import ImageAvatar from '@components/ImageAvatar';
@@ -82,6 +84,48 @@ function Form() {
     }
   }, [employeeId, getUser]);
 
+  ///////////////////////////////////////////
+  const [state, setState] = useState({
+    seg: {},
+    ter: {},
+    qua: {},
+    qui: {},
+    sex: {},
+    sab: {},
+    dom: {},
+    workScheduleMonday: true,
+    workScheduleTuesday: true,
+    workScheduleWednesday: true,
+    workScheduleThursday: true,
+    workScheduleFriday: true,
+    workScheduleSaturday: true,
+    workScheduleSunday: true,
+  });
+
+  const schedulesTimeList = [
+    { label: '08:00', value: '08:00' },
+    { label: '09:00', value: '09:00' },
+  ];
+
+  const handleChangeSwitchActive = (day) => {
+    console.log(`Switch for ${day} clicked`);
+    setState((prevState) => ({
+      ...prevState,
+      [day]: !prevState[day],
+    }));
+  };
+
+  const handleChangeHour = (dayOfWeek, type, value) => {
+    console.log(`Hour changed for ${dayOfWeek}: ${type} = ${value}`);
+    setState((prevState) => ({
+      ...prevState,
+      [dayOfWeek]: {
+        ...prevState[dayOfWeek],
+        [type]: value,
+      },
+    }));
+  };
+
   return (
     <>
       <S.Container>
@@ -145,14 +189,21 @@ function Form() {
           />
         </AccordionCustom>
 
-        {/* <AccordionCustom
-          panel="panel2"
-          expanded={expanded}
-          handleChange={handleChange}
-          title="Permissões"
+        <Box width={'100%'} mt={5}>
+          <AccordionCustom
+            panel="panel2"
+            expanded={expanded}
+            handleChange={handleChange}
+            title="Horários de Trabalho"
           >
-          <div>Permissões do usuário</div>
-          </AccordionCustom> */}
+            <HourSchedule
+              state={state}
+              SchedulesTimeList={schedulesTimeList}
+              handleChangeSwitchActive={handleChangeSwitchActive}
+              handleChangeHour={handleChangeHour}
+            />
+          </AccordionCustom>
+        </Box>
 
         <form onSubmit={formik?.handleSubmit}>
           <S.ContainerButton>

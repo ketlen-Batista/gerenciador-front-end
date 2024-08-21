@@ -1,29 +1,3 @@
-// import React from 'react';
-// import { Box } from '@mui/material';
-// import { colors } from '@src/styles/colors';
-// import { Navigate, Outlet } from 'react-router-dom';
-// import CircularProgress from '@src/components/CircularProgress';
-// import { useAuth } from '@hooks/useAuth';
-// const ProtectedRoute = () => {
-//   const { user, isLoadingStorageData } = useAuth();
-//   if (isLoadingStorageData) {
-//     return (
-//       <Box
-//         display="flex"
-//         height="800px"
-//         width="100%"
-//         alignItems="center"
-//         justifyContent="center"
-//         color={colors.primary.dark}
-//       >
-//         <CircularProgress size="large" color="inherit" />
-//       </Box>
-//     );
-//   }
-//   return user.id ? <Outlet /> : <Navigate to="/login" />;
-// };
-// export default ProtectedRoute;
-////////////////////////////////////////////////////
 import React from 'react';
 
 import { Box } from '@mui/material';
@@ -37,7 +11,7 @@ import { useAuth } from '@hooks/useAuth';
 type ProtectedRouteProps = {
   requiredPermission?: string; // Permissão necessária para acessar a rota
   redirectPath?: string; // Caminho para redirecionar se não tiver permissão
-  children: React.ReactNode; // Adicione a propriedade children aqui
+  children: React.ReactNode;
 };
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
@@ -67,11 +41,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" />;
   }
 
-  if (permissions && !permissions['desktop']) {
+  // Verifica se o usuário tem a permissão para acessar o gerenciador/site
+  if (user.id && permissions && !permissions?.desktop) {
     return <Navigate to="/login" />;
   }
 
-  // Verifique se o usuário tem a permissão necessária
+  // Verifica se o usuário tem a permissão necessária
   if (permissions && !permissions[requiredPermission]) {
     return <Navigate to={redirectPath} />;
   }
