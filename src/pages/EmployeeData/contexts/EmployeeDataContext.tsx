@@ -1,10 +1,4 @@
-import React, {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-} from 'react';
+import React, { createContext, useContext, useEffect, useMemo } from 'react';
 
 import useSnackbar from '@src/hooks/useSnackbar';
 import {
@@ -16,8 +10,6 @@ import { AxiosError } from 'axios';
 import { useFormik } from 'formik';
 import { UseMutateFunction } from 'react-query';
 import * as Yup from 'yup';
-
-import Snackbar from '@src/components/Snackbar';
 
 interface GetUser {
   userId: string;
@@ -79,6 +71,11 @@ const validationSchema = Yup.object().shape({
   phone: Yup.string().optional(),
   cpf: Yup.string().max(14, 'CPF inválido').required('CPF é obrigatório'),
   address: Yup.string().optional(),
+  cep: Yup.string().optional(),
+  emergencyContact: Yup.string().optional(),
+  city: Yup.string().optional(),
+  state: Yup.string().optional(),
+  guardian: Yup.string().optional(),
   registration: Yup.string()
     .min(6, 'Quantidade mínima de 6 dígitos')
     .required('Matrícula é obrigatória'),
@@ -107,19 +104,43 @@ export const EmployeeDataProvider = ({ children }) => {
       phone: user?.user?.phone || '',
       cpf: user?.user?.cpf || '',
       address: user?.user?.address || '',
+      cep: user?.user?.cep || '',
+      emergencyContact: user?.user?.emergencyContact || '',
+      city: user?.user?.city || '',
+      state: user?.user?.state || '',
+      guardian: user?.user?.guardian || '',
+      supervisor: user?.user?.supervisor || '',
       registration: user?.user?.registration || '',
       dateOfBirth: user?.user?.dateOfBirth || '',
       jobPosition_id: user?.user?.jobPosition_id || null,
-      office: user?.user?.office || '',
-      status_value: user?.user?.status_value || '',
+      status_value: user?.user?.status_value || null,
       contracts_value: user?.user?.contracts_value || null,
       sector_value: user?.user?.sector_value || null,
+      photo_avatar_id: user?.user?.photo_avatar_id || null,
     },
     enableReinitialize: true,
-    validationSchema,
+    validationSchema: Yup.object({
+      name: Yup.string().required('Name is required'),
+      email: Yup.string().email('Invalid email').required('Email is required'),
+      phone: Yup.string().optional(),
+      cpf: Yup.string().optional(),
+      address: Yup.string().optional(),
+      cep: Yup.string().optional(),
+      emergencyContact: Yup.string().optional(),
+      city: Yup.string().optional(),
+      state: Yup.string().optional(),
+      guardian: Yup.string().optional(),
+      supervisor: Yup.string().optional(),
+      registration: Yup.string().optional(),
+      dateOfBirth: Yup.string().optional(),
+      jobPosition_id: Yup.number().nullable().optional(),
+      status_value: Yup.number().nullable().optional(),
+      contracts_value: Yup.number().nullable().optional(),
+      sector_value: Yup.number().nullable().optional(),
+      photo_avatar_id: Yup.number().nullable().optional(),
+    }),
     onSubmit: (values) => {
       console.log('Form data:', values);
-      // handle form submission
       if (values.id) {
         updateUser({
           id: values.id,
@@ -128,12 +149,19 @@ export const EmployeeDataProvider = ({ children }) => {
           phone: values.phone,
           cpf: values.cpf,
           address: values.address,
+          cep: values.cep,
+          emergencyContact: values.emergencyContact,
+          city: values.city,
+          state: values.state,
+          guardian: values.guardian,
+          supervisor: values.supervisor,
           registration: values.registration,
           dateOfBirth: values.dateOfBirth,
           jobPosition_id: values.jobPosition_id,
           status_value: values.status_value ?? null,
           contracts_value: values.contracts_value,
           sector_value: values.sector_value,
+          photo_avatar_id: values.photo_avatar_id,
         });
         return;
       }
@@ -144,6 +172,12 @@ export const EmployeeDataProvider = ({ children }) => {
         phone: values.phone,
         cpf: values.cpf,
         address: values.address,
+        cep: values.cep,
+        emergencyContact: values.emergencyContact,
+        city: values.city,
+        state: values.state,
+        guardian: values.guardian,
+        supervisor: values.supervisor,
         registration: values.registration,
         dateOfBirth: values.dateOfBirth,
         jobPosition_id: values.jobPosition_id,
@@ -151,6 +185,7 @@ export const EmployeeDataProvider = ({ children }) => {
         contracts_value: values.contracts_value,
         sector_value: values.sector_value,
         password: values.registration,
+        photo_avatar_id: values.photo_avatar_id,
       });
     },
   });

@@ -26,8 +26,12 @@ function TableEmployees() {
   const { mutate: handleDeleteUser, isPending: isPendingDeleteUser } =
     useDeleteUser();
 
-  const handleNavigate = (page: string, employeeId: string) => {
-    navigate(page || '', { state: { employeeId } });
+  const handleNavigate = (
+    page: string,
+    employeeId: string,
+    fieldsDisabled: boolean,
+  ) => {
+    navigate(page || '', { state: { employeeId, fieldsDisabled } });
   };
 
   const handleOpenModalDelete = (userId: string) => {
@@ -112,7 +116,11 @@ function TableEmployees() {
           <Tooltip title="Ver" placement="top">
             <IconButton
               onClick={() =>
-                handleNavigate(AvailableRoutes.employeesDataPage, params.row.id)
+                handleNavigate(
+                  AvailableRoutes.employeesDataPage,
+                  params.row.id,
+                  true,
+                )
               }
             >
               <div
@@ -128,7 +136,11 @@ function TableEmployees() {
           <Tooltip title="Editar" placement="top">
             <IconButton
               onClick={() =>
-                handleNavigate(AvailableRoutes.employeesDataPage, params.row.id)
+                handleNavigate(
+                  AvailableRoutes.employeesDataPage,
+                  params.row.id,
+                  false,
+                )
               }
             >
               <div

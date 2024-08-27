@@ -16,6 +16,10 @@ export const useUserCheckpointsContext = () => {
     coordinates,
     openModalLocalization,
     handleCloseModalLocalization,
+    openModalPhoto,
+    photoId,
+    handleOpenModalPhoto,
+    handleCloseModalPhoto,
   } = useContext(UserCheckpointsContext);
 
   return {
@@ -31,5 +35,9 @@ export const useUserCheckpointsContext = () => {
     coordinates,
     openModalLocalization,
     handleCloseModalLocalization,
+    openModalPhoto,
+    photoId,
+    handleOpenModalPhoto,
+    handleCloseModalPhoto,
   };
 };

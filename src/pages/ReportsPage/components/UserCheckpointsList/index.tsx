@@ -8,6 +8,7 @@ import { formatDate } from '@src/utils/dates';
 import TableDataGrid from '@src/components/TableDataGrid';
 
 import LocalizationModal from '../LocalizationModal';
+import PhotoModal from '../PhotoModal';
 
 const UserCheckpointsList = () => {
   const {
@@ -18,6 +19,10 @@ const UserCheckpointsList = () => {
     openModalLocalization,
     handleCloseModalLocalization,
     coordinates,
+    openModalPhoto,
+    photoId,
+    handleOpenModalPhoto,
+    handleCloseModalPhoto,
   } = useUserCheckpointsContext();
 
   console.log({ openModalLocalization });
@@ -63,10 +68,32 @@ const UserCheckpointsList = () => {
           </div>
         ),
     },
+    {
+      field: 'photo_user_checkin_id',
+      headerName: 'Foto',
+      flex: 2,
+      renderCell: (params) =>
+        params.row.latitude &&
+        params.row.longitude && (
+          <div
+            onClick={() =>
+              handleOpenModalPhoto(params.row.photo_user_checkin_id)
+            }
+            style={{
+              cursor: 'pointer',
+              color: 'blue',
+              fontWeight: '500',
+            }}
+          >
+            Ver Foto
+          </div>
+        ),
+    },
     { field: 'status', headerName: 'Status', flex: 3 },
     // { field: 'justification', headerName: 'Justificativa', flex: 3 },
   ];
 
+  console.log({ userCheckpoints });
   return (
     <Box mt={5} bgcolor={colors.basic.white}>
       <TableDataGrid
@@ -80,6 +107,14 @@ const UserCheckpointsList = () => {
           handleClose={handleCloseModalLocalization}
           latitude={coordinates?.latitude}
           longitude={coordinates?.longitude}
+        />
+      )}
+
+      {openModalPhoto && (
+        <PhotoModal
+          openDialog={openModalPhoto}
+          handleClose={handleCloseModalPhoto}
+          photoId={photoId}
         />
       )}
     </Box>

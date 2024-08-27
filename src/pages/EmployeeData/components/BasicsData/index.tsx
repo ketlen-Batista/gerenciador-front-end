@@ -16,10 +16,10 @@ import { useEmployeeData } from '../../contexts/EmployeeDataContext';
 import * as S from './styles';
 
 interface BasicsDataProps {
-  user: any;
+  fieldsDisabled: boolean;
 }
 
-function BasicsData({ user }) {
+function BasicsData({ fieldsDisabled }: BasicsDataProps) {
   const { data: jobs, mutate: getJobs } = useGetJobPositions();
   const { data: contracts, mutate: getContracts } = useGetContracts();
   const { data: sectors, mutate: getSectors } = useGetSectors();
@@ -32,21 +32,21 @@ function BasicsData({ user }) {
     getContracts({});
     getSectors({});
     getStatus({});
-  }, []);
+  }, [getJobs, getContracts, getSectors, getStatus]);
 
   return (
-    // <form onSubmit={formik.handleSubmit}>
     <Grid container spacing={2}>
       <Grid item xs={4}>
         <TextInput
           name="name"
           label="Nome"
-          value={formik.values.name}
+          value={formik?.values.name}
           placeholder="Nome"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.name && Boolean(formik?.errors.name)}
+          helperText={formik?.touched.name && formik?.errors.name}
+          disabled={fieldsDisabled}
           mini
         />
       </Grid>
@@ -54,12 +54,13 @@ function BasicsData({ user }) {
         <TextInput
           name="phone"
           label="Telefone"
-          value={formik.values.phone}
+          value={formik?.values.phone}
           placeholder="Telefone"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.phone && Boolean(formik.errors.phone)}
-          helperText={formik.touched.phone && formik.errors.phone}
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.phone && Boolean(formik?.errors.phone)}
+          helperText={formik?.touched.phone && formik?.errors.phone}
+          disabled={fieldsDisabled}
           mini
         />
       </Grid>
@@ -67,12 +68,13 @@ function BasicsData({ user }) {
         <TextInput
           name="email"
           label="Email"
-          value={formik.values.email}
+          value={formik?.values.email}
           placeholder="Email"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.email && Boolean(formik?.errors.email)}
+          helperText={formik?.touched.email && formik?.errors.email}
+          disabled={fieldsDisabled}
           mini
         />
       </Grid>
@@ -80,28 +82,31 @@ function BasicsData({ user }) {
         <TextInput
           name="cpf"
           label="CPF"
-          value={maskCpf(formik.values.cpf)}
+          value={maskCpf(formik?.values.cpf)}
           placeholder="CPF"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.cpf && Boolean(formik.errors.cpf)}
-          helperText={formik.touched.cpf && formik.errors.cpf}
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.cpf && Boolean(formik?.errors.cpf)}
+          helperText={formik?.touched.cpf && formik?.errors.cpf}
+          disabled={fieldsDisabled}
           mini
         />
       </Grid>
-
       <Grid item xs={4}>
         <TextInput
           name="registration"
           label="Matrícula"
-          value={formik.values.registration}
+          value={formik?.values.registration}
           placeholder="Matrícula"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
           error={
-            formik.touched.registration && Boolean(formik.errors.registration)
+            formik?.touched.registration && Boolean(formik?.errors.registration)
           }
-          helperText={formik.touched.registration && formik.errors.registration}
+          helperText={
+            formik?.touched.registration && formik?.errors.registration
+          }
+          disabled={fieldsDisabled}
           mini
         />
       </Grid>
@@ -109,116 +114,192 @@ function BasicsData({ user }) {
         <TextInput
           name="dateOfBirth"
           label="Data de Nascimento"
-          value={maskDate(formik.values.dateOfBirth)}
+          value={maskDate(formik?.values.dateOfBirth)}
           placeholder="Data de nascimento"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
           error={
-            formik.touched.dateOfBirth && Boolean(formik.errors.dateOfBirth)
+            formik?.touched.dateOfBirth && Boolean(formik?.errors.dateOfBirth)
           }
-          helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
+          helperText={formik?.touched.dateOfBirth && formik?.errors.dateOfBirth}
+          disabled={fieldsDisabled}
           mini
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={2}>
+        <TextInput
+          name="cep"
+          label="Cep"
+          value={formik?.values.cep}
+          placeholder="Cep"
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.cep && Boolean(formik?.errors.cep)}
+          helperText={formik?.touched.cep && formik?.errors.cep}
+          disabled={fieldsDisabled}
+          mini
+        />
+      </Grid>
+      <Grid item xs={5}>
         <TextInput
           name="address"
           label="Endereço"
-          value={formik.values.address}
+          value={formik?.values.address}
           placeholder="Endereço"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.address && Boolean(formik.errors.address)}
-          helperText={formik.touched.address && formik.errors.address}
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.address && Boolean(formik?.errors.address)}
+          helperText={formik?.touched.address && formik?.errors.address}
+          disabled={fieldsDisabled}
           mini
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
+        <TextInput
+          name="city"
+          label="Cidade"
+          value={formik?.values.city}
+          placeholder="Cidade"
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.city && Boolean(formik?.errors.city)}
+          helperText={formik?.touched.city && formik?.errors.city}
+          disabled={fieldsDisabled}
+          mini
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextInput
+          name="state"
+          label="Estado"
+          value={formik?.values.state}
+          placeholder="Estado"
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.state && Boolean(formik?.errors.state)}
+          helperText={formik?.touched.state && formik?.errors.state}
+          disabled={fieldsDisabled}
+          mini
+        />
+      </Grid>
+      <Grid item xs={3}>
         <S.FieldBox>
           <Select
             label="Status"
             options={status}
-            value={formik.values.status_value}
-            name={
-              status?.find((item) => item.value === formik.values.status_value)
-                ?.name
-            }
-            onChange={(e) => formik.setFieldValue('status_value', e.value)}
-            onBlur={formik.handleBlur}
+            value={formik?.values.status_value}
+            onChange={(e) => formik?.setFieldValue('status_value', e.value)}
+            onBlur={formik?.handleBlur}
             error={
-              formik.touched.status_value && Boolean(formik.errors.status_value)
+              formik?.touched.status_value &&
+              Boolean(formik?.errors.status_value)
             }
-            //   helperText={formik.touched.jobPosition_id && formik.errors.jobPosition_id}
+            disabled={fieldsDisabled}
             clearable
           />
         </S.FieldBox>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <S.FieldBox>
           <Select
             label="Cargo"
             options={jobs}
-            value={formik.values.jobPosition_id}
-            name={
-              jobs?.find((item) => item.value === formik.values.jobPosition_id)
-                ?.name
-            }
-            onChange={(e) => formik.setFieldValue('jobPosition_id', e.value)}
-            onBlur={formik.handleBlur}
+            value={formik?.values.jobPosition_id}
+            onChange={(e) => formik?.setFieldValue('jobPosition_id', e.value)}
+            onBlur={formik?.handleBlur}
             error={
-              formik.touched.jobPosition_id &&
-              Boolean(formik.errors.jobPosition_id)
+              formik?.touched.jobPosition_id &&
+              Boolean(formik?.errors.jobPosition_id)
             }
-            //   helperText={formik.touched.jobPosition_id && formik.errors.jobPosition_id}
+            disabled={fieldsDisabled}
             clearable
           />
         </S.FieldBox>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <S.FieldBox>
           <Select
             label="Contrato"
             options={contracts}
-            value={formik.values.contracts_value}
-            name={
-              contracts?.find(
-                (item) => item.value === formik.values.contracts_value,
-              )?.name
-            }
-            onChange={(e) => formik.setFieldValue('contracts_value', e.value)}
-            onBlur={formik.handleBlur}
+            value={formik?.values.contracts_value}
+            onChange={(e) => formik?.setFieldValue('contracts_value', e.value)}
+            onBlur={formik?.handleBlur}
             error={
-              formik.touched.contracts_value &&
-              Boolean(formik.errors.contracts_value)
+              formik?.touched.contracts_value &&
+              Boolean(formik?.errors.contracts_value)
             }
-            //   helperText={formik.touched.contracts_value && formik.errors.contracts_value}
+            disabled={fieldsDisabled}
+            clearable
+          />
+        </S.FieldBox>
+      </Grid>
+      <Grid item xs={3}>
+        <S.FieldBox>
+          <Select
+            label="Setor"
+            options={sectors}
+            value={formik?.values.sector_value}
+            onChange={(e) => formik?.setFieldValue('sector_value', e.value)}
+            onBlur={formik?.handleBlur}
+            error={
+              formik?.touched.sector_value &&
+              Boolean(formik?.errors.sector_value)
+            }
+            disabled={fieldsDisabled}
             clearable
           />
         </S.FieldBox>
       </Grid>
       <Grid item xs={4}>
-        <S.FieldBox>
-          <Select
-            label="Setor"
-            // placeholder="Setor"
-            options={sectors}
-            value={formik.values.sector_value}
-            name={
-              sectors?.find((item) => item.value === formik.values.sector_value)
-                ?.name
-            }
-            onChange={(e) => formik.setFieldValue('sector_value', e.value)}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.sector_value && Boolean(formik.errors.sector_value)
-            }
-            //   helperText={formik.touched.sector_value && formik.errors.sector_value}
-            clearable
-          />
-        </S.FieldBox>
+        <TextInput
+          name="emergencyContact"
+          label="Contato de Emergência"
+          value={formik?.values.emergencyContact}
+          placeholder="Contato de emergência"
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={
+            formik?.touched.emergencyContact &&
+            Boolean(formik?.errors.emergencyContact)
+          }
+          helperText={
+            formik?.touched.emergencyContact && formik?.errors.emergencyContact
+          }
+          disabled={fieldsDisabled}
+          mini
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <TextInput
+          name="supervisor"
+          label="Supervisor do Contrato"
+          value={formik?.values.supervisor}
+          placeholder="Supervisor do contrato"
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={
+            formik?.touched.supervisor && Boolean(formik?.errors.supervisor)
+          }
+          helperText={formik?.touched.supervisor && formik?.errors.supervisor}
+          disabled={fieldsDisabled}
+          mini
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <TextInput
+          name="guardian"
+          label="Encarregado do Setor"
+          value={formik?.values.guardian}
+          placeholder="Encarregado do setor"
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          error={formik?.touched.guardian && Boolean(formik?.errors.guardian)}
+          helperText={formik?.touched.guardian && formik?.errors.guardian}
+          disabled={fieldsDisabled}
+          mini
+        />
       </Grid>
     </Grid>
-    // </form>
   );
 }
 

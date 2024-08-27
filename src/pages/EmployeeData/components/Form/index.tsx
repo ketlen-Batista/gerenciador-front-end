@@ -41,7 +41,7 @@ const IconTooltip = ({ title, icon, onClick }: IconTooltipProps) => (
 function Form() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { employeeId } = location.state || {};
+  const { employeeId, fieldsDisabled } = location.state || {};
   const [expanded, setExpanded] = useState<string | boolean>('panel1');
   const [isNewEmployee, setIsNewEmployee] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -184,7 +184,7 @@ function Form() {
           title="Dados Básicos"
         >
           <BasicsData
-            user={isNewEmployee ? {} : user}
+            fieldsDisabled={fieldsDisabled}
             // isLoadingUser={isLoadingUser}
           />
         </AccordionCustom>

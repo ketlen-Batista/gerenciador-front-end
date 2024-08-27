@@ -49,6 +49,10 @@ interface UserCheckpointsContextType {
   coordinates: { latitude: number; longitude: number };
   openModalLocalization: boolean;
   handleCloseModalLocalization: () => void;
+  openModalPhoto: boolean;
+  photoId: number;
+  handleOpenModalPhoto: (photoId: number) => void;
+  handleCloseModalPhoto: () => void;
 }
 
 export const UserCheckpointsContext = createContext(
@@ -81,6 +85,10 @@ export const UserCheckpointsProvider = ({ children }) => {
     startDate: null,
     endDate: null,
   });
+  const [openModalPhoto, setOpenModalPhoto] = useState<boolean>(false);
+  const [photoId, setPhotoId] = useState<number>();
+
+  console.log({ openModalPhoto });
 
   const { data: fetchedUsers, mutate: getUsers } = useGetUsers();
   const { data: fetchedCheckpoints, mutate: fetchUserCheckpoints } =
@@ -119,6 +127,17 @@ export const UserCheckpointsProvider = ({ children }) => {
     setUserCheckpoints(filteredCheckpoints);
   };
 
+  const handleOpenModalPhoto = (photoId: number) => {
+    console.log({ photoId });
+    setOpenModalPhoto(true);
+    setPhotoId(photoId);
+  };
+
+  const handleCloseModalPhoto = () => {
+    setOpenModalPhoto(false);
+    setPhotoId(null);
+  };
+
   const handleDateFilter = (dateRange: {
     startDate: number | null;
     endDate: number | null;
@@ -155,6 +174,10 @@ export const UserCheckpointsProvider = ({ children }) => {
       coordinates,
       openModalLocalization,
       handleCloseModalLocalization,
+      openModalPhoto,
+      photoId,
+      handleOpenModalPhoto,
+      handleCloseModalPhoto,
     }),
     [
       filterUserId,
@@ -163,6 +186,8 @@ export const UserCheckpointsProvider = ({ children }) => {
       loading,
       selectedDateRange,
       openModalLocalization,
+      openModalPhoto,
+      photoId,
     ],
   );
 
