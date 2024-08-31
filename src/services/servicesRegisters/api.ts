@@ -1,12 +1,14 @@
 import { api } from '@src/lib/axios';
-import * as DTO from './dto'
+
+import * as DTO from './dto';
 
 export async function getServiceRegister({
   id,
   endDate,
   startDate,
   userId,
-  sectorValue
+  sectorValue,
+  contractValue,
 }: DTO.GetServicesRegisterProps) {
   try {
     const { data } = await api.patch(`/services-registers/search`, {
@@ -14,7 +16,8 @@ export async function getServiceRegister({
       endDate,
       startDate,
       userId,
-      sectorValue
+      sectorValue,
+      contractValue,
     });
     return data;
   } catch (error) {

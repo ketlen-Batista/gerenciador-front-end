@@ -1,7 +1,11 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import { useListUserCheckpoints } from '@src/services/CheckinsPoints/queries';
+import { useGetContracts } from '@src/services/contractsService/queries';
+import { useGetJobPositions } from '@src/services/jobPositions/queries';
+import { useGetSectors } from '@src/services/sectorService/queries';
 import { useGetUsers } from '@src/services/users/queries';
+import { INIT_DATE_RANGE } from '@src/utils/dates';
 import { useLocation } from 'react-router-dom';
 
 interface Checkpoint {
@@ -34,8 +38,8 @@ interface User {
 }
 
 interface UserCheckpointsContextType {
-  filterUserId: string | number;
-  setFilterUserId: (userId: string | number) => void;
+  filterUserId: string;
+  setFilterUserId: (userId: string) => void;
   userCheckpoints: Checkpoint[];
   users: User[];
   loading: boolean;
@@ -53,6 +57,15 @@ interface UserCheckpointsContextType {
   photoId: number;
   handleOpenModalPhoto: (photoId: number) => void;
   handleCloseModalPhoto: () => void;
+  cargo: number | string | null;
+  setCargo: (cargo: number | string | null) => void;
+  setSetor: (setor: number | string | null) => void;
+  setContrato: (contrato: number | string | null) => void;
+  setor: number | string | null;
+  contrato: number | string | null;
+  jobs: any[];
+  contracts: any[];
+  sectors: any[];
 }
 
 export const UserCheckpointsContext = createContext(
@@ -72,9 +85,7 @@ export const UserCheckpointsProvider = ({ children }) => {
   });
   const [openModalLocalization, setOpenModalLocalization] =
     useState<boolean>(false);
-  const [filterUserId, setFilterUserId] = useState<string | number>(
-    userId ?? '',
-  );
+  const [filterUserId, setFilterUserId] = useState<string>(userId ?? '');
   const [userCheckpoints, setUserCheckpoints] = useState<Checkpoint[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -87,12 +98,15 @@ export const UserCheckpointsProvider = ({ children }) => {
   });
   const [openModalPhoto, setOpenModalPhoto] = useState<boolean>(false);
   const [photoId, setPhotoId] = useState<number>();
+  const [cargo, setCargo] = useState<number | string | null>(null);
+  const [setor, setSetor] = useState<number | string | null>(null);
+  const [contrato, setContrato] = useState<number | string | null>(null);
 
-  console.log({ openModalPhoto });
-
+  const { data: jobs, mutate: getJobs } = useGetJobPositions();
+  const { data: contracts, mutate: getContracts } = useGetContracts();
+  const { data: sectors, mutate: getSectors } = useGetSectors();
   const { data: fetchedUsers, mutate: getUsers } = useGetUsers();
-  const { data: fetchedCheckpoints, mutate: fetchUserCheckpoints } =
-    useListUserCheckpoints();
+  const { mutateAsync: fetchUserCheckpoints } = useListUserCheckpoints();
 
   const handleOpenModalLocalization = (lat: number, lngt: number) => {
     setOpenModalLocalization(true);
@@ -101,30 +115,6 @@ export const UserCheckpointsProvider = ({ children }) => {
 
   const handleCloseModalLocalization = () => {
     setOpenModalLocalization(false);
-  };
-
-  const checkpointsFiltered = () => {
-    if (!fetchedCheckpoints) return;
-
-    let filteredCheckpoints = fetchedCheckpoints;
-
-    if (filterUserId) {
-      filteredCheckpoints = filteredCheckpoints.filter(
-        (checkpoint) => checkpoint.userId === filterUserId,
-      );
-    }
-
-    if (selectedDateRange.startDate && selectedDateRange.endDate) {
-      const startDate = selectedDateRange.startDate;
-      const endDate = selectedDateRange.endDate;
-
-      filteredCheckpoints = filteredCheckpoints.filter((checkpoint) => {
-        const checkpointDate = new Date(checkpoint.timestamp).getTime();
-        return checkpointDate >= startDate && checkpointDate <= endDate;
-      });
-    }
-
-    setUserCheckpoints(filteredCheckpoints);
   };
 
   const handleOpenModalPhoto = (photoId: number) => {
@@ -147,12 +137,68 @@ export const UserCheckpointsProvider = ({ children }) => {
 
   useEffect(() => {
     getUsers({});
-    fetchUserCheckpoints({});
+    getJobs({});
+    getContracts({});
+    getSectors({});
+    fetchUserCheckpoints({
+      startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
+      endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
+    })
+      .then((checkpoints) => {
+        setUserCheckpoints(checkpoints);
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar checkpoints:', error);
+      });
   }, []);
-
+  console.log('userCheckpoints12345', userCheckpoints);
+  // useEffect(() => {
+  //   checkpointsFiltered();
+  // }, [filterUserId, selectedDateRange, fetchedCheckpoints]);
   useEffect(() => {
-    checkpointsFiltered();
-  }, [filterUserId, selectedDateRange, fetchedCheckpoints]);
+    if (
+      selectedDateRange.startDate ||
+      selectedDateRange.endDate ||
+      filterUserId.length ||
+      setor ||
+      cargo ||
+      contrato
+    ) {
+      fetchUserCheckpoints({
+        userId: filterUserId,
+        sectorId: setor ? (setor as number) : undefined,
+        jobId: cargo ? (cargo as number) : undefined,
+        contractId: contrato ? (contrato as number) : undefined,
+        startDate: selectedDateRange.startDate
+          ? new Date(selectedDateRange.startDate).toISOString()
+          : new Date(INIT_DATE_RANGE.startDate).toISOString(),
+        endDate: selectedDateRange.endDate
+          ? new Date(selectedDateRange.endDate).toISOString()
+          : new Date(INIT_DATE_RANGE.endDate).toISOString(),
+      })?.then((checkpoints) => {
+        setUserCheckpoints(checkpoints);
+      });
+      return;
+    }
+
+    fetchUserCheckpoints({
+      userId: filterUserId,
+      sectorId: setor ? (setor as number) : undefined,
+      jobId: cargo ? (cargo as number) : undefined,
+      contractId: contrato ? (contrato as number) : undefined,
+      startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
+      endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
+    }).then((checkpoints) => {
+      setUserCheckpoints(checkpoints);
+    });
+  }, [
+    filterUserId,
+    selectedDateRange.startDate,
+    selectedDateRange.endDate,
+    setor,
+    cargo,
+    contrato,
+  ]);
 
   useEffect(() => {
     if (fetchedUsers) {
@@ -178,6 +224,15 @@ export const UserCheckpointsProvider = ({ children }) => {
       photoId,
       handleOpenModalPhoto,
       handleCloseModalPhoto,
+      cargo,
+      setCargo,
+      setSetor,
+      setContrato,
+      setor,
+      contrato,
+      jobs,
+      contracts,
+      sectors,
     }),
     [
       filterUserId,
@@ -188,6 +243,15 @@ export const UserCheckpointsProvider = ({ children }) => {
       openModalLocalization,
       openModalPhoto,
       photoId,
+      cargo,
+      setCargo,
+      setSetor,
+      setContrato,
+      setor,
+      contrato,
+      jobs,
+      contracts,
+      sectors,
     ],
   );
 

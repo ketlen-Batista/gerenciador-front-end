@@ -35,7 +35,7 @@ export async function getJustificationById(id?: number) {
 
 export async function getJustificationsList() {
   try {
-    const { data } = await api.get(`/justification/list`);
+    const { data } = await api.patch(`/justification/list`);
     return data;
   } catch (error) {
     console.error('Error fetching justification:', error);

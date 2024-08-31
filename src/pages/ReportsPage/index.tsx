@@ -63,13 +63,13 @@ const ReportsPage = () => {
       id: 'pointCheckins',
       label: 'Folha de Ponto',
       content: <PointCheckins />,
-      isVisible: permissions?.pointEletronic ? true : false, // Verifica a permissão
+      isVisible: !permissions?.pointEletronic ? false : true, // Verifica a permissão
     },
     {
       id: 'serviceRegister',
       label: 'Registros de serviço',
       content: <ServiceRegister />,
-      isVisible: permissions?.servicesRegister ? true : false, // Verifica a permissão
+      isVisible: !permissions?.servicesRegister ? false : true, // Verifica a permissão
     },
     {
       id: 'justifications',
@@ -83,20 +83,22 @@ const ReportsPage = () => {
       content: <CertificatesPage />,
       isVisible: true, // Verifica a permissão
     },
-  ].filter((tab) => tab.isVisible); // Filtra as abas com base na visibilidade
-
+  ]?.filter((tab) => tab.isVisible); // Filtra as abas com base na visibilidade
+  console.log('AAAAAAAAAAAA', tabs?.[0]?.id);
   const [currentTabId, setCurrentTabId] = useState<string>(
-    tabs.length > 0 ? tabs[0].id : null, // Ajuste para não inicializar com uma aba vazia
+    tab ?? tabs?.[0]?.id, // Ajuste para não inicializar com uma aba vazia
   );
 
   return (
-    <DefaultPage pageTitle="Relatórios">
-      <Tabs
-        tabs={tabs}
-        currentTab={currentTabId}
-        onChangeTab={(tabId) => setCurrentTabId(tabId)} // Atualiza a aba selecionada
-      />
-    </DefaultPage>
+    tabs.length && (
+      <DefaultPage pageTitle="Relatórios">
+        <Tabs
+          tabs={tabs}
+          currentTab={currentTabId}
+          onChangeTab={(tabId) => setCurrentTabId(tabId)} // Atualiza a aba selecionada
+        />
+      </DefaultPage>
+    )
   );
 };
 

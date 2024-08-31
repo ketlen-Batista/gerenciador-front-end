@@ -7,6 +7,7 @@ import useResponsive from '@src/hooks/useResponsive';
 import DefaultPage from '@templates/DefaultPage';
 
 import Filters from './components/Filters';
+import MobileListDocuments from './components/MobileListDocuments';
 import ModalAddDocument from './components/ModalAddDocument';
 import TableDocuments from './components/TableDocuments';
 
@@ -26,22 +27,26 @@ function DocumentsList() {
       <Filters />
 
       {isDesktop ? (
-        <S.ContainerButtonAndTitle>
-          <S.SubTitle>Lista de Documentos</S.SubTitle>
-          <S.ContainerButton>
-            <S.ButtonAdd
-              variant="contained"
-              color="primary"
-              disableRipple
-              className={classes.button}
-              startIcon={<PostAddRoundedIcon />}
-              title="Enviar Documentos"
-              onClick={handleOpenModalAdd}
-            >
-              Enviar Documentos
-            </S.ButtonAdd>
-          </S.ContainerButton>
-        </S.ContainerButtonAndTitle>
+        <>
+          <S.ContainerButtonAndTitle>
+            <S.SubTitle>Lista de Documentos</S.SubTitle>
+            <S.ContainerButton>
+              <S.ButtonAdd
+                variant="contained"
+                color="primary"
+                disableRipple
+                className={classes.button}
+                startIcon={<PostAddRoundedIcon />}
+                title="Enviar Documentos"
+                onClick={handleOpenModalAdd}
+              >
+                Enviar Documentos
+              </S.ButtonAdd>
+            </S.ContainerButton>
+          </S.ContainerButtonAndTitle>
+
+          <TableDocuments />
+        </>
       ) : (
         <Box
           gap={3}
@@ -68,10 +73,10 @@ function DocumentsList() {
           <Box>
             <S.SubTitle>Lista de Documentos</S.SubTitle>
           </Box>
+
+          <MobileListDocuments />
         </Box>
       )}
-
-      <TableDocuments />
 
       {!!openDialogAdd && (
         <ModalAddDocument

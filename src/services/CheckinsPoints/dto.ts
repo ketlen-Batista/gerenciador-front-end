@@ -22,6 +22,9 @@ export interface UpdateUserCheckpointDTO {
 
 export interface UserCheckpointFiltersDTO {
   userId?: string;
-  startDate?: Date;
-  endDate?: Date;
+  sectorId?: number;
+  startDate?: string;
+  endDate?: string;
+  contractId?: number;
+  jobId?: number;
 }

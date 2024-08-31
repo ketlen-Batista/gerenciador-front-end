@@ -5,14 +5,18 @@ import { InfoOutlined } from '@mui/icons-material';
 import { Box, CircularProgress, FormControl, Grid } from '@mui/material';
 import { api } from '@src/lib/axios';
 import { useGetContracts } from '@src/services/contractsService/queries';
+import { useGetJobPositions } from '@src/services/jobPositions/queries';
+import { useGetSectors } from '@src/services/sectorService/queries';
 import { useGetServiceRegister } from '@src/services/servicesRegisters/queries';
 import { useGetUsers } from '@src/services/users/queries';
+import { basicNames } from '@src/utils/constants';
 import { INIT_DATE_RANGE, timestampToISO } from '@src/utils/dates';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { useLocation } from 'react-router-dom';
 
+import Button from '@src/components/Button';
 import DateFilter from '@src/components/DateFilter';
 import Select from '@src/components/Select';
 import Typography from '@src/components/Typography';
@@ -51,6 +55,13 @@ const PdfGenerator: React.FC = () => {
     endDate: INIT_DATE_RANGE.endDate,
   });
 
+  const [setor, setSetor] = useState<number | string | null>(null);
+  const [contrato, setContrato] = useState<number | string | null>(null);
+
+  const { data: contracts, mutateAsync: getContracts } = useGetContracts();
+  const { data: sectors, mutateAsync: getSectors } = useGetSectors();
+  const { data: fetchedUsers, mutateAsync: getUsers } = useGetUsers();
+
   const {
     data: serviceData,
     mutateAsync: getServiceRegister,
@@ -59,16 +70,25 @@ const PdfGenerator: React.FC = () => {
 
   console.log({ serviceData });
 
-  const { data: fetchedUsers, mutate: getUsers } = useGetUsers();
-
-  const { mutateAsync: getContracts, data: contracts } = useGetContracts();
   const ref = useRef(null);
   const contractName = contracts
     ?.find((el) => el.id === serviceData?.[0]?.sector?.contracts_value)
     ?.name?.toUpperCase();
 
   const textPage1 = `FOTOREGISTRO ${contractName ?? 'GIC SERVIÇOS LTDA'}`;
-  console.log('leng', textPage1?.length);
+
+  const handleChangeFilter = (name: string, value?: number | string | null) => {
+    switch (name) {
+      case 'setor':
+        setSetor(value);
+        break;
+      case 'contrato':
+        setContrato(value);
+        break;
+      default:
+        break;
+    }
+  };
 
   // Helpers
   const handleDateFilter = (dateRange: {
@@ -221,31 +241,33 @@ const PdfGenerator: React.FC = () => {
 
   useEffect(() => {
     getUsers({});
+    getContracts({});
+    getSectors({});
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setPdfUrl(null);
-      try {
-        await getServiceRegister({
-          startDate: selectedDateRange.startDate
-            ? timestampToISO(selectedDateRange.startDate)
-            : null,
-          endDate: selectedDateRange.endDate
-            ? timestampToISO(selectedDateRange.endDate)
-            : null,
-          userId: filterUserId ? (filterUserId as string) : '',
-        });
-      } catch (error) {
-        console.error('Erro ao buscar registros de serviço:', error);
-      }
-    };
-
-    if (filterUserId) {
-      fetchData();
-      getContracts({});
+  // useEffect(() => {
+  const fetchData = async () => {
+    setPdfUrl(null);
+    try {
+      await getServiceRegister({
+        startDate: selectedDateRange.startDate
+          ? timestampToISO(selectedDateRange.startDate)
+          : null,
+        endDate: selectedDateRange.endDate
+          ? timestampToISO(selectedDateRange.endDate)
+          : null,
+        contractValue: contrato ? (contrato as number) : undefined,
+        sectorValue: setor ? (setor as number) : undefined,
+        userId: filterUserId ? (filterUserId as string) : '',
+      });
+    } catch (error) {
+      console.error('Erro ao buscar registros de serviço:', error);
     }
-  }, [selectedDateRange, filterUserId]);
+  };
+
+  // fetchData();
+
+  // }, [selectedDateRange, filterUserId, setor, contrato]);
 
   useEffect(() => {
     const generatePreview = async () => {
@@ -328,24 +350,46 @@ const PdfGenerator: React.FC = () => {
       width="100%"
     >
       <Grid container spacing={2} alignItems="center">
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <FormControl fullWidth>
             <Select
               label="Usuário"
               options={usersCustomSelect}
               value={filterUserId}
-              onChange={(e) => setFilterUserId(e.value)}
+              onChange={(e) => setFilterUserId(e.value as string)}
               clearable
             />
           </FormControl>
         </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}>
+
+        <Grid item xs={2}>
+          <Select
+            options={contracts}
+            value={contrato}
+            onChange={(e) => handleChangeFilter('contrato', e.value)}
+            label={basicNames.sector.singular}
+            clearable
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <Select
+            options={sectors}
+            value={setor}
+            onChange={(e) => handleChangeFilter('setor', e.value)}
+            label={basicNames.section.singular}
+            clearable
+          />
+        </Grid>
+        <Grid item xs={3}>
           <DateFilter
             ref={ref}
             initialRange={INIT_DATE_RANGE}
             onFilter={handleDateFilter}
           />
+        </Grid>
+
+        <Grid item xs={2}>
+          <Button onClick={fetchData}>Carregar PDF</Button>
         </Grid>
       </Grid>
 
@@ -379,9 +423,7 @@ const PdfGenerator: React.FC = () => {
         >
           <InfoOutlined color="warning" sx={{ height: 28, width: 28 }} />
           <Typography variant="body1" fontSize={17} color="warning.main">
-            {!filterUserId
-              ? 'É necessário selecionar um usuário'
-              : 'Sem dados para exibir'}
+            {'Sem dados para exibir'}
           </Typography>
         </Box>
       )}

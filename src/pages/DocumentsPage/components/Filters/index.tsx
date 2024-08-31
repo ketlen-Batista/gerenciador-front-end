@@ -31,46 +31,48 @@ const Filters = () => {
     : [];
 
   return isDesktop ? (
-    <Grid container spacing={2} alignItems="center">
-      <Grid item xs={4}>
-        <TextInput
-          name="search"
-          label="Buscar"
-          value={search}
-          placeholder="Buscar"
-          onChange={handleChangeSearch}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton aria-label="Clique para buscar">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          mini
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <FormControl fullWidth>
-          <Select
-            label="Usuário"
-            options={usersCustomSelect}
-            value={typeof filterUserId !== 'undefined' ? filterUserId : ''}
-            onChange={(e) => setFilterUserId(e.value)}
-            clearable
+    <div>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={4}>
+          <TextInput
+            name="search"
+            label="Buscar"
+            value={search}
+            placeholder="Buscar"
+            onChange={handleChangeSearch}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="Clique para buscar">
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            mini
           />
-        </FormControl>
+        </Grid>
+        <Grid item xs={4}>
+          <FormControl fullWidth>
+            <Select
+              label="Usuário"
+              options={usersCustomSelect}
+              value={typeof filterUserId !== 'undefined' ? filterUserId : ''}
+              onChange={(e) => setFilterUserId(e.value)}
+              clearable
+            />
+          </FormControl>
+        </Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={3}>
+          <DateFilter
+            ref={ref}
+            initialRange={INIT_DATE_RANGE}
+            onFilter={handleDateFilter}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={1}></Grid>
-      <Grid item xs={3}>
-        <DateFilter
-          ref={ref}
-          initialRange={INIT_DATE_RANGE}
-          onFilter={handleDateFilter}
-        />
-      </Grid>
-    </Grid>
+    </div>
   ) : (
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={12}>

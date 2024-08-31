@@ -5,14 +5,15 @@
 // import Button from '@mui/material/Button';
 // import Container from '@mui/material/Container';
 // import CssBaseline from '@mui/material/CssBaseline';
-// import Grid from '@mui/material/Grid';
 // import Link from '@mui/material/Link';
 // import TextField from '@mui/material/TextField';
 // import Typography from '@mui/material/Typography';
 // import { ThemeProvider, createTheme } from '@mui/material/styles';
 // import { AvailableRoutes } from '@src/routes/availableRoutes';
 // import { colors } from '@src/styles/colors';
+// import { useFormik } from 'formik';
 // import { useNavigate } from 'react-router-dom';
+// import * as Yup from 'yup';
 // import { useAuth } from '@hooks/useAuth';
 // function Copyright(props: any) {
 //   return (
@@ -32,22 +33,30 @@
 //   );
 // }
 // const defaultTheme = createTheme();
-// export default function SignIn() {
+// const SignIn = () => {
 //   const { signIn } = useAuth();
 //   const navigate = useNavigate();
-//   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-//     const data = new FormData(event.currentTarget);
-//     const email = data.get('email') as string;
-//     const password = data.get('password') as string;
-//     try {
-//       await signIn(email, password);
-//       navigate(AvailableRoutes.home);
-//     } catch (error) {
-//       console.error('Erro ao fazer login:', error);
-//       // Exibir mensagem de erro para o usuário, se necessário
-//     }
-//   };
+//   const formik = useFormik({
+//     initialValues: {
+//       email: '',
+//       password: '',
+//     },
+//     validationSchema: Yup.object({
+//       email: Yup.string().email('Email inválido').required('Obrigatório'),
+//       password: Yup.string()
+//         .min(6, 'A senha deve ter no mínimo 6 caracteres')
+//         .required('Obrigatório'),
+//     }),
+//     onSubmit: async (values) => {
+//       try {
+//         await signIn(values.email, values.password);
+//         navigate(AvailableRoutes.home);
+//       } catch (error) {
+//         console.error('Erro ao fazer login:', error);
+//         // Exibir mensagem de erro para o usuário, se necessário
+//       }
+//     },
+//   });
 //   return (
 //     <ThemeProvider theme={defaultTheme}>
 //       <Container component="main" maxWidth="xs">
@@ -68,7 +77,7 @@
 //           </Typography>
 //           <Box
 //             component="form"
-//             onSubmit={handleSubmit}
+//             onSubmit={formik.handleSubmit}
 //             noValidate
 //             sx={{ mt: 1 }}
 //           >
@@ -80,7 +89,12 @@
 //               label="Email"
 //               name="email"
 //               autoComplete="email"
-//               autoFocus
+//               // autoFocus
+//               value={formik.values.email}
+//               onChange={formik.handleChange}
+//               onBlur={formik.handleBlur}
+//               error={formik.touched.email && Boolean(formik.errors.email)}
+//               helperText={formik.touched.email && formik.errors.email}
 //             />
 //             <TextField
 //               margin="normal"
@@ -91,6 +105,11 @@
 //               type="password"
 //               id="password"
 //               autoComplete="current-password"
+//               value={formik.values.password}
+//               onChange={formik.handleChange}
+//               onBlur={formik.handleBlur}
+//               error={formik.touched.password && Boolean(formik.errors.password)}
+//               helperText={formik.touched.password && formik.errors.password}
 //             />
 //             <Button
 //               type="submit"
@@ -100,26 +119,14 @@
 //             >
 //               Entrar
 //             </Button>
-//             {/* <Grid container>
-//               <Grid item xs>
-//                 <Link href="#" variant="body2">
-//                   Esqueceu sua senha?
-//                 </Link>
-//               </Grid>
-//               <Grid item>
-//                 <Link href="#" variant="body2">
-//                   {'Não tem uma conta? Inscrever-se'}
-//                 </Link>
-//               </Grid>
-//             </Grid> */}
 //           </Box>
 //         </Box>
 //         <Copyright sx={{ mt: 8, mb: 4 }} />
 //       </Container>
 //     </ThemeProvider>
 //   );
-// }
-///////////////////////////////////////////////////////////////////////////////
+// };
+// export default SignIn;
 import * as React from 'react';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -166,18 +173,21 @@ const SignIn = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      cpf: '',
       password: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('Email inválido').required('Obrigatório'),
+      cpf: Yup.string()
+        .min(11, 'O CPF deve ter no mínimo 11 caracteres')
+        .max(14, 'O CPF deve ter no máximo 14 caracteres')
+        .required('Obrigatório'),
       password: Yup.string()
         .min(6, 'A senha deve ter no mínimo 6 caracteres')
         .required('Obrigatório'),
     }),
     onSubmit: async (values) => {
       try {
-        await signIn(values.email, values.password);
+        await signIn(values.cpf, values.password); // Mudando para CPF
         navigate(AvailableRoutes.home);
       } catch (error) {
         console.error('Erro ao fazer login:', error);
@@ -214,16 +224,16 @@ const SignIn = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email"
-              name="email"
-              autoComplete="email"
+              id="cpf"
+              label="CPF"
+              name="cpf"
+              autoComplete="cpf"
               // autoFocus
-              value={formik.values.email}
+              value={formik.values.cpf}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+              error={formik.touched.cpf && Boolean(formik.errors.cpf)}
+              helperText={formik.touched.cpf && formik.errors.cpf}
             />
             <TextField
               margin="normal"

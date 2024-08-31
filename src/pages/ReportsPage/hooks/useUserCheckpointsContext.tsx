@@ -20,6 +20,15 @@ export const useUserCheckpointsContext = () => {
     photoId,
     handleOpenModalPhoto,
     handleCloseModalPhoto,
+    cargo,
+    setCargo,
+    setSetor,
+    setContrato,
+    setor,
+    contrato,
+    jobs,
+    contracts,
+    sectors,
   } = useContext(UserCheckpointsContext);
 
   return {
@@ -39,5 +48,14 @@ export const useUserCheckpointsContext = () => {
     photoId,
     handleOpenModalPhoto,
     handleCloseModalPhoto,
+    cargo,
+    setCargo,
+    setSetor,
+    setContrato,
+    setor,
+    contrato,
+    jobs,
+    contracts,
+    sectors,
   };
 };
