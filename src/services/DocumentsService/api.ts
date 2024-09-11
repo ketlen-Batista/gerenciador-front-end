@@ -31,6 +31,11 @@ export async function listDocuments({
   startDate,
   endDate,
   typeDocumentValue,
+  startDateCertificate,
+  endDateCertificate,
+  sectorValue,
+  contractValue,
+  jobId,
 }: DTO.ListDocumentsDTO) {
   try {
     const { data } = await api.patch(`/documents/listDocuments`, {
@@ -39,6 +44,11 @@ export async function listDocuments({
       startDate,
       endDate,
       typeDocumentValue,
+      startDateCertificate,
+      endDateCertificate,
+      sectorValue,
+      contractValue,
+      jobId,
     });
     return data;
   } catch (error) {

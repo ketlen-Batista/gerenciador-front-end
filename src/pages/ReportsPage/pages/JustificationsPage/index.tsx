@@ -1,16 +1,15 @@
 import React from 'react';
 
-import { UserCheckpointsProvider } from '@pages/ReportsPage/contexts/UserCheckpointsContext';
-
 import JustificationsList from '../../components/JustificationsList';
-import UserFilter from '@pages/ReportsPage/components/UserFilter';
+
+import { JustificationsProvider } from '../../contexts/JustificationsContext';
 
 const JustificationsPage = () => {
   return (
-    <UserCheckpointsProvider>
+    <JustificationsProvider>
       {/* <UserFilter /> */}
       <JustificationsList />
-    </UserCheckpointsProvider>
+    </JustificationsProvider>
   );
 };
 

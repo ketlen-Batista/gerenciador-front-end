@@ -258,7 +258,7 @@ const SwitchWithHoursSelectComponent = ({
           alignItems="center"
           style={{ gap: '12px' }}
         >
-          <Box component="span">Inicio 1</Box>
+          <Box component="span">Entrada</Box>
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}
@@ -285,7 +285,7 @@ const SwitchWithHoursSelectComponent = ({
           alignItems="center"
           style={{ gap: '23px' }}
         >
-          <Box component="span">Fim 1</Box>
+          <Box component="span">Pausa</Box>
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}
@@ -315,7 +315,7 @@ const SwitchWithHoursSelectComponent = ({
           alignItems="center"
           style={{ gap: '10px' }}
         >
-          <Box component="span">Inicio 2</Box>
+          <Box component="span">Retorno</Box>
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}
@@ -345,7 +345,7 @@ const SwitchWithHoursSelectComponent = ({
           alignItems="center"
           style={{ gap: '20px' }}
         >
-          <Box component="span">Fim 2</Box>
+          <Box component="span">Saída</Box>
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}

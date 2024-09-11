@@ -120,10 +120,12 @@ export const EmployeeDataProvider = ({ children }) => {
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
-      name: Yup.string().required('Name is required'),
-      email: Yup.string().email('Invalid email').required('Email is required'),
+      name: Yup.string().required('o nome é requerido'),
+      email: Yup.string()
+        .email('Invalid email')
+        .required('o email é requerido'),
       phone: Yup.string().optional(),
-      cpf: Yup.string().optional(),
+      cpf: Yup.string().required('o cpf é requerido'),
       address: Yup.string().optional(),
       cep: Yup.string().optional(),
       emergencyContact: Yup.string().optional(),
@@ -184,7 +186,7 @@ export const EmployeeDataProvider = ({ children }) => {
         status_value: values.status_value,
         contracts_value: values.contracts_value,
         sector_value: values.sector_value,
-        password: values.registration,
+        password: values.cpf,
         photo_avatar_id: values.photo_avatar_id,
       });
     },

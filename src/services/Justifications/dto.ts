@@ -12,3 +12,12 @@ export interface UpdateJustificationDTO {
   dateJustification?: string;
   approve?: boolean;
 }
+
+export interface listDTO {
+  userId?: string;
+  sectorValue?: number;
+  contractValue?: number;
+  jobId?: number;
+  startDate?: string;
+  endDate?: string;
+}

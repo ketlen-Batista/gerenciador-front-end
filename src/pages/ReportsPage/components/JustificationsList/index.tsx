@@ -1,27 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import { Box, Tooltip } from '@mui/material';
-import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
-import {
-  useGetJustificationsList,
-  useUpdateJustification,
-} from '@src/services/Justifications/queries';
 import { colors } from '@src/styles/colors';
 
+import ModalConfirm from '@src/components/ModalConfirm';
 import TableDataGrid from '@src/components/TableDataGrid';
 
+import { useJustificationsContext } from '../../hooks/useJustificationsContext';
+
+import Filters from './Filters';
+
 const JustificationsList = () => {
-  const { users } = useUserCheckpointsContext();
+  const [isOpenModalApprove, setIsOpenModalApprove] = useState(false);
+  const [isOpenModalDisapprove, setIsOpenModalDisapprove] = useState(false);
+  const [idCertificate, setIdCertificate] = useState(null);
 
+  const handleCloseModalDisapprove = () => {
+    setIsOpenModalDisapprove(false);
+    setIdCertificate(null);
+  };
+
+  const handleCloseModalApprove = () => {
+    setIsOpenModalApprove(false);
+    setIdCertificate(null);
+  };
+
+  const handleOpenModalDisapprove = (id: number) => {
+    setIsOpenModalDisapprove(true);
+    setIdCertificate(id);
+  };
+
+  const handleOpenModalApprove = (id: number) => {
+    setIsOpenModalApprove(true);
+    setIdCertificate(id);
+  };
   const {
-    mutateAsync: getJustifications,
-    data: justificationsList,
-    isPending: loading,
-  } = useGetJustificationsList();
-
-  const { mutateAsync: updateJustifications, isPending: loadingUpdate } =
-    useUpdateJustification();
+    users,
+    fetchJustifications,
+    justifications,
+    loading,
+    updateJustifications,
+  } = useJustificationsContext();
 
   const handleApprove = async ({
     id,
@@ -35,7 +55,8 @@ const JustificationsList = () => {
       approve: approve,
     });
 
-    getJustifications({});
+    setIsOpenModalDisapprove(false);
+    setIsOpenModalApprove(false);
   };
 
   const columns = [
@@ -54,7 +75,7 @@ const JustificationsList = () => {
       renderCell: (params) => params?.value && <div>{params.value}</div>,
     },
     { field: 'pointType', headerName: 'Tipo de ponto', flex: 1 },
-    { field: 'justificationMessage', headerName: 'justificativa', flex: 3 },
+    { field: 'justificationMessage', headerName: 'Justificativa', flex: 3 },
     {
       field: 'approve',
       headerName: 'Status',
@@ -116,9 +137,7 @@ const JustificationsList = () => {
             <Box
               display={'flex'}
               mr={5}
-              onClick={() =>
-                handleApprove({ id: params.row.id, approve: true })
-              }
+              onClick={() => handleOpenModalApprove(params.row.id as number)}
             >
               <AssignmentTurnedInIcon htmlColor="#1E90FF" />
             </Box>
@@ -127,9 +146,7 @@ const JustificationsList = () => {
           <Tooltip title="Reprovar" placement="top">
             <Box
               display={'flex'}
-              onClick={() =>
-                handleApprove({ id: params.row.id, approve: false })
-              }
+              onClick={() => handleOpenModalDisapprove(params.row.id as number)}
             >
               <AssignmentTurnedInIcon htmlColor="#FF0000" />
             </Box>
@@ -139,19 +156,45 @@ const JustificationsList = () => {
     },
   ];
 
-  useEffect(() => {
-    getJustifications({});
-  }, []);
-
   return (
-    <Box mt={5} bgcolor={colors.basic.white}>
-      <TableDataGrid
-        rows={justificationsList || []}
-        columns={columns}
-        loading={loading}
-        pageSize={8}
-      />
-    </Box>
+    <>
+      <Filters />
+      <Box mt={5} bgcolor={colors.basic.white}>
+        <TableDataGrid
+          rows={justifications || []}
+          columns={columns}
+          loading={loading}
+          pageSize={8}
+        />
+      </Box>
+      {isOpenModalApprove && (
+        <ModalConfirm
+          openDialog={isOpenModalApprove}
+          handleClose={handleCloseModalApprove}
+          handleConfirm={() =>
+            handleApprove({ id: idCertificate, approve: true })
+          }
+          titleModal="Aprovar"
+          text="Tem certeza que deseja aprovar esta justificativa?"
+          textButtonConfirm="Aprovar"
+          colorButtonConfirm={colors.success.dark}
+        />
+      )}
+
+      {isOpenModalDisapprove && (
+        <ModalConfirm
+          openDialog={isOpenModalDisapprove}
+          handleClose={handleCloseModalDisapprove}
+          handleConfirm={() =>
+            handleApprove({ id: idCertificate, approve: false })
+          }
+          titleModal="Reprovar"
+          text="Tem certeza que deseja reprovar esta justificativa?"
+          textButtonConfirm="Reprovar"
+          colorButtonConfirm={colors.error.dark}
+        />
+      )}
+    </>
   );
 };
 

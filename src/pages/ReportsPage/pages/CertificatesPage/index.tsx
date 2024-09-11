@@ -1,17 +1,18 @@
 import React from 'react';
 
-import { UserCheckpointsProvider } from '@pages/ReportsPage/contexts/UserCheckpointsContext';
-
 import CertificatesList from '../../components/CertificatesList';
+import FiltersCertificates from '../../components/FiltersCertificates';
+
+import { CertificatesProvider } from '../../contexts/CertificatesContext';
 
 // import UserFilter from '@pages/ReportsPage/components/UserFilter';
 
 const CertificatesPage = () => {
   return (
-    <UserCheckpointsProvider>
-      {/* <UserFilter /> */}
+    <CertificatesProvider>
+      <FiltersCertificates />
       <CertificatesList />
-    </UserCheckpointsProvider>
+    </CertificatesProvider>
   );
 };
 

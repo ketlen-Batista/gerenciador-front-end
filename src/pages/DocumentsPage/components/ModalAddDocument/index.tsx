@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import {
   useLinkDocumentToUsers,
   useUploadDocument,
@@ -22,14 +23,16 @@ const ModalAddDocument = ({
   openDialog,
   handleClose,
 }: ModalAddDocumentProps) => {
-  const GIC_ID = 'dedb4210-f594-4e5d-893f-670c7c02692a';
+  // const GIC_ID = 'dedb4210-f594-4e5d-893f-670c7c02692a';
+
+  const { user } = useAuth();
 
   const [file, setFile] = useState<File | null>(null);
   const [documentName, setDocumentName] = useState('');
 
   const [recipientId, setRecipientId] = useState<string[]>([]);
   const [typeDocument, setTypeDocument] = useState<string | number>('');
-  const [senderId, setSenderId] = useState(GIC_ID);
+  const [senderId, setSenderId] = useState(user?.id);
 
   const {
     mutate: uploadDocument,

@@ -32,7 +32,7 @@ export function useGetJustificationById(handleReturn?: HandleReturn) {
 export function useGetJustificationsList(handleReturn?: HandleReturn) {
   return useCustomMutation({
     key: 'getJustificationsList',
-    request: () => API.getJustificationsList(),
+    request: (params: DTO.listDTO) => API.getJustificationsList(params),
     handleReturn,
   });
 }

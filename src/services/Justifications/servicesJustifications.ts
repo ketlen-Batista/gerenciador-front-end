@@ -33,9 +33,9 @@ export async function getJustificationById(id?: number) {
   }
 }
 
-export async function getJustificationsList() {
+export async function getJustificationsList(params: DTO.listDTO) {
   try {
-    const { data } = await api.patch(`/justification/list`);
+    const { data } = await api.patch(`/justification/list`, params);
     return data;
   } catch (error) {
     console.error('Error fetching justification:', error);

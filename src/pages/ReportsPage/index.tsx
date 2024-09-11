@@ -84,7 +84,7 @@ const ReportsPage = () => {
       isVisible: true, // Verifica a permissão
     },
   ]?.filter((tab) => tab.isVisible); // Filtra as abas com base na visibilidade
-  console.log('AAAAAAAAAAAA', tabs?.[0]?.id);
+
   const [currentTabId, setCurrentTabId] = useState<string>(
     tab ?? tabs?.[0]?.id, // Ajuste para não inicializar com uma aba vazia
   );

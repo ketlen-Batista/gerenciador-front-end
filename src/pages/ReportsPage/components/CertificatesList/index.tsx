@@ -1,37 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import { Box, Tooltip } from '@mui/material';
-import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
-import { useListDocuments } from '@src/services/DocumentsService/queries';
-import {
-  useGetJustificationsList,
-  useUpdateJustification,
-} from '@src/services/Justifications/queries';
-import { useUpdateDocument } from '@src/services/typesDocuments/queries';
 import { colors } from '@src/styles/colors';
-import { formatDate, formatDateDayMonthAndYear } from '@src/utils/dates';
+import { formatDateDayMonthAndYear } from '@src/utils/dates';
 import { getPdfUrlServer } from '@src/utils/functions';
 
+import ModalConfirm from '@src/components/ModalConfirm';
 import TableDataGrid from '@src/components/TableDataGrid';
 import ModalPdf from '@src/pages/DocumentsPage/components/ModalPdf';
 
+import { useCertificatesContext } from '../../hooks/useCertificatesContext';
+
 const CertificatesList = () => {
-  const { users } = useUserCheckpointsContext();
   const [openModalPdf, setOpenModalPdf] = useState(false);
   const [urlPdf, setUrlPdf] = useState('');
   const [documentName, setDocumentName] = useState('');
+  const [isOpenModalApprove, setIsOpenModalApprove] = useState(false);
+  const [isOpenModalDisapprove, setIsOpenModalDisapprove] = useState(false);
+  const [idCertificate, setIdCertificate] = useState(null);
 
-  const {
-    data: documentsList,
-    mutateAsync: getDocumentsList,
-    isPending: IsLoadingDocumentList,
-  } = useListDocuments();
+  const handleCloseModalDisapprove = () => {
+    setIsOpenModalDisapprove(false);
+    setIdCertificate(null);
+  };
 
-  const TYPE_DOCUMENT_CERTIFICATES = [4, 5];
+  const handleCloseModalApprove = () => {
+    setIsOpenModalApprove(false);
+    setIdCertificate(null);
+  };
 
-  const { mutateAsync: updateJustifications, isPending: loadingUpdate } =
-    useUpdateDocument();
+  const handleOpenModalDisapprove = (id: number) => {
+    setIsOpenModalDisapprove(true);
+    setIdCertificate(id);
+  };
+
+  const handleOpenModalApprove = (id: number) => {
+    setIsOpenModalApprove(true);
+    setIdCertificate(id);
+  };
+
+  const { users, certificates, loading, updateDocument } =
+    useCertificatesContext();
 
   const handleApprove = async ({
     id,
@@ -40,12 +50,13 @@ const CertificatesList = () => {
     id: number;
     approve: boolean;
   }) => {
-    await updateJustifications({
+    await updateDocument({
       id: id,
       approve: approve,
     });
 
-    getDocumentsList({});
+    setIsOpenModalDisapprove(false);
+    setIsOpenModalApprove(false);
   };
 
   const handleViewDocument = ({
@@ -78,7 +89,6 @@ const CertificatesList = () => {
           <div>{`${formatDateDayMonthAndYear(params.row.dateStartCertificate)} a ${formatDateDayMonthAndYear(params.row.dateEndCertificate)}`}</div>
         ),
     },
-    // { field: 'pointType', headerName: 'Tipo de ponto', flex: 1 },
     {
       field: 'documentName',
       headerName: 'Documento',
@@ -163,9 +173,7 @@ const CertificatesList = () => {
             <Box
               display={'flex'}
               mr={5}
-              onClick={() =>
-                handleApprove({ id: params.row.id, approve: true })
-              }
+              onClick={() => handleOpenModalApprove(params.row.id as number)}
             >
               <AssignmentTurnedInIcon htmlColor="#1E90FF" />
             </Box>
@@ -174,9 +182,7 @@ const CertificatesList = () => {
           <Tooltip title="Reprovar" placement="top">
             <Box
               display={'flex'}
-              onClick={() =>
-                handleApprove({ id: params.row.id, approve: false })
-              }
+              onClick={() => handleOpenModalDisapprove(params.row.id as number)}
             >
               <AssignmentTurnedInIcon htmlColor="#FF0000" />
             </Box>
@@ -186,20 +192,41 @@ const CertificatesList = () => {
     },
   ];
 
-  useEffect(() => {
-    getDocumentsList({
-      typeDocumentValue: TYPE_DOCUMENT_CERTIFICATES,
-    });
-  }, []);
-
   return (
     <Box mt={5} bgcolor={colors.basic.white}>
       <TableDataGrid
-        rows={documentsList || []}
+        rows={certificates || []}
         columns={columns}
-        loading={IsLoadingDocumentList}
+        loading={loading}
         pageSize={8}
       />
+      {isOpenModalApprove && (
+        <ModalConfirm
+          openDialog={isOpenModalApprove}
+          handleClose={handleCloseModalApprove}
+          handleConfirm={() =>
+            handleApprove({ id: idCertificate, approve: true })
+          }
+          titleModal="Aprovar"
+          text="Tem certeza que deseja aprovar este atestado?"
+          textButtonConfirm="Aprovar"
+          colorButtonConfirm={colors.success.dark}
+        />
+      )}
+
+      {isOpenModalDisapprove && (
+        <ModalConfirm
+          openDialog={isOpenModalDisapprove}
+          handleClose={handleCloseModalDisapprove}
+          handleConfirm={() =>
+            handleApprove({ id: idCertificate, approve: false })
+          }
+          titleModal="Reprovar"
+          text="Tem certeza que deseja reprovar este atestado?"
+          textButtonConfirm="Reprovar"
+          colorButtonConfirm={colors.error.dark}
+        />
+      )}
       {openModalPdf && (
         <ModalPdf
           openDialog={openModalPdf}
