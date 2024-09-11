@@ -58,6 +58,7 @@ import OfficesSettings from './OfficesSettings';
 import PermissionsSettings from './PermissionsSettings';
 import SectorSettings from './SectorSettings';
 import SettingsContracts from './SettingsContracts';
+import Status from './Status';
 
 const SettingsPage = () => {
   const { permissions } = useAuth(); // Obtém as permissões do usuário
@@ -87,6 +88,12 @@ const SettingsPage = () => {
       label: 'Permissões',
       content: <PermissionsSettings />,
       isVisible: permissions?.configPermission ? true : false, // Verifica a permissão
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      content: <Status />,
+      isVisible: true, // Verifica a permissão
     },
   ].filter((tab) => tab.isVisible); // Filtra as abas com base na visibilidade
 
