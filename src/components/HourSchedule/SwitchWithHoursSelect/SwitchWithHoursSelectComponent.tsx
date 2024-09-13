@@ -188,6 +188,188 @@
 // };
 // export default SwitchWithHoursSelectComponent;
 /////////////////////////////////////////////////////////////
+// import React from 'react';
+// import Box from '@material-ui/core/Box';
+// import Tooltip from '@material-ui/core/Tooltip';
+// import {
+//   Autocomplete,
+//   FormControlLabel,
+//   Switch,
+//   TextField,
+// } from '@mui/material';
+// interface Options {
+//   label?: string;
+//   value?: string;
+// }
+// type propTypes = {
+//   label: string;
+//   dayOfWeek: string;
+//   value?: any;
+//   active?: boolean;
+//   options?: Options[] | [];
+//   onClick?: () => void;
+//   onChange?: (dayOfWeek: string, key: string, value: any) => void;
+//   titleTooltip?: string;
+//   EntryTime?: string;
+//   PauseTime?: string;
+//   ReturnTime?: string;
+//   ExitTime?: string;
+// };
+// const SwitchWithHoursSelectComponent = ({
+//   label,
+//   dayOfWeek,
+//   value,
+//   options = [],
+//   active,
+//   onClick,
+//   onChange,
+//   titleTooltip = '',
+//   EntryTime,
+//   PauseTime,
+//   ReturnTime,
+//   ExitTime,
+// }: propTypes) => {
+//   const handleSliceByOptions = (prevValue, options) => {
+//     const newOption = options.findIndex((item) => item.value === prevValue);
+//     if (newOption === -1) {
+//       return options;
+//     }
+//     return options.slice(newOption + 1, options.length);
+//   };
+//   return (
+//     <Box component="div" display="flex">
+//       <Box component="div" display="flex" alignItems="center">
+//         <FormControlLabel
+//           control={<Switch checked={active} onChange={onClick} />}
+//           label=""
+//         />
+//         <Tooltip title={titleTooltip}>
+//           <Box
+//             component="span"
+//             fontSize="16px"
+//             fontFamily={'Poppins Bold'}
+//             width={'52px'}
+//           >
+//             {label}
+//           </Box>
+//         </Tooltip>
+//       </Box>
+//       <Box component="div" display="flex" style={{ gap: '16px' }} ml={2}>
+//         <Box
+//           component="div"
+//           display="flex"
+//           alignItems="center"
+//           style={{ gap: '12px' }}
+//         >
+//           <Box component="span">Entrada</Box>
+//           <Autocomplete
+//             disablePortal
+//             renderInput={(params) => <TextField {...params} label="Horário" />}
+//             value={
+//               EntryTime
+//                 ? {
+//                     value: EntryTime,
+//                     label: EntryTime,
+//                   }
+//                 : null
+//             }
+//             options={options}
+//             onChange={(e, newValue) => {
+//               onChange?.(dayOfWeek, 'workScheduleFirstStart', newValue?.value);
+//             }}
+//             disabled={!active}
+//           />
+//         </Box>
+//         <Box
+//           component="div"
+//           display="flex"
+//           alignItems="center"
+//           style={{ gap: '23px' }}
+//         >
+//           <Box component="span">Pausa</Box>
+//           <Autocomplete
+//             disablePortal
+//             renderInput={(params) => <TextField {...params} label="Horário" />}
+//             options={handleSliceByOptions(
+//               value?.workScheduleFirstStart,
+//               options,
+//             )}
+//             value={
+//               PauseTime
+//                 ? {
+//                     value: PauseTime,
+//                     label: PauseTime,
+//                   }
+//                 : null
+//             }
+//             onChange={(e, newValue) => {
+//               onChange?.(dayOfWeek, 'workScheduleFirstStop', newValue?.value);
+//             }}
+//             disabled={!active}
+//           />
+//         </Box>
+//         <Box
+//           component="div"
+//           display="flex"
+//           alignItems="center"
+//           style={{ gap: '10px' }}
+//         >
+//           <Box component="span">Retorno</Box>
+//           <Autocomplete
+//             disablePortal
+//             renderInput={(params) => <TextField {...params} label="Horário" />}
+//             options={handleSliceByOptions(
+//               value?.workScheduleFirstStop,
+//               options,
+//             )}
+//             value={
+//               ReturnTime
+//                 ? {
+//                     value: ReturnTime,
+//                     label: ReturnTime,
+//                   }
+//                 : null
+//             }
+//             onChange={(e, newValue) => {
+//               onChange?.(dayOfWeek, 'workScheduleSecondStart', newValue?.value);
+//             }}
+//             disabled={!active}
+//           />
+//         </Box>
+//         <Box
+//           component="div"
+//           display="flex"
+//           alignItems="center"
+//           style={{ gap: '20px' }}
+//         >
+//           <Box component="span">Saída</Box>
+//           <Autocomplete
+//             disablePortal
+//             renderInput={(params) => <TextField {...params} label="Horário" />}
+//             options={handleSliceByOptions(
+//               value?.workScheduleSecondStart,
+//               options,
+//             )}
+//             value={
+//               ExitTime
+//                 ? {
+//                     value: ExitTime,
+//                     label: ExitTime,
+//                   }
+//                 : null
+//             }
+//             onChange={(e, newValue) => {
+//               onChange?.(dayOfWeek, 'workScheduleSecondStop', newValue?.value);
+//             }}
+//             disabled={!active}
+//           />
+//         </Box>
+//       </Box>
+//     </Box>
+//   );
+// };
+// export default SwitchWithHoursSelectComponent;
+////////////////////////////////////////////////////////////
 import React from 'react';
 
 import Box from '@material-ui/core/Box';
@@ -213,19 +395,29 @@ type propTypes = {
   onClick?: () => void;
   onChange?: (dayOfWeek: string, key: string, value: any) => void;
   titleTooltip?: string;
+  EntryTime?: string;
+  PauseTime?: string;
+  ReturnTime?: string;
+  ExitTime?: string;
 };
 
 const SwitchWithHoursSelectComponent = ({
   label,
   dayOfWeek,
-  value,
   options = [],
   active,
   onClick,
   onChange,
   titleTooltip = '',
+  EntryTime,
+  PauseTime,
+  ReturnTime,
+  ExitTime,
 }: propTypes) => {
-  const handleSliceByOptions = (prevValue, options) => {
+  const handleSliceByOptions = (
+    prevValue: string | undefined,
+    options: Options[],
+  ) => {
     const newOption = options.findIndex((item) => item.value === prevValue);
     if (newOption === -1) {
       return options;
@@ -234,24 +426,19 @@ const SwitchWithHoursSelectComponent = ({
   };
 
   return (
-    <Box component="div" display="flex">
-      <Box component="div" display="flex" alignItems="center">
+    <Box component="div" display="flex" mb={2}>
+      <Box component="div" display="flex" alignItems="center" mr={2}>
         <FormControlLabel
           control={<Switch checked={active} onChange={onClick} />}
           label=""
         />
         <Tooltip title={titleTooltip}>
-          <Box
-            component="span"
-            fontSize="16px"
-            fontFamily={'Poppins Bold'}
-            width={'52px'}
-          >
+          <Box component="span" fontSize="16px" fontFamily={'Poppins Bold'}>
             {label}
           </Box>
         </Tooltip>
       </Box>
-      <Box component="div" display="flex" style={{ gap: '16px' }} ml={2}>
+      <Box component="div" display="flex" style={{ gap: '16px' }}>
         <Box
           component="div"
           display="flex"
@@ -262,19 +449,10 @@ const SwitchWithHoursSelectComponent = ({
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}
-            value={
-              value?.workScheduleFirstStart
-                ? {
-                    value: value?.workScheduleFirstStart,
-                    label: options.find(
-                      (e) => e.value === value?.workScheduleFirstStart,
-                    )?.label,
-                  }
-                : null
-            }
+            value={EntryTime ? { value: EntryTime, label: EntryTime } : null}
             options={options}
             onChange={(e, newValue) => {
-              onChange?.(dayOfWeek, 'workScheduleFirstStart', newValue?.value);
+              onChange?.(dayOfWeek, 'EntryTime', newValue?.value);
             }}
             disabled={!active}
           />
@@ -283,28 +461,16 @@ const SwitchWithHoursSelectComponent = ({
           component="div"
           display="flex"
           alignItems="center"
-          style={{ gap: '23px' }}
+          style={{ gap: '12px' }}
         >
           <Box component="span">Pausa</Box>
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}
-            options={handleSliceByOptions(
-              value?.workScheduleFirstStart,
-              options,
-            )}
-            value={
-              value?.workScheduleFirstStop
-                ? {
-                    value: value?.workScheduleFirstStop,
-                    label: options.find(
-                      (e) => e.value === value?.workScheduleFirstStop,
-                    )?.label,
-                  }
-                : null
-            }
+            options={handleSliceByOptions(EntryTime, options)}
+            value={PauseTime ? { value: PauseTime, label: PauseTime } : null}
             onChange={(e, newValue) => {
-              onChange?.(dayOfWeek, 'workScheduleFirstStop', newValue?.value);
+              onChange?.(dayOfWeek, 'PauseTime', newValue?.value);
             }}
             disabled={!active}
           />
@@ -313,28 +479,16 @@ const SwitchWithHoursSelectComponent = ({
           component="div"
           display="flex"
           alignItems="center"
-          style={{ gap: '10px' }}
+          style={{ gap: '12px' }}
         >
           <Box component="span">Retorno</Box>
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}
-            options={handleSliceByOptions(
-              value?.workScheduleFirstStop,
-              options,
-            )}
-            value={
-              value?.workScheduleSecondStart
-                ? {
-                    value: value?.workScheduleSecondStart,
-                    label: options.find(
-                      (e) => e.value === value?.workScheduleSecondStart,
-                    )?.label,
-                  }
-                : null
-            }
+            options={handleSliceByOptions(PauseTime, options)}
+            value={ReturnTime ? { value: ReturnTime, label: ReturnTime } : null}
             onChange={(e, newValue) => {
-              onChange?.(dayOfWeek, 'workScheduleSecondStart', newValue?.value);
+              onChange?.(dayOfWeek, 'ReturnTime', newValue?.value);
             }}
             disabled={!active}
           />
@@ -343,28 +497,16 @@ const SwitchWithHoursSelectComponent = ({
           component="div"
           display="flex"
           alignItems="center"
-          style={{ gap: '20px' }}
+          style={{ gap: '12px' }}
         >
           <Box component="span">Saída</Box>
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}
-            options={handleSliceByOptions(
-              value?.workScheduleSecondStart,
-              options,
-            )}
-            value={
-              value?.workScheduleSecondStop
-                ? {
-                    value: value?.workScheduleSecondStop,
-                    label: options.find(
-                      (e) => e.value === value?.workScheduleSecondStop,
-                    )?.label,
-                  }
-                : null
-            }
+            options={handleSliceByOptions(ReturnTime, options)}
+            value={ExitTime ? { value: ExitTime, label: ExitTime } : null}
             onChange={(e, newValue) => {
-              onChange?.(dayOfWeek, 'workScheduleSecondStop', newValue?.value);
+              onChange?.(dayOfWeek, 'ExitTime', newValue?.value);
             }}
             disabled={!active}
           />

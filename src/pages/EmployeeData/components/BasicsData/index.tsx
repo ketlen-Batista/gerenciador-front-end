@@ -20,10 +20,10 @@ interface BasicsDataProps {
 }
 
 function BasicsData({ fieldsDisabled }: BasicsDataProps) {
-  const { data: jobs, mutate: getJobs } = useGetJobPositions();
-  const { data: contracts, mutate: getContracts } = useGetContracts();
-  const { data: sectors, mutate: getSectors } = useGetSectors();
-  const { data: status, mutate: getStatus } = useGetStatus();
+  const { data: jobs, mutateAsync: getJobs } = useGetJobPositions();
+  const { data: contracts, mutateAsync: getContracts } = useGetContracts();
+  const { data: sectors, mutateAsync: getSectors } = useGetSectors();
+  const { data: status, mutateAsync: getStatus } = useGetStatus();
 
   const { formik } = useEmployeeData();
 
@@ -48,6 +48,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           helperText={formik?.touched.name && formik?.errors.name}
           disabled={fieldsDisabled}
           mini
+          required
         />
       </Grid>
       <Grid item xs={4}>
@@ -76,6 +77,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           helperText={formik?.touched.email && formik?.errors.email}
           disabled={fieldsDisabled}
           mini
+          required
         />
       </Grid>
       <Grid item xs={4}>
@@ -90,6 +92,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           helperText={formik?.touched.cpf && formik?.errors.cpf}
           disabled={fieldsDisabled}
           mini
+          required
         />
       </Grid>
       <Grid item xs={4}>
@@ -196,6 +199,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
             }
             disabled={fieldsDisabled}
             clearable
+            required
           />
         </S.FieldBox>
       </Grid>
@@ -213,6 +217,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
             }
             disabled={fieldsDisabled}
             clearable
+            required
           />
         </S.FieldBox>
       </Grid>
@@ -230,6 +235,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
             }
             disabled={fieldsDisabled}
             clearable
+            required
           />
         </S.FieldBox>
       </Grid>
@@ -247,6 +253,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
             }
             disabled={fieldsDisabled}
             clearable
+            required
           />
         </S.FieldBox>
       </Grid>

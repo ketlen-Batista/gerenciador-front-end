@@ -135,10 +135,12 @@ export const EmployeeDataProvider = ({ children }) => {
       supervisor: Yup.string().optional(),
       registration: Yup.string().optional(),
       dateOfBirth: Yup.string().optional(),
-      jobPosition_id: Yup.number().nullable().optional(),
-      status_value: Yup.number().nullable().optional(),
-      contracts_value: Yup.number().nullable().optional(),
-      sector_value: Yup.number().nullable().optional(),
+      jobPosition_id: Yup.number().nullable().required('o cargo é requerido'),
+      status_value: Yup.number().nullable().required('o status é requerido'),
+      contracts_value: Yup.number()
+        .nullable()
+        .required('o contrato é requerido'),
+      sector_value: Yup.number().nullable().required('o setor é requerido'),
       photo_avatar_id: Yup.number().nullable().optional(),
     }),
     onSubmit: (values) => {

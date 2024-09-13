@@ -243,10 +243,12 @@ function Form() {
             title="Horários de Trabalho"
           >
             <HourSchedule
-              state={state}
-              SchedulesTimeList={schedulesTimeList}
-              handleChangeSwitchActive={handleChangeSwitchActive}
-              handleChangeHour={handleChangeHour}
+              // state={state}
+              // SchedulesTimeList={schedulesTimeList}
+              // handleChangeSwitchActive={handleChangeSwitchActive}
+              // handleChangeHour={handleChangeHour}
+
+              employeeId={employeeId as string}
             />
           </AccordionCustom>
         </Box>
