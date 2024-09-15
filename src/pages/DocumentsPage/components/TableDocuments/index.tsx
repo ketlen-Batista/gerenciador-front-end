@@ -20,7 +20,8 @@ import TableDataGrid from '@components/TableDataGrid';
 import ModalPdf from '../ModalPdf';
 
 function TableDocuments() {
-  const { documentsFiltered, loading, fetchDocuments } = useDocumentsFilter();
+  const { documentsFiltered, loading, fetchDocuments, areArraysEqual } =
+    useDocumentsFilter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [documentIdToDelete, setDocumentIdToDelete] = useState<number>(null);
   const [openModalPdf, setOpenModalPdf] = useState(false);
@@ -154,7 +155,7 @@ function TableDocuments() {
       headerClassName: 'table-header',
       cellClassName: 'table-body',
       renderCell: (params) =>
-        params?.value ? (
+        areArraysEqual(params?.row?.recipientId, params?.row?.whoViewed) ? (
           <div
             style={{
               display: 'flex',

@@ -151,7 +151,7 @@ export const EmployeeDataProvider = ({ children }) => {
           name: values.name,
           email: values.email,
           phone: values.phone,
-          cpf: values.cpf,
+          cpf: values.cpf.replace(/\D/g, ''),
           address: values.address,
           cep: values.cep,
           emergencyContact: values.emergencyContact,
@@ -165,7 +165,8 @@ export const EmployeeDataProvider = ({ children }) => {
           status_value: values.status_value ?? null,
           contracts_value: values.contracts_value,
           sector_value: values.sector_value,
-          photo_avatar_id: values.photo_avatar_id,
+          photo_avatar_id: values.photo_avatar_id ?? undefined,
+          // password: values.cpf.replace(/\D/g, ''),
         });
         return;
       }
@@ -174,7 +175,7 @@ export const EmployeeDataProvider = ({ children }) => {
         name: values.name,
         email: values.email,
         phone: values.phone,
-        cpf: values.cpf,
+        cpf: values.cpf.replace(/\D/g, ''),
         address: values.address,
         cep: values.cep,
         emergencyContact: values.emergencyContact,
@@ -188,7 +189,7 @@ export const EmployeeDataProvider = ({ children }) => {
         status_value: values.status_value,
         contracts_value: values.contracts_value,
         sector_value: values.sector_value,
-        password: values.cpf,
+        password: values.cpf.replace(/\D/g, ''),
         photo_avatar_id: values.photo_avatar_id,
       });
     },

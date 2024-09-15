@@ -40,6 +40,7 @@ interface DocumentsFilterContextType {
   openDialogAdd: boolean;
   handleCloseModalAdd: () => void;
   handleOpenModalAdd: () => void;
+  areArraysEqual: (arr1: any, arr2: any) => boolean;
 }
 export const DocumentsFilterContext = createContext<DocumentsFilterContextType>(
   {} as DocumentsFilterContextType,
@@ -119,6 +120,18 @@ export const DocumentsFilterProvider = ({ children }) => {
         : null,
     };
   };
+
+  function areArraysEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+
+    // Ordenar ambos os arrays
+    const sortedArr1 = arr1.slice().sort();
+    const sortedArr2 = arr2.slice().sort();
+
+    // Comparar os itens de cada array
+    return sortedArr1.every((value, index) => value === sortedArr2[index]);
+  }
+
   useEffect(() => {
     const dateRangeISO = convertTimestampsToISO(selectedDateRange);
     if (dateRangeISO.startDate && dateRangeISO.endDate) {
@@ -157,6 +170,7 @@ export const DocumentsFilterProvider = ({ children }) => {
       openDialogAdd,
       handleCloseModalAdd,
       handleOpenModalAdd,
+      areArraysEqual,
     }),
     [
       filterUserId,
@@ -170,6 +184,7 @@ export const DocumentsFilterProvider = ({ children }) => {
       openDialogAdd,
       handleCloseModalAdd,
       handleOpenModalAdd,
+      areArraysEqual,
     ],
   );
   return (
