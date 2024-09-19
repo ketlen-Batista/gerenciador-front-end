@@ -103,11 +103,16 @@
 // export default AccordionCustom;
 import React from 'react';
 
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from '@material-ui/core';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box } from '@mui/material';
-import MuiAccordion from '@mui/material/Accordion';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
+// import MuiAccordion from '@mui/material/Accordion';
+// import MuiAccordionDetails from '@mui/material/AccordionDetails';
+// import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import { withStyles } from '@mui/styles';
 import { colors } from '@src/styles/colors';
@@ -129,7 +134,7 @@ interface AccordionComponentProps {
   arrowsColor?: MakeStylesProps['arrowsColor'];
 }
 
-const Accordion = withStyles({
+const AccordionCustomize = withStyles({
   root: {
     borderBottom: `1px solid ${colors.text.disabled}`,
     boxShadow: 'none',
@@ -141,7 +146,7 @@ const Accordion = withStyles({
     },
   },
   expanded: {},
-})(MuiAccordion);
+})(Accordion);
 
 const AccordionSummaryStyled = withStyles((theme) => ({
   root: {
@@ -171,7 +176,10 @@ const AccordionCustom = ({
   titleExpandedColor,
 }: AccordionComponentProps) => {
   return (
-    <Accordion expanded={expanded === panel} onChange={handleChange(panel)}>
+    <AccordionCustomize
+      expanded={expanded === panel}
+      onChange={handleChange(panel)}
+    >
       <AccordionSummaryStyled
         expandIcon={
           <Box>
@@ -184,12 +192,14 @@ const AccordionCustom = ({
         <Typography
           fontWeight={600}
           style={{ color: expanded === panel ? titleExpandedColor : undefined }}
+          // bold={true}
+          variant="h5"
         >
           {title}
         </Typography>
       </AccordionSummaryStyled>
-      <MuiAccordionDetails>{children}</MuiAccordionDetails>
-    </Accordion>
+      <AccordionDetails>{children}</AccordionDetails>
+    </AccordionCustomize>
   );
 };
 

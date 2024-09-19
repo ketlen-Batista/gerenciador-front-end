@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 
 import { FormControl, Grid } from '@mui/material';
+import useResponsive from '@src/hooks/useResponsive';
 import { useJustificationsContext } from '@src/pages/ReportsPage/hooks/useJustificationsContext';
 import { basicNames } from '@src/utils/constants';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
@@ -10,6 +11,7 @@ import Select from '@src/components/Select';
 
 const Filters = () => {
   const ref = useRef(null);
+  const { isDesktop } = useResponsive();
   const {
     users,
     setFilterUserId,
@@ -51,7 +53,7 @@ const Filters = () => {
 
   return (
     <Grid container spacing={2} alignItems="center">
-      <Grid item xs={2}>
+      <Grid item xs={!isDesktop ? 12 : 2}>
         <Select
           options={contracts}
           value={contrato}
@@ -60,7 +62,7 @@ const Filters = () => {
           clearable
         />
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={!isDesktop ? 12 : 2}>
         <Select
           options={sectors}
           value={setor}
@@ -70,7 +72,7 @@ const Filters = () => {
         />
       </Grid>
 
-      <Grid item xs={2}>
+      <Grid item xs={!isDesktop ? 12 : 2}>
         <Select
           options={jobs}
           value={cargo}
@@ -80,7 +82,7 @@ const Filters = () => {
         />
       </Grid>
 
-      <Grid item xs={3}>
+      <Grid item xs={!isDesktop ? 12 : 3}>
         <FormControl fullWidth>
           <Select
             label="Usuário"
@@ -92,7 +94,7 @@ const Filters = () => {
         </FormControl>
       </Grid>
 
-      <Grid item xs={3}>
+      <Grid item xs={!isDesktop ? 12 : 3}>
         <DateFilter
           ref={ref}
           initialRange={INIT_DATE_RANGE}

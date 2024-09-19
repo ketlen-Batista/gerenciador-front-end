@@ -597,7 +597,8 @@
 ////////////////////////////////////////////
 import React, { useEffect } from 'react';
 
-import { Button } from '@mui/material';
+import { Button } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import { ScheduleData } from '@src/services/schedule/dto';
 import {
   useCreateOrUpdateSchedule,
@@ -797,9 +798,10 @@ const preparePayload = (values: ScheduleData) => ({
 
 interface Props {
   employeeId: string;
+  fieldsDisabled: boolean;
 }
 
-const HourScheduleComponent = ({ employeeId }: Props) => {
+const HourScheduleComponent = ({ employeeId, fieldsDisabled }: Props) => {
   const { mutateAsync: getUserSchedules, data: scheduleData } =
     useGetUserSchedules();
   const { mutateAsync: createOrUpdateSchedule } = useCreateOrUpdateSchedule();
@@ -948,9 +950,23 @@ const HourScheduleComponent = ({ employeeId }: Props) => {
         />
       ))}
 
-      <Button type="submit" onClick={() => formik?.handleSubmit()}>
+      {/* <Button type="submit" onClick={() => formik?.handleSubmit()}>
         Enviar
-      </Button>
+      </Button> */}
+
+      <Grid item xs={12} pt={2}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          onClick={() => formik?.handleSubmit()}
+          disabled={fieldsDisabled}
+          size="medium"
+          fullWidth
+        >
+          Salvar
+        </Button>
+      </Grid>
     </div>
   );
 };

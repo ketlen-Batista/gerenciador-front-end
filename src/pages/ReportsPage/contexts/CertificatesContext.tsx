@@ -17,8 +17,10 @@ import { format } from 'date-fns';
 import { useLocation } from 'react-router-dom';
 
 interface Certificate {
-  id: string;
+  id: number;
   userId: string;
+  senderId: string;
+  documentName: string;
   timestamp: string;
   checkpointType: string;
   status: string;
@@ -27,6 +29,8 @@ interface Certificate {
   latitude: number | string;
   longitude: number | string;
   medicalCertificate: string | null;
+  dateStartCertificate: string | null;
+  dateEndCertificate: string | null;
 }
 
 interface User {

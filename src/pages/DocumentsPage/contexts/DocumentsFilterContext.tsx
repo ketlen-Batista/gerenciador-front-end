@@ -9,13 +9,14 @@ import { getTime, parseISO } from 'date-fns';
 import { useLocation } from 'react-router-dom';
 
 interface Document {
-  id: string;
+  id: number;
   documentName: string;
   sentIn: string;
   sender: string;
   recipient: string;
   received: boolean;
   visa: boolean;
+  photoId: number;
 }
 interface DocumentsFilterContextType {
   filterUserId: string | number;

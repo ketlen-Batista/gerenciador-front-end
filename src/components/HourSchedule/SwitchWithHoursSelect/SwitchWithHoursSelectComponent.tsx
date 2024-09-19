@@ -372,14 +372,12 @@
 ////////////////////////////////////////////////////////////
 import React from 'react';
 
-import Box from '@material-ui/core/Box';
+import { Box, Switch } from '@material-ui/core';
+// import Box from '@material-ui/core/Box';
 import Tooltip from '@material-ui/core/Tooltip';
-import {
-  Autocomplete,
-  FormControlLabel,
-  Switch,
-  TextField,
-} from '@mui/material';
+import { Autocomplete, FormControlLabel, Grid, TextField } from '@mui/material';
+
+import Typography from '@src/components/Typography';
 
 interface Options {
   label?: string;
@@ -426,18 +424,35 @@ const SwitchWithHoursSelectComponent = ({
   };
 
   return (
-    <Box component="div" display="flex" mb={2}>
-      <Box component="div" display="flex" alignItems="center" mr={2}>
-        <FormControlLabel
-          control={<Switch checked={active} onChange={onClick} />}
-          label=""
-        />
-        <Tooltip title={titleTooltip}>
-          <Box component="span" fontSize="16px" fontFamily={'Poppins Bold'}>
-            {label}
-          </Box>
-        </Tooltip>
-      </Box>
+    <Box component="div" display="flex">
+      {/* <Box
+        // component="div"
+        display="flex"
+        alignItems="center"
+        justifyContent={'space-between'}
+        // mr={2}
+        // width={'100%'}
+        flexDirection={'row'}
+      > */}
+      <Grid container mt={3}>
+        <Grid item xs={6}>
+          <Tooltip title={titleTooltip}>
+            <Typography fontSize={600} bold={true} variant="h6">
+              {label}
+            </Typography>
+          </Tooltip>
+        </Grid>
+
+        <Grid item xs={6} display={'flex'} justifyContent={'flex-end'}>
+          <FormControlLabel
+            control={
+              <Switch checked={active} onChange={onClick} color="primary" />
+            }
+            label={active ? 'Trabalho' : 'Folga'}
+          />
+        </Grid>
+        {/* </Box> */}
+      </Grid>
       <Box component="div" display="flex" style={{ gap: '16px' }}>
         <Box
           component="div"
@@ -446,24 +461,30 @@ const SwitchWithHoursSelectComponent = ({
           style={{ gap: '12px' }}
         >
           <Box component="span">Entrada</Box>
-          <Autocomplete
-            disablePortal
-            renderInput={(params) => <TextField {...params} label="Horário" />}
-            value={EntryTime ? { value: EntryTime, label: EntryTime } : null}
-            options={options}
-            onChange={(e, newValue) => {
-              onChange?.(dayOfWeek, 'EntryTime', newValue?.value);
-            }}
-            disabled={!active}
-          />
+          <Box>
+            <Autocomplete
+              disablePortal
+              renderInput={(params) => (
+                <TextField {...params} label="Horário" />
+              )}
+              value={EntryTime ? { value: EntryTime, label: EntryTime } : null}
+              options={options}
+              onChange={(e, newValue) => {
+                onChange?.(dayOfWeek, 'EntryTime', newValue?.value);
+              }}
+              disabled={!active}
+            />
+          </Box>
         </Box>
         <Box
           component="div"
           display="flex"
           alignItems="center"
-          style={{ gap: '12px' }}
+          style={{ gap: '15px' }}
         >
-          <Box component="span">Pausa</Box>
+          <Box component="span" pb={5}>
+            Pausa
+          </Box>
           <Autocomplete
             disablePortal
             renderInput={(params) => <TextField {...params} label="Horário" />}

@@ -8,8 +8,10 @@ import UserFilter from '@pages/ReportsPage/components/UserFilter';
 const PointCheckins = () => {
   return (
     <UserCheckpointsProvider>
-      <UserFilter />
-      <UserCheckpointsList />
+      <>
+        <UserFilter />
+        <UserCheckpointsList />
+      </>
     </UserCheckpointsProvider>
   );
 };

@@ -7,7 +7,6 @@ import { JustificationsProvider } from '../../contexts/JustificationsContext';
 const JustificationsPage = () => {
   return (
     <JustificationsProvider>
-      {/* <UserFilter /> */}
       <JustificationsList />
     </JustificationsProvider>
   );

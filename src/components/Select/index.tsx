@@ -63,12 +63,27 @@ function Select({
     onChange(formatted);
   };
 
+  // const handleRenderValue = (selected: SelectValue) => {
+  //   const initReturn = placeholder ?? '-';
+  //   if (!selected) return initReturn;
+
+  //   const typed = selected as string;
+  //   const optionIndex = options.findIndex(({ value }) => value === typed);
+
+  //   if (optionIndex < 0) return initReturn;
+  //   return options[optionIndex].name;
+  // };
+
   const handleRenderValue = (selected: SelectValue) => {
     const initReturn = placeholder ?? '-';
     if (!selected) return initReturn;
 
     const typed = selected as string;
-    const optionIndex = options.findIndex(({ value }) => value === typed);
+
+    // Verifica se 'options' está definido e se é um array
+    if (!options || !options.length) return initReturn;
+
+    const optionIndex = options?.findIndex(({ value }) => value === typed);
 
     if (optionIndex < 0) return initReturn;
     return options[optionIndex].name;

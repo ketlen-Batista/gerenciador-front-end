@@ -14,6 +14,7 @@ import { getPdfUrlServer } from '@src/utils/functions';
 
 import CircularProgress from '@src/components/CircularProgress';
 import ModalConfirm from '@src/components/ModalConfirm';
+import PhotoModal from '@src/components/PhotoModal';
 
 import TableDataGrid from '@components/TableDataGrid';
 
@@ -27,6 +28,8 @@ function TableDocuments() {
   const [openModalPdf, setOpenModalPdf] = useState(false);
   const [urlPdf, setUrlPdf] = useState('');
   const [documentName, setDocumentName] = useState('');
+  const [photoId, setPhotoId] = useState(null);
+
   const { mutate: handleDeleteDocuments, isPending: isPendingDeleteDocuments } =
     useDeleteDocument();
   const { mutate: getDocumentById } = useGetDocumentById(); // Use o hook para obter o documento pelo ID
@@ -46,41 +49,16 @@ function TableDocuments() {
     await handleDeleteDocuments(documentIdToDelete);
     handleCloseModalDelete();
   };
-  // const handleViewDocument = (documentId: number) => {
-  //   getDocumentById(documentId, {
-  //     onSuccess: (data) => {
-  //       console.log('data134', data);
-  //       const blob = new Blob([data], { type: 'application/pdf' });
-  //       const url = URL.createObjectURL(blob);
-  //       setUrlPdf(url);
-  //       setOpenModalPdf(true);
-  //       // window.open(url);
-  //     },
-  //     onError: (error) => {
-  //       console.error('Failed to fetch document', error);
-  //     },
-  //   });
-  // };
-  const handleViewDocument = (documentId: number, nameDocument: string) => {
+  
+  const handleViewDocument = (
+    documentId: number,
+    nameDocument: string,
+    photoId: number,
+  ) => {
     setUrlPdf(getPdfUrlServer(documentId));
     setDocumentName(nameDocument);
     setOpenModalPdf(true);
-    // getDocumentById(documentId, {
-    //   onSuccess: (response) => {
-    //     const contentType = response.headers.get('Content-Type');
-    //     if (contentType === 'application/pdf') {
-    //       const blob = new Blob([response.data], { type: 'application/pdf' });
-    //       const url = URL.createObjectURL(blob);
-    //       setUrlPdf(url);
-    //       setOpenModalPdf(true);
-    //     } else {
-    //       console.error('Unexpected content type:', contentType);
-    //     }
-    //   },
-    //   onError: (error) => {
-    //     console.error('Failed to fetch document', error);
-    //   },
-    // });
+    setPhotoId(photoId);
   };
   const columns = [
     {
@@ -201,7 +179,11 @@ function TableDocuments() {
           <Tooltip title="Ver" placement="top">
             <IconButton
               onClick={() =>
-                handleViewDocument(params.row.id, params.row.documentName)
+                handleViewDocument(
+                  params.row.id,
+                  params.row.documentName,
+                  params.row.photoId,
+                )
               }
             >
               <div
@@ -257,12 +239,21 @@ function TableDocuments() {
           colorButtonConfirm={colors.error.dark}
         />
       )}
-      {openModalPdf && (
+      {openModalPdf && !photoId && (
         <ModalPdf
           openDialog={openModalPdf}
           handleClose={() => setOpenModalPdf(false)}
           urlPdf={urlPdf}
           documentName={documentName}
+        />
+      )}
+
+      {openModalPdf && photoId && (
+        <PhotoModal
+          openDialog={openModalPdf}
+          handleClose={() => setOpenModalPdf(false)}
+          photoId={photoId}
+          titleModal={documentName}
         />
       )}
     </>

@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import logo from '@assets/imagem1pdfgic.png';
 import { InfoOutlined } from '@mui/icons-material';
 import { Box, CircularProgress, FormControl, Grid } from '@mui/material';
+import useResponsive from '@src/hooks/useResponsive';
 import { api } from '@src/lib/axios';
 import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
@@ -40,6 +41,8 @@ interface User {
 const PdfGenerator: React.FC = () => {
   const location = useLocation();
   const { userId } = location.state || {};
+
+  const { isMobile } = useResponsive();
 
   // State variables
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -349,8 +352,13 @@ const PdfGenerator: React.FC = () => {
       justifyContent="center"
       width="100%"
     >
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={3}>
+      <Grid
+        container
+        spacing={isMobile ? 1 : 2}
+        alignItems="center"
+        direction={isMobile ? 'column' : 'row'}
+      >
+        <Grid item xs={isMobile ? 12 : 3}>
           <FormControl fullWidth>
             <Select
               label="Usuário"
@@ -362,7 +370,7 @@ const PdfGenerator: React.FC = () => {
           </FormControl>
         </Grid>
 
-        <Grid item xs={2}>
+        <Grid item xs={isMobile ? 12 : 2}>
           <Select
             options={contracts}
             value={contrato}
@@ -371,7 +379,8 @@ const PdfGenerator: React.FC = () => {
             clearable
           />
         </Grid>
-        <Grid item xs={2}>
+
+        <Grid item xs={isMobile ? 12 : 2}>
           <Select
             options={sectors}
             value={setor}
@@ -380,7 +389,8 @@ const PdfGenerator: React.FC = () => {
             clearable
           />
         </Grid>
-        <Grid item xs={3}>
+
+        <Grid item xs={isMobile ? 12 : 3}>
           <DateFilter
             ref={ref}
             initialRange={INIT_DATE_RANGE}
@@ -388,8 +398,10 @@ const PdfGenerator: React.FC = () => {
           />
         </Grid>
 
-        <Grid item xs={2}>
-          <Button onClick={fetchData}>Carregar PDF</Button>
+        <Grid item xs={isMobile ? 12 : 2}>
+          <Button fullWidth={isMobile} onClick={fetchData}>
+            Carregar PDF
+          </Button>
         </Grid>
       </Grid>
 
@@ -429,6 +441,95 @@ const PdfGenerator: React.FC = () => {
       )}
     </Box>
   );
+
+  // return (
+  //   <Box
+  //     display="flex"
+  //     flexDirection="column"
+  //     alignItems="center"
+  //     justifyContent="center"
+  //     width="100%"
+  //   >
+  //     <Grid container spacing={2} alignItems="center">
+  //       <Grid item xs={3}>
+  //         <FormControl fullWidth>
+  //           <Select
+  //             label="Usuário"
+  //             options={usersCustomSelect}
+  //             value={filterUserId}
+  //             onChange={(e) => setFilterUserId(e.value as string)}
+  //             clearable
+  //           />
+  //         </FormControl>
+  //       </Grid>
+
+  //       <Grid item xs={2}>
+  //         <Select
+  //           options={contracts}
+  //           value={contrato}
+  //           onChange={(e) => handleChangeFilter('contrato', e.value)}
+  //           label={basicNames.sector.singular}
+  //           clearable
+  //         />
+  //       </Grid>
+  //       <Grid item xs={2}>
+  //         <Select
+  //           options={sectors}
+  //           value={setor}
+  //           onChange={(e) => handleChangeFilter('setor', e.value)}
+  //           label={basicNames.section.singular}
+  //           clearable
+  //         />
+  //       </Grid>
+  //       <Grid item xs={3}>
+  //         <DateFilter
+  //           ref={ref}
+  //           initialRange={INIT_DATE_RANGE}
+  //           onFilter={handleDateFilter}
+  //         />
+  //       </Grid>
+
+  //       <Grid item xs={2}>
+  //         <Button onClick={fetchData}>Carregar PDF</Button>
+  //       </Grid>
+  //     </Grid>
+
+  //     {loading ? (
+  //       <Box
+  //         display="flex"
+  //         alignItems="center"
+  //         justifyContent="center"
+  //         height="100vh"
+  //       >
+  //         <CircularProgress color="success" />
+  //       </Box>
+  //     ) : pdfUrl ? (
+  //       <Box
+  //         display="flex"
+  //         flexDirection="row"
+  //         alignItems="center"
+  //         justifyContent="space-around"
+  //         width="100%"
+  //         mt={4}
+  //       >
+  //         <iframe src={pdfUrl} title="PDF Preview" width="80%" height="560px" />
+  //       </Box>
+  //     ) : (
+  //       <Box
+  //         display="flex"
+  //         alignItems="center"
+  //         justifyContent="center"
+  //         gap={1}
+  //         height="200px"
+  //       >
+  //         <InfoOutlined color="warning" sx={{ height: 28, width: 28 }} />
+  //         <Typography variant="body1" fontSize={17} color="warning.main">
+  //           {'Sem dados para exibir'}
+  //         </Typography>
+  //       </Box>
+  //     )}
+  //   </Box>
+  // );
 };
 
 export default PdfGenerator;

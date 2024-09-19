@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
+import useResponsive from '@src/hooks/useResponsive';
 import useSnackbar from '@src/hooks/useSnackbar';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { PermissionsUpdate } from '@src/services/permissions/dto';
@@ -36,6 +37,7 @@ const PermissionsSettings = () => {
     useUpdatePermissions();
   const { data: jobs, mutate: getJobs } = useGetJobPositions();
   const { showSnackbar } = useSnackbar();
+  const { isDesktop } = useResponsive();
 
   useEffect(() => {
     if (cargo?.value) {
@@ -98,27 +100,53 @@ const PermissionsSettings = () => {
   ];
   return (
     <div>
-      <S.Container>
-        <S.ContainerTitles>
-          <S.Title>Configuração de Permissões</S.Title>
-        </S.ContainerTitles>
-        <Box width={'30%'}>
-          <Select
-            options={jobs}
-            value={cargo?.value}
-            name={cargo?.name}
-            onChange={(event) => {
-              const selectedValue = event.value;
-              const selectedOption = jobs.find(
-                (job) => job.value === selectedValue,
-              );
-              setCargo(selectedOption || OptionEmpty);
-            }}
-            label={translate('Select a position')}
-            clearable
-          />
-        </Box>
-      </S.Container>
+      {isDesktop ? (
+        <S.Container>
+          <S.ContainerTitles>
+            <S.Title>Configuração de Permissões</S.Title>
+          </S.ContainerTitles>
+          <Box width={'30%'}>
+            <Select
+              options={jobs}
+              value={cargo?.value}
+              name={cargo?.name}
+              onChange={(event) => {
+                const selectedValue = event.value;
+                const selectedOption = jobs.find(
+                  (job) => job.value === selectedValue,
+                );
+                setCargo(selectedOption || OptionEmpty);
+              }}
+              label={translate('Select a position')}
+              clearable
+            />
+          </Box>
+        </S.Container>
+      ) : (
+        <Grid container mb={3}>
+          <Grid item xs={12}>
+            <S.ContainerTitles>
+              <S.Title>Configuração de Permissões</S.Title>
+            </S.ContainerTitles>
+          </Grid>
+          <Grid item xs={12}>
+            <Select
+              options={jobs}
+              value={cargo?.value}
+              name={cargo?.name}
+              onChange={(event) => {
+                const selectedValue = event.value;
+                const selectedOption = jobs.find(
+                  (job) => job.value === selectedValue,
+                );
+                setCargo(selectedOption || OptionEmpty);
+              }}
+              label={translate('Select a position')}
+              clearable
+            />
+          </Grid>
+        </Grid>
+      )}
       {cargo?.value ? (
         <>
           <Grid container>

@@ -26,7 +26,7 @@ interface TableSectorsProps {
   isPending: boolean;
 }
 
-function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
+function Table({ sectors, isPending, getSectors }: TableSectorsProps) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [sectorName, setSectorName] = useState(null);
   const [contractId, setContractId] = useState(null);

@@ -24,16 +24,16 @@ interface TableJobsProps {
   jobs: any[];
   getJobs?: UseMutateFunction<any, AxiosError<unknown, any>, unknown, unknown>;
   isPending: boolean;
+  handleOpenModal: (name: string, id: number) => void;
+  handleOpenModalDelete: (id: number) => void;
 }
-function Table({ jobs, getJobs, isPending }: TableJobsProps) {
-  const { mutateAsync: handleDeleteJob, isPending: isPendingDelete } =
-    useDeleteJobPosition();
-
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
-  const [jobName, setJobName] = useState(null);
-  const [jobId, setJobId] = useState(null);
-
+function Table({
+  jobs,
+  getJobs,
+  isPending,
+  handleOpenModal,
+  handleOpenModalDelete,
+}: TableJobsProps) {
   const customJobs = (
     jobsparams: CustomJobsRequest[],
   ): CustomJobsResponse[] => {
@@ -46,34 +46,6 @@ function Table({ jobs, getJobs, isPending }: TableJobsProps) {
   useEffect(() => {
     getJobs({});
   }, []);
-
-  const handleCloseModal = () => {
-    setOpenDialog(false);
-    setJobId(null);
-    getJobs({});
-  };
-
-  const handleOpenModal = (name, id) => {
-    setOpenDialog(true);
-    setJobName(name);
-    setJobId(id);
-  };
-
-  const handleOpenModalDelete = (id: number) => {
-    setIsOpenModalDelete(true);
-    setJobId(id);
-  };
-
-  const handleCloseModalDelete = () => {
-    setIsOpenModalDelete(false);
-    setJobId(null);
-    getJobs({});
-  };
-
-  const handleDelete = async () => {
-    await handleDeleteJob({ id: jobId });
-    handleCloseModalDelete();
-  };
 
   const columns = [
     {
@@ -135,29 +107,6 @@ function Table({ jobs, getJobs, isPending }: TableJobsProps) {
     !isPending && (
       <>
         <TableDataGrid columns={columns} rows={customJobs(jobs || [])} />
-        {openDialog && (
-          <ModalJob
-            openDialog={openDialog}
-            handleClose={handleCloseModal}
-            jobName={jobName}
-            jobId={jobId}
-            getJobs={getJobs}
-          />
-        )}
-        {isOpenModalDelete && (
-          <ModalConfirm
-            openDialog={isOpenModalDelete}
-            handleClose={handleCloseModalDelete}
-            handleConfirm={handleDelete}
-            isLoading={isPendingDelete}
-            textButtonConfirm={'Excluir'}
-            colorButtonConfirm={colors.error.dark}
-            text={
-              'Essa ação não poderá ser desfeita. Deseja realmente excluir este cargo?'
-            }
-            titleModal={'Excluir'}
-          />
-        )}
       </>
     )
   );

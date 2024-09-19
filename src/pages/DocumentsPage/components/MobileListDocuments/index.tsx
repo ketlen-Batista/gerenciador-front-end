@@ -277,6 +277,7 @@ import { INIT_DATE_RANGE } from '@src/utils/dates';
 import { getPdfUrlServer } from '@src/utils/functions';
 
 import ModalConfirm from '@src/components/ModalConfirm';
+import PhotoModal from '@src/components/PhotoModal';
 
 import DocumentCard from '../DocumentCard';
 import ModalPdf from '../ModalPdf';
@@ -291,6 +292,7 @@ function MobileListDocuments() {
   const [openModalPdf, setOpenModalPdf] = useState(false);
   const [urlPdf, setUrlPdf] = useState('');
   const [documentName, setDocumentName] = useState('');
+  const [photoId, setPhotoId] = useState(null);
 
   const { mutate: handleDeleteDocuments, isPending: isPendingDeleteDocuments } =
     useDeleteDocument();
@@ -315,10 +317,15 @@ function MobileListDocuments() {
     handleCloseModalDelete();
   };
 
-  const handleViewDocument = (documentId: number, nameDocument: string) => {
+  const handleViewDocument = (
+    documentId: number,
+    nameDocument: string,
+    photoId: number,
+  ) => {
     setUrlPdf(getPdfUrlServer(documentId));
     setDocumentName(nameDocument);
     setOpenModalPdf(true);
+    setPhotoId(photoId);
   };
 
   return (
@@ -346,8 +353,10 @@ function MobileListDocuments() {
             <DocumentCard
               key={doc.id}
               document={doc}
-              onView={(id) => handleViewDocument(id, doc.documentName)}
-              onDelete={(id) => handleOpenModalDelete(id)}
+              onView={() =>
+                handleViewDocument(doc.id, doc.documentName, doc.photoId)
+              }
+              onDelete={() => handleOpenModalDelete(doc.id)}
             />
           ))
         )}
@@ -363,12 +372,21 @@ function MobileListDocuments() {
           colorButtonConfirm={colors.error.dark}
         />
       )}
-      {openModalPdf && (
+      {openModalPdf && !photoId && (
         <ModalPdf
           openDialog={openModalPdf}
           handleClose={() => setOpenModalPdf(false)}
           urlPdf={urlPdf}
           documentName={documentName}
+        />
+      )}
+
+      {openModalPdf && photoId && (
+        <PhotoModal
+          openDialog={openModalPdf}
+          handleClose={() => setOpenModalPdf(false)}
+          photoId={photoId}
+          titleModal={documentName}
         />
       )}
     </>

@@ -56,7 +56,7 @@ const ReportsPage = () => {
   const location = useLocation();
   const { tab } = location.state || {};
   const { permissions } = useAuth(); // Obtém as permissões do usuário
-
+  console.log({ tab });
   // Define as abas com base nas permissões
   const tabs: Tab[] = [
     {
@@ -86,7 +86,7 @@ const ReportsPage = () => {
   ]?.filter((tab) => tab.isVisible); // Filtra as abas com base na visibilidade
 
   const [currentTabId, setCurrentTabId] = useState<string>(
-    tab ?? tabs?.[0]?.id, // Ajuste para não inicializar com uma aba vazia
+    tab?.length ? tab : tabs?.[0]?.id, // Ajuste para não inicializar com uma aba vazia
   );
 
   return (

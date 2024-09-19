@@ -10,16 +10,22 @@ interface PhotoModalProps {
   photoId?: number;
   openDialog: boolean;
   handleClose: () => void;
+  titleModal?: string;
 }
 
-const PhotoModal = ({ photoId, openDialog, handleClose }: PhotoModalProps) => {
+const PhotoModal = ({
+  photoId,
+  openDialog,
+  handleClose,
+  titleModal,
+}: PhotoModalProps) => {
   return (
     <FullScreenDialog
       open={openDialog}
       onClose={handleClose}
       maxWidth={'md'}
       closeButtonPosition={'right'}
-      title={'Foto no momento do Ponto'}
+      title={titleModal}
       fullWidth
     >
       {photoId ? (
