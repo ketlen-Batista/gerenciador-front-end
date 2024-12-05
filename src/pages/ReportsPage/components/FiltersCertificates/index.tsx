@@ -149,7 +149,7 @@ const FiltersCertificates = () => {
   };
 
   return (
-    <Grid container spacing={2} direction={isMobile ? 'column' : 'row'}>
+    <Grid container spacing={2} direction={isMobile ? 'row' : 'column'}>
       <Grid item xs={12} sm={6} md={2}>
         <Select
           options={contracts}

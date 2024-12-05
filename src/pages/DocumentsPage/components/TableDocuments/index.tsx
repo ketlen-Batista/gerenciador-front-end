@@ -49,7 +49,7 @@ function TableDocuments() {
     await handleDeleteDocuments(documentIdToDelete);
     handleCloseModalDelete();
   };
-  
+
   const handleViewDocument = (
     documentId: number,
     nameDocument: string,
@@ -93,38 +93,24 @@ function TableDocuments() {
     },
     {
       field: 'received',
-      headerName: 'Recebido?',
+      headerName: 'Enviado',
       flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
-      renderCell: (params) =>
-        params?.value ? (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: '100%',
-              color: 'green',
-              marginLeft: '15px',
-            }}
-          >
-            <CheckIcon color="inherit" />
-          </div>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: '100%',
-              color: 'red',
-              marginLeft: '15px',
-            }}
-          >
-            <CloseIcon color="inherit" />
-          </div>
-        ),
+      renderCell: (params) => (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: '100%',
+            color: 'green',
+            marginLeft: '15px',
+          }}
+        >
+          <CheckIcon color="inherit" />
+        </div>
+      ),
     },
     {
       field: 'visa',

@@ -234,6 +234,7 @@ import { formatDateDayMonthAndYear } from '@src/utils/dates';
 import { getPdfUrlServer } from '@src/utils/functions';
 
 import ModalConfirm from '@src/components/ModalConfirm';
+import PhotoModal from '@src/components/PhotoModal';
 import TableDataGrid from '@src/components/TableDataGrid';
 import ModalPdf from '@src/pages/DocumentsPage/components/ModalPdf';
 
@@ -269,8 +270,16 @@ const CertificatesList = () => {
     setIdCertificate(id);
   };
 
-  const { users, certificates, loading, updateDocument } =
-    useCertificatesContext();
+  const {
+    users,
+    certificates,
+    loading,
+    updateDocument,
+    openModalPhoto,
+    photoId,
+    handleOpenModalPhoto,
+    handleCloseModalPhoto,
+  } = useCertificatesContext();
 
   const handleApprove = async ({
     id,
@@ -297,7 +306,6 @@ const CertificatesList = () => {
   };
 
   const columns = [
-    // Define suas colunas aqui para desktop
     {
       field: 'senderId',
       headerName: 'Usuário',
@@ -306,11 +314,135 @@ const CertificatesList = () => {
         <div>{users.find((user) => user.id === params.row.senderId)?.name}</div>
       ),
     },
-    // ... outras colunas
+    {
+      field: 'dateStartCertificate',
+      headerName: 'Período',
+      flex: 2,
+      renderCell: (params) =>
+        params?.value && (
+          <div>{`${formatDateDayMonthAndYear(params.row.dateStartCertificate)} a ${formatDateDayMonthAndYear(params.row.dateEndCertificate)}`}</div>
+        ),
+    },
+    {
+      field: 'documentName',
+      headerName: 'Documento',
+      flex: 2,
+      renderCell: (params) =>
+        params.value && (
+          <div
+            onClick={() => {
+              params?.row?.photoDocument?.id
+                ? handleOpenModalPhoto(params.row.photoDocument.id)
+                : handleViewDocument({
+                    documentId: params.row.id,
+                    nameDocument: params.row.documentName,
+                  });
+            }}
+            style={{
+              cursor: 'pointer',
+              color: 'blue',
+              fontWeight: '500',
+            }}
+          >
+            Ver Documento
+          </div>
+        ),
+    },
+    {
+      field: 'approve',
+      headerName: 'Status',
+      flex: 1,
+      renderCell: (params) => (
+        <Box
+          display={'flex'}
+          alignItems={'center'}
+          justifyContent={'start'}
+          height={'100%'}
+          width={'100%'}
+        >
+          <Box
+            bgcolor={
+              params.value == true
+                ? 'green'
+                : params.value == false
+                  ? 'red'
+                  : 'yellow'
+            }
+            color={
+              params.value == true
+                ? 'white'
+                : params.value == false
+                  ? 'white'
+                  : 'black'
+            }
+            fontWeight={500}
+            p={1}
+            width={'fit-content'}
+            height={'2rem'}
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            borderRadius={'15px'}
+          >
+            {params.value == true
+              ? 'Aprovada'
+              : params.value == false
+                ? 'Reprovada'
+                : 'Pendente'}
+          </Box>
+        </Box>
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: '',
+      flex: 1,
+      renderCell: (params) => (
+        <Box
+          display={'flex'}
+          alignItems={'center'}
+          justifyContent={'start'}
+          height={'100%'}
+          width={'100%'}
+        >
+          <Tooltip title="Aprovar" placement="top">
+            <Box
+              display={'flex'}
+              mr={5}
+              sx={{ cursor: 'pointer' }}
+              onClick={() =>
+                params.row.approve === true
+                  ? null
+                  : handleOpenModalApprove(params.row.id as number)
+              }
+            >
+              <AssignmentTurnedInIcon
+                htmlColor={params.row.approve === true ? '#464646' : '#1E90FF'}
+              />
+            </Box>
+          </Tooltip>
+          <Tooltip title="Reprovar" placement="top">
+            <Box
+              display={'flex'}
+              sx={{ cursor: 'pointer' }}
+              onClick={() =>
+                params.row.approve === false
+                  ? null
+                  : handleOpenModalDisapprove(params.row.id as number)
+              }
+            >
+              <AssignmentTurnedInIcon
+                htmlColor={params.row.approve === false ? '#464646' : '#FF0000'}
+              />
+            </Box>
+          </Tooltip>
+        </Box>
+      ),
+    },
   ];
 
   return (
-    <Box mt={5} bgcolor={colors.basic.white}>
+    <Box mt={5}>
       {isMobile ? (
         // Responsivo para mobile (cards)
         certificates?.map((certificate) => (
@@ -320,6 +452,7 @@ const CertificatesList = () => {
             m={2}
             border="1px solid gray"
             borderRadius="8px"
+            bgcolor={colors.basic.white}
           >
             <div>
               <strong>Usuário:</strong>{' '}
@@ -395,6 +528,15 @@ const CertificatesList = () => {
           handleClose={() => setOpenModalPdf(false)}
           urlPdf={urlPdf}
           documentName={documentName}
+        />
+      )}
+
+      {openModalPhoto && (
+        <PhotoModal
+          openDialog={openModalPhoto}
+          handleClose={handleCloseModalPhoto}
+          photoId={photoId}
+          titleModal={'Foto do Documento'}
         />
       )}
     </Box>

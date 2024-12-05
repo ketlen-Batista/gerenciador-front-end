@@ -286,6 +286,30 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     };
   }, [signOut]);
 
+  const TOKEN_EXPIRATION_TIME = 12 * 3600 * 1000; // 12 horas em milissegundos
+
+  useEffect(() => {
+    let logoutTimer: NodeJS.Timeout;
+
+    async function initializeLogoutTimer() {
+      const { token } = await storageAuthTokenGet();
+      console.log({ token });
+      if (token) {
+        // Calcular o tempo restante
+        const expirationTime = TOKEN_EXPIRATION_TIME; // 12 horas
+        logoutTimer = setTimeout(() => {
+          signOut(); // Deslogar após o tempo limite
+        }, expirationTime);
+      }
+    }
+
+    initializeLogoutTimer();
+
+    return () => {
+      clearTimeout(logoutTimer); // Limpar timer ao desmontar o componente
+    };
+  }, [signOut]);
+
   useEffect(() => {
     if (user.jobPosition_id) {
       getPermissions(Number(user.jobPosition_id));

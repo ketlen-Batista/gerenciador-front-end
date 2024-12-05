@@ -9,6 +9,7 @@ import { INIT_DATE_RANGE } from '@src/utils/dates';
 
 import DateFilter from '@src/components/DateFilter';
 import Select from '@src/components/Select';
+import TextField from '@src/components/TextField';
 import TextInput from '@src/components/TextInput';
 
 const Filters = () => {
@@ -31,10 +32,11 @@ const Filters = () => {
     : [];
 
   return isDesktop ? (
-    <div>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={4}>
-          <TextInput
+    // <div>
+    <Grid container spacing={2}>
+      <Grid item xs={4}>
+        <FormControl fullWidth>
+          <TextField
             name="search"
             label="Buscar"
             value={search}
@@ -49,31 +51,33 @@ const Filters = () => {
                 </InputAdornment>
               ),
             }}
-            mini
+            // mini
           />
-        </Grid>
-        <Grid item xs={4}>
-          <FormControl fullWidth>
-            <Select
-              label="Usuário"
-              options={usersCustomSelect}
-              value={typeof filterUserId !== 'undefined' ? filterUserId : ''}
-              onChange={(e) => setFilterUserId(e.value)}
-              clearable
-            />
-          </FormControl>
-        </Grid>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={3}>
-          <DateFilter
-            ref={ref}
-            initialRange={INIT_DATE_RANGE}
-            onFilter={handleDateFilter}
-          />
-        </Grid>
+        </FormControl>
       </Grid>
-    </div>
+      <Grid item xs={4}>
+        <FormControl fullWidth>
+          <Select
+            label="Usuário"
+            options={usersCustomSelect}
+            value={typeof filterUserId !== 'undefined' ? filterUserId : ''}
+            onChange={(e) => setFilterUserId(e.value)}
+            clearable
+            heightSelect={'100%'}
+          />
+        </FormControl>
+      </Grid>
+      <Grid item xs={1}></Grid>
+      <Grid item xs={3} sm={6} md={3}>
+        <DateFilter
+          ref={ref}
+          initialRange={INIT_DATE_RANGE}
+          onFilter={handleDateFilter}
+        />
+      </Grid>
+    </Grid>
   ) : (
+    // </div>
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={12}>
         <TextInput
@@ -91,7 +95,7 @@ const Filters = () => {
               </InputAdornment>
             ),
           }}
-          mini
+          // mini
         />
       </Grid>
       <Grid item xs={12}>
@@ -110,6 +114,7 @@ const Filters = () => {
           ref={ref}
           initialRange={INIT_DATE_RANGE}
           onFilter={handleDateFilter}
+          // style={{ minHeight: '50px' }}
         />
       </Grid>
     </Grid>

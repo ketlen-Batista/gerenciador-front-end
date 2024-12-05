@@ -23,6 +23,10 @@ export const useCertificatesContext = () => {
     contracts,
     sectors,
     updateDocument,
+    openModalPhoto,
+    photoId,
+    handleOpenModalPhoto,
+    handleCloseModalPhoto,
   } = useContext(CertificatesContext);
 
   return {
@@ -45,5 +49,9 @@ export const useCertificatesContext = () => {
     contracts,
     sectors,
     updateDocument,
+    openModalPhoto,
+    photoId,
+    handleOpenModalPhoto,
+    handleCloseModalPhoto,
   };
 };

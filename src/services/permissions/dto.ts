@@ -12,6 +12,8 @@ export interface PermissionsUpdate {
   reports?: boolean;
   pointEletronic?: boolean;
   servicesRegister?: boolean;
+  justifications?: boolean;
+  certificates?: boolean;
   documentsPage?: boolean;
   documentsAdmin?: boolean;
   documentsBasic?: boolean;
@@ -20,6 +22,7 @@ export interface PermissionsUpdate {
   configSector?: boolean;
   configOffice?: boolean;
   configPermission?: boolean;
+  configStatus?: boolean;
   mobile?: boolean;
   desktop?: boolean;
 }

@@ -437,7 +437,7 @@ const SwitchWithHoursSelectComponent = ({
       <Grid container mt={3}>
         <Grid item xs={6}>
           <Tooltip title={titleTooltip}>
-            <Typography fontSize={600} bold={true} variant="h6">
+            <Typography bold={true} variant="h6">
               {label}
             </Typography>
           </Tooltip>

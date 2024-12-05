@@ -25,6 +25,8 @@ import RadioButton from '@components/RadioButton';
 import TextField from '@components/TextField';
 import Typography from '@components/Typography';
 
+import TextInput from '../TextInput';
+
 import { formatInputInfo } from './functions';
 import { GenericRef } from './interfaces';
 import { DateRange, PopoverDirection } from './interfaces';
@@ -140,6 +142,7 @@ function DateFilter(
       <TextField
         disableSelection
         value={inputInfo}
+        // label={inputInfo}
         onClick={handleOpenPopover}
         InputProps={{
           startAdornment: <CalendarToday className="start" />,
@@ -152,6 +155,10 @@ function DateFilter(
             />
           ),
         }}
+        // sx={{
+        //   height: '208px !important',
+        // }}
+        // mini
       />
       <S.CustomPopover
         open={popoverIsOpen}

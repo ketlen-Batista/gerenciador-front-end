@@ -82,6 +82,10 @@ interface CertificatesContextType {
     UpdateDocumentDTO,
     unknown
   >;
+  openModalPhoto: boolean;
+  photoId: number;
+  handleOpenModalPhoto: (photoId: number) => void;
+  handleCloseModalPhoto: () => void;
 }
 
 export const CertificatesContext = createContext({} as CertificatesContextType);
@@ -104,6 +108,8 @@ export const CertificatesProvider = ({ children }) => {
   const [cargo, setCargo] = useState<number | string | null>(null);
   const [setor, setSetor] = useState<number | string | null>(null);
   const [contrato, setContrato] = useState<number | string | null>(null);
+  const [openModalPhoto, setOpenModalPhoto] = useState<boolean>(false);
+  const [photoId, setPhotoId] = useState<number>();
 
   const { data: jobs, mutate: getJobs } = useGetJobPositions();
   const { data: contracts, mutate: getContracts } = useGetContracts();
@@ -123,6 +129,17 @@ export const CertificatesProvider = ({ children }) => {
     endDate: number | null;
   }) => {
     setSelectedDateRange(dateRange);
+  };
+
+  const handleOpenModalPhoto = (photoId: number) => {
+    console.log({ photoId });
+    setOpenModalPhoto(true);
+    setPhotoId(photoId);
+  };
+
+  const handleCloseModalPhoto = () => {
+    setOpenModalPhoto(false);
+    setPhotoId(null);
   };
 
   useEffect(() => {
@@ -225,6 +242,10 @@ export const CertificatesProvider = ({ children }) => {
       contracts,
       sectors,
       updateDocument,
+      openModalPhoto,
+      photoId,
+      handleOpenModalPhoto,
+      handleCloseModalPhoto,
     }),
     [
       filterUserId,
@@ -242,6 +263,10 @@ export const CertificatesProvider = ({ children }) => {
       contracts,
       sectors,
       updateDocument,
+      openModalPhoto,
+      photoId,
+      handleOpenModalPhoto,
+      handleCloseModalPhoto,
     ],
   );
 
