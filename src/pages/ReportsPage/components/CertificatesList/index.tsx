@@ -229,6 +229,7 @@ import React, { useState } from 'react';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import { Box, Tooltip, useMediaQuery } from '@mui/material';
 import useResponsive from '@src/hooks/useResponsive';
+import { useCreateUserCheckpoint } from '@src/services/CheckinsPoints/queries';
 import { colors } from '@src/styles/colors';
 import { formatDateDayMonthAndYear } from '@src/utils/dates';
 import { getPdfUrlServer } from '@src/utils/functions';
@@ -239,6 +240,8 @@ import TableDataGrid from '@src/components/TableDataGrid';
 import ModalPdf from '@src/pages/DocumentsPage/components/ModalPdf';
 
 import { useCertificatesContext } from '../../hooks/useCertificatesContext';
+import CertificateApproveBody from '../CertificateApproveBody';
+import ModalConfirmCertificateApprove from '../ModalConfirmCertificateApprove';
 
 const CertificatesList = () => {
   const [openModalPdf, setOpenModalPdf] = useState(false);
@@ -247,6 +250,9 @@ const CertificatesList = () => {
   const [isOpenModalApprove, setIsOpenModalApprove] = useState(false);
   const [isOpenModalDisapprove, setIsOpenModalDisapprove] = useState(false);
   const [idCertificate, setIdCertificate] = useState(null);
+  const [employeeIdSelected, setEmployeeIdSelected] = useState('');
+  const [dateInitCertificate, setDateInitCertificate] = useState('');
+  const [dateEndCertificate, setDateEndCertificate] = useState('');
 
   const { isMobile } = useResponsive();
 
@@ -265,9 +271,17 @@ const CertificatesList = () => {
     setIdCertificate(id);
   };
 
-  const handleOpenModalApprove = (id: number) => {
+  const handleOpenModalApprove = (
+    id: number,
+    employeeId: string,
+    dateinit: string,
+    dateEnd: string,
+  ) => {
     setIsOpenModalApprove(true);
     setIdCertificate(id);
+    setEmployeeIdSelected(employeeId);
+    setDateInitCertificate(dateinit);
+    setDateEndCertificate(dateEnd);
   };
 
   const {
@@ -281,6 +295,8 @@ const CertificatesList = () => {
     handleCloseModalPhoto,
   } = useCertificatesContext();
 
+  const { mutateAsync: createUserCheckpoint } = useCreateUserCheckpoint();
+
   const handleApprove = async ({
     id,
     approve,
@@ -289,6 +305,11 @@ const CertificatesList = () => {
     approve: boolean;
   }) => {
     await updateDocument({ id: id, approve: approve });
+
+    // await createUserCheckpoint({
+    //   checkpointType
+    // })
+
     setIsOpenModalDisapprove(false);
     setIsOpenModalApprove(false);
   };
@@ -413,7 +434,12 @@ const CertificatesList = () => {
               onClick={() =>
                 params.row.approve === true
                   ? null
-                  : handleOpenModalApprove(params.row.id as number)
+                  : handleOpenModalApprove(
+                      params.row.id as number,
+                      params.row.senderId as string,
+                      params.row.dateStartCertificate as string,
+                      params.row.dateEndCertificate as string,
+                    )
               }
             >
               <AssignmentTurnedInIcon
@@ -475,7 +501,16 @@ const CertificatesList = () => {
             </div>
             <Box display="flex" justifyContent="space-between" mt={2}>
               <Tooltip title="Aprovar" placement="top">
-                <Box onClick={() => handleOpenModalApprove(certificate.id)}>
+                <Box
+                  onClick={() =>
+                    handleOpenModalApprove(
+                      certificate?.id,
+                      certificate?.senderId,
+                      certificate?.dateStartCertificate,
+                      certificate?.dateEndCertificate,
+                    )
+                  }
+                >
                   <AssignmentTurnedInIcon htmlColor="#1E90FF" />
                 </Box>
               </Tooltip>
@@ -488,25 +523,34 @@ const CertificatesList = () => {
           </Box>
         ))
       ) : (
-        <TableDataGrid
-          rows={certificates || []}
-          columns={columns}
-          loading={loading}
-          pageSize={8}
-        />
+        <Box bgcolor="white">
+          <TableDataGrid
+            rows={certificates || []}
+            columns={columns}
+            loading={loading}
+            pageSize={8}
+          />
+        </Box>
       )}
       {/* Modais de aprovação e PDF */}
       {isOpenModalApprove && (
-        <ModalConfirm
+        <ModalConfirmCertificateApprove
           openDialog={isOpenModalApprove}
           handleClose={handleCloseModalApprove}
           handleConfirm={() =>
             handleApprove({ id: idCertificate, approve: true })
           }
-          titleModal="Aprovar"
+          titleModal="Aprovação"
           text="Tem certeza que deseja aprovar este atestado?"
           textButtonConfirm="Aprovar"
           colorButtonConfirm={colors.success.dark}
+          body={
+            <CertificateApproveBody
+              employeeId={employeeIdSelected}
+              dateInitCertificate={dateInitCertificate}
+              dateEndCertificate={dateEndCertificate}
+            />
+          }
         />
       )}
       {isOpenModalDisapprove && (
@@ -516,7 +560,7 @@ const CertificatesList = () => {
           handleConfirm={() =>
             handleApprove({ id: idCertificate, approve: false })
           }
-          titleModal="Reprovar"
+          titleModal="Reprovação"
           text="Tem certeza que deseja reprovar este atestado?"
           textButtonConfirm="Reprovar"
           colorButtonConfirm={colors.error.dark}

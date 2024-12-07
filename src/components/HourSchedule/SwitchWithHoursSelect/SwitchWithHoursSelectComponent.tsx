@@ -376,6 +376,7 @@ import { Box, Switch } from '@material-ui/core';
 // import Box from '@material-ui/core/Box';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Autocomplete, FormControlLabel, Grid, TextField } from '@mui/material';
+import BoxMui from '@mui/material/Box';
 
 import Typography from '@src/components/Typography';
 
@@ -437,9 +438,16 @@ const SwitchWithHoursSelectComponent = ({
       <Grid container mt={3}>
         <Grid item xs={6}>
           <Tooltip title={titleTooltip}>
-            <Typography bold={true} variant="h6">
+            <BoxMui
+              // display="flex"
+              fontSize={{
+                xs: '14px',
+                md: '16px',
+              }}
+              fontWeight={'bold'}
+            >
               {label}
-            </Typography>
+            </BoxMui>
           </Tooltip>
         </Grid>
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import { IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import { useDeleteStatus } from '@src/services/status/queries';
 import { colors } from '@src/styles/colors';
 import { basicNames } from '@src/utils/constants';
@@ -62,8 +62,10 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
   };
 
   const handleOpenModalDelete = (id: number) => {
-    setIsOpenModalDelete(true);
-    setStatusId(id);
+    if (id < 7) {
+      setIsOpenModalDelete(true);
+      setStatusId(id);
+    }
   };
 
   const handleCloseModalDelete = () => {
@@ -73,8 +75,10 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
   };
 
   const handleDelete = async () => {
-    await handleDeleteStatus(statusId);
-    handleCloseModalDelete();
+    if (statusId < 7) {
+      await handleDeleteStatus(statusId);
+      handleCloseModalDelete();
+    }
   };
 
   const columns = [
@@ -114,18 +118,28 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
               </div>
             </IconButton>
           </Tooltip>
-
           <Tooltip title="Deletar" placement="top">
             <IconButton>
-              <div
-                style={{
-                  display: 'flex',
-                  color: 'var(--Danger)',
-                }}
+              <Box
+                // style={{
+                //   display: 'flex',
+                //   color:
+                //     params.row.id < 4
+                //       ? colors.text.disabled
+                //       : colors.error.dark,
+                // }}
+                display="flex"
+                color={colors.error.light}
                 onClick={() => handleOpenModalDelete(params.row.id)}
               >
-                <DeleteOutlinedIcon fontSize="medium" />
-              </div>
+                <DeleteOutlinedIcon
+                  fontSize="medium"
+                  color="inherit"
+                  // htmlColor={
+                  //   params.row.id < 4 ? colors.text.disabled : colors.error.dark
+                  // }
+                />
+              </Box>
             </IconButton>
           </Tooltip>
         </div>
@@ -136,7 +150,11 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
   return (
     !isPending && (
       <>
-        <TableDataGrid columns={columns} rows={customStatuss(status || [])} />
+        <TableDataGrid
+          columns={columns}
+          rows={customStatuss(status || [])}
+          pageSize={7}
+        />
         {openDialog && (
           <ModalStatus
             openDialog={openDialog}
