@@ -2,180 +2,83 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 
 import { Box } from '@mui/material';
-import {
-  useCreateOrUpdateSchedule,
-  useGetUserSchedules,
-} from '@src/services/schedule/queries';
+import { useGetUserSchedules } from '@src/services/schedule/queries';
 import { schedulesTimeList } from '@src/utils/constants';
-import { format, formatDate } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 
 import SwitchWithHoursSelectComponent from '@src/components/HourSchedule/SwitchWithHoursSelect/SwitchWithHoursSelectComponent';
-import Select from '@src/components/Select';
 
-// import { Container } from './styles';
-
-const validationSchema = Yup.object({
-  userId: Yup.string().required('User ID é obrigatório'),
-  mondayWork: Yup.boolean(),
-  mondayEntryTime: Yup.string().nullable(),
-  mondayPauseTime: Yup.string().nullable(),
-  mondayReturnTime: Yup.string().nullable(),
-  mondayExitTime: Yup.string().nullable(),
-  tuesdayWork: Yup.boolean(),
-  tuesdayEntryTime: Yup.string().nullable(),
-  tuesdayPauseTime: Yup.string().nullable(),
-  tuesdayReturnTime: Yup.string().nullable(),
-  tuesdayExitTime: Yup.string().nullable(),
-  wednesdayWork: Yup.boolean(),
-  wednesdayEntryTime: Yup.string().nullable(),
-  wednesdayPauseTime: Yup.string().nullable(),
-  wednesdayReturnTime: Yup.string().nullable(),
-  wednesdayExitTime: Yup.string().nullable(),
-  thursdayWork: Yup.boolean(),
-  thursdayEntryTime: Yup.string().nullable(),
-  thursdayPauseTime: Yup.string().nullable(),
-  thursdayReturnTime: Yup.string().nullable(),
-  thursdayExitTime: Yup.string().nullable(),
-  fridayWork: Yup.boolean(),
-  fridayEntryTime: Yup.string().nullable(),
-  fridayPauseTime: Yup.string().nullable(),
-  fridayReturnTime: Yup.string().nullable(),
-  fridayExitTime: Yup.string().nullable(),
-  saturdayWork: Yup.boolean(),
-  saturdayEntryTime: Yup.string().nullable(),
-  saturdayPauseTime: Yup.string().nullable(),
-  saturdayReturnTime: Yup.string().nullable(),
-  saturdayExitTime: Yup.string().nullable(),
-  sundayWork: Yup.boolean(),
-  sundayEntryTime: Yup.string().nullable(),
-  sundayPauseTime: Yup.string().nullable(),
-  sundayReturnTime: Yup.string().nullable(),
-  sundayExitTime: Yup.string().nullable(),
-});
+import { useCertificatesContext } from '../../hooks/useCertificatesContext';
 
 interface CertificateApproveBodyProps {
   employeeId: string;
   dateInitCertificate: string;
   dateEndCertificate: string;
+  statusJustificationName: string;
 }
 
-type DatesProps = {
-  date: string;
-  dayOfWeekEN: string;
-  dayOfWeekPT: string;
-};
-
-// const CertificateApproveBody: CertificateApproveBodyProps = ({ employeeId }) =>
+// type DatesProps = {
+//   date: string;
+//   dayOfWeekEN: string;
+//   dayOfWeekPT: string;
+// };
 
 const CertificateApproveBody = ({
   employeeId,
   dateInitCertificate,
   dateEndCertificate,
+  statusJustificationName,
 }: CertificateApproveBodyProps) => {
-  const { mutateAsync: getUserSchedules, data: scheduleData } =
-    useGetUserSchedules();
-  const { mutateAsync: createOrUpdateSchedule } = useCreateOrUpdateSchedule();
+  const { formik, getDaysBetweenDates, getUserSchedules, dates } =
+    useCertificatesContext();
 
-  const [dates, setDates] = useState<DatesProps[]>([]);
+  // const { mutateAsync: getUserSchedules, data: scheduleData } =
+  //   useGetUserSchedules();
 
-  const handleSubmit = async (values: any) => {
-    try {
-      await createOrUpdateSchedule(values);
-    } catch (error) {
-      console.error('Erro ao enviar os dados:', error);
-    }
-  };
+  // const [dates, setDates] = useState<DatesProps[]>([]);
 
-  const formik = useFormik({
-    initialValues: {
-      userId: employeeId,
-      mondayWork: false,
-      mondayEntryTime: '',
-      mondayPauseTime: '',
-      mondayReturnTime: '',
-      mondayExitTime: '',
-      tuesdayWork: false,
-      tuesdayEntryTime: '',
-      tuesdayPauseTime: '',
-      tuesdayReturnTime: '',
-      tuesdayExitTime: '',
-      wednesdayWork: false,
-      wednesdayEntryTime: '',
-      wednesdayPauseTime: '',
-      wednesdayReturnTime: '',
-      wednesdayExitTime: '',
-      thursdayWork: false,
-      thursdayEntryTime: '',
-      thursdayPauseTime: '',
-      thursdayReturnTime: '',
-      thursdayExitTime: '',
-      fridayWork: false,
-      fridayEntryTime: '',
-      fridayPauseTime: '',
-      fridayReturnTime: '',
-      fridayExitTime: '',
-      saturdayWork: false,
-      saturdayEntryTime: '',
-      saturdayPauseTime: '',
-      saturdayReturnTime: '',
-      saturdayExitTime: '',
-      sundayWork: false,
-      sundayEntryTime: '',
-      sundayPauseTime: '',
-      sundayReturnTime: '',
-      sundayExitTime: '',
-    },
-    enableReinitialize: true,
-    validationSchema,
-    onSubmit: (values) => {
-      handleSubmit(values);
-    },
-  });
+  // const getDaysBetweenDates = (
+  //   startDate: string,
+  //   endDate: string,
+  // ): { date: string; dayOfWeekPT: string; dayOfWeekEN: string }[] => {
+  //   const start = new Date(startDate);
+  //   const end = new Date(endDate);
+  //   const dates = [];
 
-  const getDaysBetweenDates = (
-    startDate: string,
-    endDate: string,
-  ): { date: string; dayOfWeekPT: string; dayOfWeekEN: string }[] => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const dates = [];
+  //   // Adiciona a data inicial
+  //   dates.push({
+  //     date: format(start, 'yyyy-MM-dd'),
+  //     dayOfWeekPT: format(start, 'EEEE', { locale: ptBR }),
+  //     dayOfWeekEN: format(start, 'EEEE', { locale: enUS }),
+  //   });
 
-    // Adiciona a data inicial
-    dates.push({
-      date: format(start, 'yyyy-MM-dd'),
-      dayOfWeekPT: format(start, 'EEEE', { locale: ptBR }),
-      dayOfWeekEN: format(start, 'EEEE', { locale: enUS }),
-    });
+  //   // Itera pelos dias intermediários
+  //   while (start < end) {
+  //     start.setDate(start.getDate() + 1); // Incrementa um dia
+  //     if (start <= end) {
+  //       dates.push({
+  //         date: format(new Date(start), 'yyyy-MM-dd'),
+  //         dayOfWeekPT: format(new Date(start), 'EEEE', { locale: ptBR }),
+  //         dayOfWeekEN: format(new Date(start), 'EEEE', { locale: enUS }),
+  //       });
+  //     }
+  //   }
 
-    // Itera pelos dias intermediários
-    while (start < end) {
-      start.setDate(start.getDate() + 1); // Incrementa um dia
-      if (start <= end) {
-        dates.push({
-          date: format(new Date(start), 'yyyy-MM-dd'),
-          dayOfWeekPT: format(new Date(start), 'EEEE', { locale: ptBR }),
-          dayOfWeekEN: format(new Date(start), 'EEEE', { locale: enUS }),
-        });
-      }
-    }
-
-    // Adiciona a data final somente se for diferente da inicial
-    if (
-      format(new Date(startDate), 'yyyy-MM-dd') !==
-      format(new Date(endDate), 'yyyy-MM-dd')
-    ) {
-      dates.push({
-        date: format(end, 'yyyy-MM-dd'),
-        dayOfWeekPT: format(end, 'EEEE', { locale: ptBR }),
-        dayOfWeekEN: format(end, 'EEEE', { locale: enUS }),
-      });
-    }
-    setDates(dates);
-    return dates;
-  };
+  //   // Adiciona a data final somente se for diferente da inicial
+  //   if (
+  //     format(new Date(startDate), 'yyyy-MM-dd') !==
+  //     format(new Date(endDate), 'yyyy-MM-dd')
+  //   ) {
+  //     dates.push({
+  //       date: format(end, 'yyyy-MM-dd'),
+  //       dayOfWeekPT: format(end, 'EEEE', { locale: ptBR }),
+  //       dayOfWeekEN: format(end, 'EEEE', { locale: enUS }),
+  //     });
+  //   }
+  //   setDates(dates);
+  //   return dates;
+  // };
 
   useEffect(() => {
     const days = getDaysBetweenDates(dateInitCertificate, dateEndCertificate);
@@ -228,13 +131,14 @@ const CertificateApproveBody = ({
       }
     });
   }, []);
-
+  console.log({ dates });
   return (
     <Box>
       {dates?.map((day) => (
         <SwitchWithHoursSelectComponent
           key={day.date}
-          label={`${format(day.date, 'dd/MM/yyyy')} - ${day.dayOfWeekPT}`}
+          // label={`${format(day.date, 'dd/MM/yyyy')} - ${day.dayOfWeekPT}`}
+          label={`${format(parseISO(day.date), 'dd/MM/yyyy')} - ${day.dayOfWeekPT}`}
           dayOfWeek={day.dayOfWeekEN?.toLocaleLowerCase()}
           active={
             formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}Work`]
@@ -263,6 +167,7 @@ const CertificateApproveBody = ({
               !formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}Work`],
             )
           }
+          statusJustificationName={statusJustificationName}
         />
       ))}
     </Box>

@@ -1,10 +1,10 @@
 export interface CreateUserCheckpointDTO {
-  photoFile: File;
-  timestamp: Date;
-  latitude: number;
-  longitude: number;
+  photoId?: number;
+  timestamp?: string;
+  latitude?: number;
+  longitude?: number;
   checkpointType: string;
-  status: string;
+  status_value?: number;
   justification?: string;
   medicalCertificate?: File;
   userId: string;

@@ -1,122 +1,9 @@
-// import React from 'react';
-// import { Box } from '@mui/material';
-// import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
-// import { colors } from '@src/styles/colors';
-// import { formatDate } from '@src/utils/dates';
-// import PhotoModal from '../../../../components/PhotoModal';
-// import TableDataGrid from '@src/components/TableDataGrid';
-// import LocalizationModal from '../LocalizationModal';
-// const UserCheckpointsList = () => {
-//   const {
-//     userCheckpoints,
-//     users,
-//     loading,
-//     handleOpenModalLocalization,
-//     openModalLocalization,
-//     handleCloseModalLocalization,
-//     coordinates,
-//     openModalPhoto,
-//     photoId,
-//     handleOpenModalPhoto,
-//     handleCloseModalPhoto,
-//   } = useUserCheckpointsContext();
-//   console.log({ openModalLocalization });
-//   const columns = [
-//     {
-//       field: 'userId',
-//       headerName: 'Usuário',
-//       flex: 3,
-//       renderCell: (params) => (
-//         <div>{users.find((user) => user.id === params.row.userId)?.name}</div>
-//       ),
-//     },
-//     {
-//       field: 'timestamp',
-//       headerName: 'Data e horário',
-//       flex: 3,
-//       renderCell: (params) =>
-//         params?.value && <div>{formatDate(params.value)}</div>,
-//     },
-//     { field: 'checkpointType', headerName: 'Tipo', flex: 3 },
-//     {
-//       field: 'localization',
-//       headerName: 'Localização',
-//       flex: 3,
-//       renderCell: (params) =>
-//         params.row.latitude &&
-//         params.row.longitude && (
-//           <div
-//             onClick={() =>
-//               handleOpenModalLocalization(
-//                 params.row.latitude,
-//                 params.row.longitude,
-//               )
-//             }
-//             style={{
-//               cursor: 'pointer',
-//               color: 'blue',
-//               fontWeight: '500',
-//             }}
-//           >
-//             Ver localização
-//           </div>
-//         ),
-//     },
-//     {
-//       field: 'photo_user_checkin_id',
-//       headerName: 'Foto',
-//       flex: 2,
-//       renderCell: (params) =>
-//         params.row.latitude &&
-//         params.row.longitude && (
-//           <div
-//             onClick={() =>
-//               handleOpenModalPhoto(params.row.photo_user_checkin_id)
-//             }
-//             style={{
-//               cursor: 'pointer',
-//               color: 'blue',
-//               fontWeight: '500',
-//             }}
-//           >
-//             Ver Foto
-//           </div>
-//         ),
-//     },
-//     { field: 'status', headerName: 'Status', flex: 3 },
-//     // { field: 'justification', headerName: 'Justificativa', flex: 3 },
-//   ];
-//   console.log({ userCheckpoints });
-//   return (
-//     <Box mt={5} bgcolor={colors.basic.white}>
-//       <TableDataGrid
-//         rows={userCheckpoints || []}
-//         columns={columns}
-//         loading={loading}
-//       />
-//       {openModalLocalization && (
-//         <LocalizationModal
-//           openDialog={openModalLocalization}
-//           handleClose={handleCloseModalLocalization}
-//           latitude={coordinates?.latitude}
-//           longitude={coordinates?.longitude}
-//         />
-//       )}
-//       {openModalPhoto && (
-//         <PhotoModal
-//           openDialog={openModalPhoto}
-//           handleClose={handleCloseModalPhoto}
-//           photoId={photoId}
-//           titleModal={'Foto no momento do Ponto'}
-//         />
-//       )}
-//     </Box>
-//   );
-// };
-// export default UserCheckpointsList;
-/////////////////////////////////////////////
-import React from 'react';
+import React, { ReactNode } from 'react';
 
+import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
+import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
+import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import {
   Box,
   Button,
@@ -133,7 +20,46 @@ import { formatDate } from '@src/utils/dates';
 import PhotoModal from '../../../../components/PhotoModal';
 import TableDataGrid from '@src/components/TableDataGrid';
 
+import HoursSummaryTable from '../HoursSummaryTable';
 import LocalizationModal from '../LocalizationModal';
+import UserHoursDashboard from '../UserHoursDashboard';
+
+export type OptionProps = {
+  id: number;
+  title: string;
+  bgColor?: string;
+  icon?: ReactNode;
+};
+
+export const OPTIONS_TYPES_POINTS: OptionProps[] = [
+  {
+    id: 1,
+    title: 'Entrada',
+    bgColor: '#00B37E',
+    icon: <ExitToAppOutlinedIcon />,
+  },
+
+  {
+    id: 2,
+    title: 'Pausa',
+    bgColor: '#0000FF',
+    icon: <EmojiFoodBeverageIcon />,
+  },
+
+  {
+    id: 3,
+    title: 'Retorno',
+    bgColor: '#FFA500',
+    icon: <FreeBreakfastOutlinedIcon />,
+  },
+
+  {
+    id: 4,
+    title: 'Saída',
+    bgColor: '#FF0000',
+    icon: <LogoutOutlinedIcon />,
+  },
+];
 
 const UserCheckpointsList = () => {
   const {
@@ -159,7 +85,9 @@ const UserCheckpointsList = () => {
       headerName: 'Usuário',
       flex: 3,
       renderCell: (params) => (
-        <div>{users.find((user) => user.id === params.row.userId)?.name}</div>
+        <Box fontWeight="bold">
+          {users.find((user) => user.id === params.row.userId)?.name}
+        </Box>
       ),
     },
     {
@@ -169,14 +97,48 @@ const UserCheckpointsList = () => {
       renderCell: (params) =>
         params?.value && <div>{formatDate(params.value)}</div>,
     },
-    { field: 'checkpointType', headerName: 'Tipo', flex: 3 },
+    {
+      field: 'checkpointType',
+      headerName: 'Tipo',
+      flex: 2,
+      renderCell: (params) => {
+        const option = OPTIONS_TYPES_POINTS.find(
+          (item) => item.title.toLowerCase() === params.value?.toLowerCase(),
+        );
+
+        // Retorna o Box com as propriedades correspondentes, ou um valor padrão
+        return option ? (
+          <Box
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="flex-start"
+          >
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              color={option?.bgColor}
+            >
+              {option?.icon}
+            </Box>
+            <Box color={option?.bgColor} fontWeight="bold" ml={1}>
+              {option?.title}
+            </Box>
+          </Box>
+        ) : (
+          <Box color="gray" fontWeight="normal">
+            {params.value}
+          </Box>
+        );
+      },
+    },
     {
       field: 'localization',
       headerName: 'Localização',
       flex: 3,
       renderCell: (params) =>
-        params.row.latitude &&
-        params.row.longitude && (
+        params.row.latitude && params.row.longitude ? (
           <div
             onClick={() =>
               handleOpenModalLocalization(
@@ -192,15 +154,16 @@ const UserCheckpointsList = () => {
           >
             Ver localização
           </div>
+        ) : (
+          <Box> -------------------- </Box>
         ),
     },
     {
       field: 'photo_user_checkin_id',
       headerName: 'Foto',
-      flex: 2,
+      flex: 3,
       renderCell: (params) =>
-        params.row.latitude &&
-        params.row.longitude && (
+        params.row.latitude && params.row.longitude ? (
           <div
             onClick={() =>
               handleOpenModalPhoto(params.row.photo_user_checkin_id)
@@ -213,9 +176,37 @@ const UserCheckpointsList = () => {
           >
             Ver Foto
           </div>
+        ) : (
+          <Box> ----------- </Box>
         ),
     },
-    { field: 'status', headerName: 'Status', flex: 3 },
+    {
+      field: 'status',
+      headerName: 'Status',
+      flex: 3,
+      renderCell: (params) =>
+        params?.row?.status?.value && (
+          <Box display="flex" justifyContent="flex-start" alignItems="center">
+            <Box
+              component="div"
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              borderRadius={4}
+              bgcolor={colors.statusColors[params?.row?.status?.value ?? 8]}
+              color={colors.basic.white}
+              fontWeight={'bold'}
+              fontSize={'14px'}
+              px={1}
+              sx={{
+                opacity: 0.9,
+              }}
+            >
+              {params?.row?.status?.name ?? ''}
+            </Box>
+          </Box>
+        ),
+    },
   ];
 
   // Renderização do Card para dispositivos mobile
@@ -269,8 +260,10 @@ const UserCheckpointsList = () => {
     <Box mt={5} bgcolor={colors.basic.white}>
       {isDesktop ? (
         // Renderiza a tabela no desktop
+
         <TableDataGrid
-          rows={userCheckpoints || []}
+          // rows={userCheckpoints || []}
+          rows={[...(userCheckpoints || [])].reverse()}
           columns={columns}
           loading={loading}
           autoHeight

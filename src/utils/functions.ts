@@ -56,3 +56,15 @@ export function formatDateToCustomString(date) {
   // Formate a data
   return `${dayName} ${monthName} ${day < 10 ? '0' + day : day} ${year} ${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${timeZone}`;
 }
+
+export function addHoursToTime(time, hoursToAdd) {
+  // Converte o tempo para um objeto Date usando uma referência qualquer (1970-01-01)
+  const [hours, minutes] = time.split(':').map(Number);
+  const date = new Date(1970, 0, 1, hours, minutes);
+
+  // Soma as horas
+  date.setHours(date.getHours() + hoursToAdd);
+
+  // Formata o horário de volta para "HH:mm"
+  return date.toTimeString().slice(0, 5);
+}

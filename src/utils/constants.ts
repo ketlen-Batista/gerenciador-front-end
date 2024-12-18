@@ -165,6 +165,7 @@ export const sectorsData = [
 ];
 
 export const schedulesTimeList = [
+  { label: 'Nenhum horário', value: '' },
   { label: '00:00', value: '00:00' },
   { label: '00:30', value: '00:30' },
   { label: '01:00', value: '01:00' },

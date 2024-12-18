@@ -27,6 +27,14 @@ export const useCertificatesContext = () => {
     photoId,
     handleOpenModalPhoto,
     handleCloseModalPhoto,
+    employeeIdSelected,
+    setEmployeeIdSelected,
+    formik,
+    getDaysBetweenDates,
+    getUserSchedules,
+    dates,
+    statusJustificationValue,
+    setStatusJustificationValue,
   } = useContext(CertificatesContext);
 
   return {
@@ -53,5 +61,13 @@ export const useCertificatesContext = () => {
     photoId,
     handleOpenModalPhoto,
     handleCloseModalPhoto,
+    employeeIdSelected,
+    setEmployeeIdSelected,
+    formik,
+    getDaysBetweenDates,
+    getUserSchedules,
+    dates,
+    statusJustificationValue,
+    setStatusJustificationValue,
   };
 };

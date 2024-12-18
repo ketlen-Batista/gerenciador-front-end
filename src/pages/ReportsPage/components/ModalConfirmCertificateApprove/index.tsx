@@ -39,6 +39,7 @@ const ModalConfirmCertificateApprove = ({
       closeButtonPosition={'right'}
       title={titleModal}
       fullWidth
+      style={{ zIndex: 9999 }}
       extraFooterComponent={
         <Box display="flex" justifyContent="flex-end" width="100%" gap={2}>
           <Box color={colors.basic.black}>
@@ -61,7 +62,6 @@ const ModalConfirmCertificateApprove = ({
     >
       <Box
         display="flex"
-        // fontSize={'18px'}
         justifyContent="center"
         my={5}
         mx={2}

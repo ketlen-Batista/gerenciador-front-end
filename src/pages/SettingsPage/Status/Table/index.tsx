@@ -62,10 +62,10 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
   };
 
   const handleOpenModalDelete = (id: number) => {
-    if (id < 7) {
-      setIsOpenModalDelete(true);
-      setStatusId(id);
-    }
+    // if (id > 7) {
+    setIsOpenModalDelete(true);
+    setStatusId(id);
+    // }
   };
 
   const handleCloseModalDelete = () => {
@@ -75,10 +75,10 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
   };
 
   const handleDelete = async () => {
-    if (statusId < 7) {
-      await handleDeleteStatus(statusId);
-      handleCloseModalDelete();
-    }
+    // if (statusId > 7) {
+    await handleDeleteStatus(statusId);
+    handleCloseModalDelete();
+    // }
   };
 
   const columns = [
