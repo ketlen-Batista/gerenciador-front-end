@@ -8,17 +8,22 @@ import { useGetUsers } from '@src/services/users/queries';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
 import { useLocation } from 'react-router-dom';
 
-interface Checkpoint {
-  id: string;
-  userId: string;
-  timestamp: string;
-  checkpointType: string;
-  status: string;
-  justification: string;
-  photo: number;
-  latitude: number | string;
-  longitude: number | string;
+export interface Checkpoint {
+  id: number;
+  timestamp: string; // formato ISO
+  checkpointType: 'entrada' | 'pausa' | 'retorno' | 'saída';
+  status_value: number | null;
+  justification: string | null;
   medicalCertificate: string | null;
+  userId: string;
+  User: {
+    id: string;
+    name: string;
+  };
+  status: {
+    value: number;
+    name: string;
+  } | null;
 }
 
 interface User {
@@ -140,21 +145,34 @@ export const UserCheckpointsProvider = ({ children }) => {
     getJobs({});
     getContracts({});
     getSectors({});
+    // fetchUserCheckpoints({
+    //   startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
+    //   endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
+    // })
+    //   .then((checkpoints) => {
+    //     setUserCheckpoints(checkpoints);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Erro ao buscar checkpoints:', error);
+    //   });
     fetchUserCheckpoints({
       startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
       endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
     })
       .then((checkpoints) => {
-        setUserCheckpoints(checkpoints);
+        // Verifica e ordena os checkpoints de forma segura
+        const sortedData = checkpoints.sort(
+          (a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+        );
+        console.log({ sortedData });
+        setUserCheckpoints(sortedData);
       })
       .catch((error) => {
         console.error('Erro ao buscar checkpoints:', error);
       });
   }, []);
-  console.log('userCheckpoints12345', userCheckpoints);
-  // useEffect(() => {
-  //   checkpointsFiltered();
-  // }, [filterUserId, selectedDateRange, fetchedCheckpoints]);
+
   useEffect(() => {
     if (
       selectedDateRange.startDate ||
@@ -176,7 +194,11 @@ export const UserCheckpointsProvider = ({ children }) => {
           ? new Date(selectedDateRange.endDate).toISOString()
           : new Date(INIT_DATE_RANGE.endDate).toISOString(),
       })?.then((checkpoints) => {
-        setUserCheckpoints(checkpoints);
+        const sortedData = checkpoints.sort(
+          (a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+        );
+        setUserCheckpoints(sortedData);
       });
       return;
     }
@@ -189,7 +211,11 @@ export const UserCheckpointsProvider = ({ children }) => {
       startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
       endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
     }).then((checkpoints) => {
-      setUserCheckpoints(checkpoints);
+      const sortedData = checkpoints.sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+      );
+      setUserCheckpoints(sortedData);
     });
   }, [
     filterUserId,

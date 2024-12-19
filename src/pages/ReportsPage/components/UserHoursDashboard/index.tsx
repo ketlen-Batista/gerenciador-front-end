@@ -4,22 +4,48 @@ import { Card, CircularProgress, Typography } from '@mui/material';
 // Substitua pelo caminho correto
 import { useListUserCheckpoints } from '@src/services/CheckinsPoints/queries';
 
+import { useUserCheckpointsContext } from '../../hooks/useUserCheckpointsContext';
 // Substitua pelo caminho correto
 import HoursSummaryTable from '../HoursSummaryTable';
 
 import processUserCheckpoints from './ProcessUserCheckpoints';
 
-const UserHoursDashboard: React.FC = () => {
-  const { mutateAsync: fetchUserCheckpoints } = useListUserCheckpoints();
+const UserHoursDashboard = () => {
+  // const { mutateAsync: fetchUserCheckpoints } = useListUserCheckpoints();
+  const {
+    userCheckpoints,
+
+    // loading,
+  } = useUserCheckpointsContext();
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const rawData = await fetchUserCheckpoints({});
+  //       const processedData = processUserCheckpoints(rawData);
+  //       setData(processedData);
+  //     } catch (err: any) {
+  //       setError('Erro ao buscar os dados. Por favor, tente novamente.');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [fetchUserCheckpoints]);
+
   useEffect(() => {
+    // setData(userCheckpoints);
+
     const fetchData = async () => {
       try {
         setLoading(true);
-        const rawData = await fetchUserCheckpoints({});
+        const rawData = userCheckpoints;
         const processedData = processUserCheckpoints(rawData);
         setData(processedData);
       } catch (err: any) {
@@ -30,7 +56,7 @@ const UserHoursDashboard: React.FC = () => {
     };
 
     fetchData();
-  }, [fetchUserCheckpoints]);
+  }, [userCheckpoints]);
 
   if (loading) {
     return (
@@ -55,9 +81,6 @@ const UserHoursDashboard: React.FC = () => {
 
   return (
     <div>
-      <Typography variant="h4" gutterBottom sx={{ margin: 2 }}>
-        Banco de Horas dos Funcionários
-      </Typography>
       <HoursSummaryTable data={data} />
     </div>
   );

@@ -134,11 +134,11 @@ const CertificatesList = () => {
       renderCell: (params) => params?.value?.name && params?.value?.name,
     },
     {
-      field: 'documentName',
+      field: 'document',
       headerName: 'Documento',
       flex: 2,
       renderCell: (params) =>
-        params.value && (
+        (params.value || params.row?.photoDocument?.id) && (
           <div
             onClick={() => {
               params?.row?.photoDocument?.id

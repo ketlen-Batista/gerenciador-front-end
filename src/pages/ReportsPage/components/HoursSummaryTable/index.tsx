@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import {
-  Box,
-  Button,
+  Box, // Button,
   Card,
   Modal,
   Table,
@@ -12,6 +11,8 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+
+import ButtonCustom from '@src/components/ButtonCustom';
 
 interface UserSummary {
   userId: string;
@@ -40,9 +41,9 @@ const HoursSummaryTable: React.FC<{ data: UserSummary[] }> = ({ data }) => {
   };
 
   return (
-    <Card sx={{ padding: 2, margin: 2 }}>
+    <Card sx={{ padding: 2, marginTop: 6 }}>
       <Typography variant="h6" gutterBottom>
-        Banco de Horas dos Funcionários
+        Banco de horas
       </Typography>
       <Table>
         <TableHead>
@@ -64,13 +65,9 @@ const HoursSummaryTable: React.FC<{ data: UserSummary[] }> = ({ data }) => {
               <TableCell>{user.absences}</TableCell>
               <TableCell>{user.daysWorked}</TableCell>
               <TableCell>
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={() => handleOpenDetails(user)}
-                >
+                <ButtonCustom onClick={() => handleOpenDetails(user)}>
                   Detalhes
-                </Button>
+                </ButtonCustom>
               </TableCell>
             </TableRow>
           ))}

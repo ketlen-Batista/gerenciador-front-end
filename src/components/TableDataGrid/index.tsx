@@ -46,7 +46,7 @@ interface TableProps extends DataGridProps {
   pageSize?: number | any;
   messageNoRows?: string;
   //   hidePagination?: boolean;
-  //   [propName: string]: any;
+  [propName: string]: any;
 }
 
 export default function TableDataGrid({
@@ -56,7 +56,7 @@ export default function TableDataGrid({
   messageNoRows,
   //   hidePagination,
   //   extraStyles = {},
-  //   ...rest
+  ...rest
 }: TableProps): JSX.Element {
   const classes = useStyles();
 
@@ -76,7 +76,7 @@ export default function TableDataGrid({
   return (
     // <div style={{ width: '100%', ...extraStyles }}>
 
-    <Box width="100%">
+    <Box width="100%" height={'100%'}>
       {!rows?.length ? (
         <Box
           display="flex"
@@ -91,21 +91,38 @@ export default function TableDataGrid({
           </Typography>
         </Box>
       ) : (
+        // <DataGrid
+        //   rows={rows || []}
+        //   columns={columns}
+        //   autoHeight
+        //   disableColumnMenu
+        //   initialState={{
+        //     pagination: {
+        //       paginationModel: {
+        //         pageSize: pageSize || 5,
+        //       },
+        //     },
+        //   }}
+        //   // pageSizeOptions={[5]}
+        //   // pagination
+        //   disableRowSelectionOnClick
+        //   classes={classes}
+        //   {...rest}
+        // />
+
         <DataGrid
           rows={rows || []}
           columns={columns}
-          autoHeight
+          // autoHeight
           disableColumnMenu
+          disableRowSelectionOnClick
           initialState={{
             pagination: {
-              paginationModel: {
-                pageSize: pageSize || 5,
-              },
+              paginationModel: { pageSize: pageSize || 5 },
             },
           }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
           classes={classes}
+          {...rest}
         />
       )}
     </Box>

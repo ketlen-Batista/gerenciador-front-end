@@ -1,5 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
@@ -14,10 +15,15 @@ import {
 } from '@mui/material';
 import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
 import useResponsive from '@src/hooks/useResponsive';
+import {
+  useDeleteUserCheckpoint,
+  useUpdateUserCheckpoint,
+} from '@src/services/CheckinsPoints/queries';
 import { colors } from '@src/styles/colors';
 import { formatDate } from '@src/utils/dates';
 
 import PhotoModal from '../../../../components/PhotoModal';
+import ModalConfirm from '@src/components/ModalConfirm';
 import TableDataGrid from '@src/components/TableDataGrid';
 
 import HoursSummaryTable from '../HoursSummaryTable';
@@ -77,6 +83,20 @@ const UserCheckpointsList = () => {
   } = useUserCheckpointsContext();
 
   const { isDesktop } = useResponsive();
+  const { mutateAsync: deletePoint } = useDeleteUserCheckpoint();
+
+  const [isOpenModalDeletePoint, setIsOpenModalDeletePoint] = useState(false);
+  const [checkpointIdToDelete, setCheckpointIdToDelete] = useState(null);
+
+  const handleOpenModalDeletePoint = (checkpointId: number) => {
+    setIsOpenModalDeletePoint(true);
+    setCheckpointIdToDelete(checkpointId);
+  };
+
+  const handleCloseModalDeletePoint = () => {
+    setIsOpenModalDeletePoint(false);
+    setCheckpointIdToDelete(null);
+  };
 
   // Colunas da Tabela (apenas para Desktop)
   const columns = [
@@ -207,6 +227,17 @@ const UserCheckpointsList = () => {
           </Box>
         ),
     },
+    {
+      field: 'id',
+      headerName: 'Excluir ponto',
+      flex: 3,
+      renderCell: (params) =>
+        params?.value && (
+          <Box onClick={() => handleOpenModalDeletePoint(params.value)}>
+            <DeleteIcon />
+          </Box>
+        ),
+    },
   ];
 
   // Renderização do Card para dispositivos mobile
@@ -262,11 +293,12 @@ const UserCheckpointsList = () => {
         // Renderiza a tabela no desktop
 
         <TableDataGrid
-          // rows={userCheckpoints || []}
-          rows={[...(userCheckpoints || [])].reverse()}
+          rows={userCheckpoints || []}
           columns={columns}
           loading={loading}
-          autoHeight
+          // pageSizeOptions={[4, 8, 16]}
+          pagination
+          pageSize={4}
         />
       ) : (
         // Renderiza os cards no mobile
@@ -294,6 +326,18 @@ const UserCheckpointsList = () => {
           handleClose={handleCloseModalPhoto}
           photoId={photoId}
           titleModal={'Foto no momento do Ponto'}
+        />
+      )}
+
+      {isOpenModalDeletePoint && (
+        <ModalConfirm
+          openDialog={isOpenModalDeletePoint}
+          handleClose={handleCloseModalDeletePoint}
+          handleConfirm={() => deletePoint(checkpointIdToDelete)}
+          titleModal="Excluir Ponto"
+          text="Tem certeza que deseja excluir este ponto?"
+          textButtonConfirm="Excluir"
+          colorButtonConfirm={colors.error.dark}
         />
       )}
     </Box>

@@ -5,7 +5,8 @@ import MUIDialog, { DialogProps } from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 
-import Button from '@components/Button';
+import Button from '@src/components/ButtonCustom';
+
 import CircularProgress from '@components/CircularProgress';
 import Typography from '@components/Typography';
 

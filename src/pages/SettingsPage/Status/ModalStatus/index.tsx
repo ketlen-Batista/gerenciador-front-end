@@ -5,7 +5,7 @@ import { useCreateStatus, useUpdateStatus } from '@src/services/status/queries';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-import Button from '@src/components/Button';
+import Button from '@src/components/ButtonCustom';
 import CircularProgress from '@src/components/CircularProgress';
 import FullScreenDialog from '@src/components/FullScreenDialog';
 import TextField from '@src/components/TextField';

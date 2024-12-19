@@ -17,7 +17,7 @@ import { ptBR } from 'date-fns/locale';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { useLocation } from 'react-router-dom';
 
-import Button from '@src/components/Button';
+import Button from '@src/components/ButtonCustom';
 import DateFilter from '@src/components/DateFilter';
 import Select from '@src/components/Select';
 import Typography from '@src/components/Typography';

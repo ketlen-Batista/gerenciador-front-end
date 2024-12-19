@@ -17,7 +17,8 @@ import {
 } from '@mui/material';
 import { endOfDay, startOfDay } from 'date-fns';
 
-import Button from '@components/Button';
+import Button from '@src/components/ButtonCustom';
+
 import DatePicker from '@components/DatePicker';
 import { initDateRange, radioGroups } from '@components/DatePicker/constants';
 import DateRangePicker from '@components/DateRangePicker';
@@ -260,7 +261,7 @@ function DateFilter(
             Limpar filtros
           </Button>
           <Button
-            color="secondary"
+            // color="secondary"
             onClick={handleOnFilter}
             disabled={disableFilterButton}
             isLoading={isLoading}
