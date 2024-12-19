@@ -46,7 +46,7 @@ const ModalConfirm = ({
           </Box>
 
           <Box color={colorButtonConfirm as string}>
-            <Button onClick={handleConfirm} color="inherit" variant="outlined">
+            <Button onClick={handleConfirm} variant="contained">
               {isLoading ? (
                 <CircularProgress size="small" color="inherit" />
               ) : (

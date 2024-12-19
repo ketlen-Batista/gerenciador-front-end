@@ -22,7 +22,8 @@ function TableEmployees() {
 
   const { isDesktop } = useResponsive();
 
-  const { jobs, contracts, sectors, filteredUsers } = useEmployeesFilter();
+  const { jobs, contracts, sectors, filteredUsers, isLoadingUsers } =
+    useEmployeesFilter();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
   const { mutate: handleDeleteUser, isPending: isPendingDeleteUser } =
@@ -186,6 +187,7 @@ function TableEmployees() {
           columns={columns}
           rows={filteredUsers || []}
           pageSize={7}
+          loading={isLoadingUsers}
         />
       )}
       {isOpenModal && (

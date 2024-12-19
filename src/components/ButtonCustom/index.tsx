@@ -46,13 +46,13 @@ function ButtonCustom({
       <Box
         component={Button}
         bgcolor={
-          variant === 'outlined' ? 'transparent' : `${bgColor} !important`
+          variant != 'contained' ? 'transparent' : `${bgColor} !important`
         }
         fontWeight={`${fontWeight} !important`}
         p={`${p} !important`}
         size={size}
         color={
-          variant === 'outlined' && !color
+          variant != 'contained' && !color
             ? colors.basic.black
             : `${color} !important`
         }

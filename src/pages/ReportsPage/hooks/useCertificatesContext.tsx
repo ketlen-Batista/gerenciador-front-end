@@ -35,6 +35,8 @@ export const useCertificatesContext = () => {
     dates,
     statusJustificationValue,
     setStatusJustificationValue,
+    scheduleData,
+    isLoadingCertificatesGet,
   } = useContext(CertificatesContext);
 
   return {
@@ -69,5 +71,7 @@ export const useCertificatesContext = () => {
     dates,
     statusJustificationValue,
     setStatusJustificationValue,
+    scheduleData,
+    isLoadingCertificatesGet,
   };
 };

@@ -196,7 +196,7 @@ function Table({ sectors, isPending, getSectors }: TableSectorsProps) {
 
   return !isPending ? (
     <>
-      <TableDataGrid columns={columns} rows={sectors} />
+      <TableDataGrid columns={columns} rows={sectors} loading={isPending} />
 
       {openDialog && (
         <ModalSectors

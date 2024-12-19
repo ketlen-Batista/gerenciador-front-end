@@ -182,6 +182,7 @@ function Table({ contracts, getContracts, isPending }: TableContractsProps) {
         rows={contracts}
         pageSize={8}
         messageNoRows="Sem contratos para exibir"
+        loading={isPending}
       />
       {openDialog && (
         <ModalContracts

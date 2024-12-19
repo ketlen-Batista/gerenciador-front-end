@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Card, CircularProgress, Typography } from '@mui/material';
+import { Box, Card, CircularProgress, Typography } from '@mui/material';
 // Substitua pelo caminho correto
 import { useListUserCheckpoints } from '@src/services/CheckinsPoints/queries';
+import { colors } from '@src/styles/colors';
 
 import { useUserCheckpointsContext } from '../../hooks/useUserCheckpointsContext';
 // Substitua pelo caminho correto
@@ -14,7 +15,7 @@ const UserHoursDashboard = () => {
   // const { mutateAsync: fetchUserCheckpoints } = useListUserCheckpoints();
   const {
     userCheckpoints,
-
+    isLoadingUserCheckpoints,
     // loading,
   } = useUserCheckpointsContext();
 
@@ -58,20 +59,27 @@ const UserHoursDashboard = () => {
     fetchData();
   }, [userCheckpoints]);
 
-  if (loading) {
+  if (loading || isLoadingUserCheckpoints) {
     return (
-      <Card sx={{ padding: 4, margin: 2, textAlign: 'center' }}>
-        <CircularProgress />
-        <Typography variant="body1" sx={{ marginTop: 2 }}>
-          Carregando dados...
-        </Typography>
+      <Card sx={{ padding: 2, marginTop: 6, textAlign: 'center' }}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          color={colors.basic.black}
+          my={4}
+          width={'100%'}
+          minHeight={'200px'}
+        >
+          <CircularProgress color="primary" size={60} />
+        </Box>
       </Card>
     );
   }
 
   if (error) {
     return (
-      <Card sx={{ padding: 4, margin: 2, textAlign: 'center' }}>
+      <Card sx={{ padding: 2, marginTop: 6, textAlign: 'center' }}>
         <Typography variant="body1" color="error">
           {error}
         </Typography>

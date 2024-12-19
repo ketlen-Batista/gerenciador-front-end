@@ -71,6 +71,7 @@ interface UserCheckpointsContextType {
   jobs: any[];
   contracts: any[];
   sectors: any[];
+  isLoadingUserCheckpoints: boolean;
 }
 
 export const UserCheckpointsContext = createContext(
@@ -111,7 +112,10 @@ export const UserCheckpointsProvider = ({ children }) => {
   const { data: contracts, mutate: getContracts } = useGetContracts();
   const { data: sectors, mutate: getSectors } = useGetSectors();
   const { data: fetchedUsers, mutate: getUsers } = useGetUsers();
-  const { mutateAsync: fetchUserCheckpoints } = useListUserCheckpoints();
+  const {
+    mutateAsync: fetchUserCheckpoints,
+    isPending: isLoadingUserCheckpoints,
+  } = useListUserCheckpoints();
 
   const handleOpenModalLocalization = (lat: number, lngt: number) => {
     setOpenModalLocalization(true);
@@ -259,6 +263,7 @@ export const UserCheckpointsProvider = ({ children }) => {
       jobs,
       contracts,
       sectors,
+      isLoadingUserCheckpoints,
     }),
     [
       filterUserId,
@@ -278,6 +283,7 @@ export const UserCheckpointsProvider = ({ children }) => {
       jobs,
       contracts,
       sectors,
+      isLoadingUserCheckpoints,
     ],
   );
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import { Box, Tooltip } from '@mui/material';
+import { Box, CircularProgress, Tooltip } from '@mui/material';
 import useResponsive from '@src/hooks/useResponsive';
 import { colors } from '@src/styles/colors';
 import { formatDateDayMonthAndYear } from '@src/utils/dates';
@@ -31,6 +31,7 @@ const CertificatesList = () => {
     statusJustificationValue,
     setStatusJustificationValue,
     formik,
+    isLoadingCertificatesGet,
   } = useCertificatesContext();
 
   const [openModalPdf, setOpenModalPdf] = useState(false);
@@ -39,7 +40,6 @@ const CertificatesList = () => {
   const [isOpenModalApprove, setIsOpenModalApprove] = useState(false);
   const [isOpenModalDisapprove, setIsOpenModalDisapprove] = useState(false);
   const [idCertificate, setIdCertificate] = useState(null);
-  // const [employeeIdSelected, setEmployeeIdSelected] = useState('');
   const [dateInitCertificate, setDateInitCertificate] = useState('');
   const [dateEndCertificate, setDateEndCertificate] = useState('');
   const [statusJustificationName, setStatusJustificationName] = useState('');
@@ -54,6 +54,11 @@ const CertificatesList = () => {
   const handleCloseModalApprove = () => {
     setIsOpenModalApprove(false);
     setIdCertificate(null);
+    setEmployeeIdSelected('');
+    setDateInitCertificate('');
+    setDateEndCertificate('');
+    setStatusJustificationValue(null);
+    setStatusJustificationName('');
   };
 
   const handleOpenModalDisapprove = (id: number) => {
@@ -61,22 +66,38 @@ const CertificatesList = () => {
     setIdCertificate(id);
   };
 
-  const handleOpenModalApprove = (
-    id: number,
-    employeeId: string,
-    dateinit: string,
-    dateEnd: string,
-    statusId: number,
-    justificationName: string,
-  ) => {
-    setIsOpenModalApprove(true);
-    setIdCertificate(id);
-    setEmployeeIdSelected(employeeId);
-    setDateInitCertificate(dateinit);
-    setDateEndCertificate(dateEnd);
-    setStatusJustificationValue(statusId);
-    setStatusJustificationName(justificationName);
-  };
+  // const handleOpenModalApprove = (
+  //   id: number,
+  //   employeeId: string,
+  //   dateinit: string,
+  //   dateEnd: string,
+  //   statusId: number,
+  //   justificationName: string,
+  // ) => {
+  //   setIsOpenModalApprove(true);
+  //   setIdCertificate(id);
+  //   setEmployeeIdSelected(employeeId);
+  //   setDateInitCertificate(dateinit);
+  //   setDateEndCertificate(dateEnd);
+  //   setStatusJustificationValue(statusId);
+  //   setStatusJustificationName(justificationName);
+  // };
+
+  const handleOpenModalApprove = React.useCallback(
+    (id, employeeId, dateInit, dateEnd, statusId, justificationName) => {
+      setIsOpenModalApprove(true);
+
+      setTimeout(() => {
+        setIdCertificate(id);
+        setEmployeeIdSelected(employeeId);
+        // setDateInitCertificate(dateInit);
+        // setDateEndCertificate(dateEnd);
+        setStatusJustificationValue(statusId);
+        setStatusJustificationName(justificationName);
+      }, 0); // Garantir que o modal abre antes de preencher os estados
+    },
+    [],
+  );
 
   const handleApprove = async ({
     id,
@@ -86,11 +107,6 @@ const CertificatesList = () => {
     approve: boolean;
   }) => {
     await updateDocument({ id: id, approve: approve });
-
-    // await createUserCheckpoint({
-    //   checkpointType
-    // })
-
     await formik?.handleSubmit();
 
     setIsOpenModalDisapprove(false);
@@ -320,13 +336,13 @@ const CertificatesList = () => {
           <TableDataGrid
             rows={certificates || []}
             columns={columns}
-            loading={loading}
+            loading={isLoadingCertificatesGet}
             pageSize={8}
           />
         </Box>
       )}
       {/* Modais de aprovação e PDF */}
-      {isOpenModalApprove && (
+      {/* {isOpenModalApprove && (
         <ModalConfirmCertificateApprove
           openDialog={isOpenModalApprove}
           handleClose={handleCloseModalApprove}
@@ -346,6 +362,43 @@ const CertificatesList = () => {
             />
           }
         />
+      )} */}
+
+      {isOpenModalApprove && (
+        // <Suspense fallback={<div>Carregando...</div>}>
+        <ModalConfirmCertificateApprove
+          openDialog={isOpenModalApprove}
+          handleClose={handleCloseModalApprove}
+          handleConfirm={() =>
+            handleApprove({ id: idCertificate, approve: true })
+          }
+          titleModal="Aprovação"
+          text="Tem certeza que deseja aprovar este atestado?"
+          textButtonConfirm="Aprovar"
+          colorButtonConfirm={colors.success.dark}
+          body={
+            !!employeeIdSelected &&
+            !!statusJustificationName &&
+            !!idCertificate ? (
+              <CertificateApproveBody
+                employeeId={employeeIdSelected}
+                statusJustificationName={statusJustificationName}
+                idCertificate={idCertificate}
+              />
+            ) : (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                color={colors.basic.black}
+                my={4}
+              >
+                <CircularProgress color="primary" size={60} />
+              </Box>
+            )
+          }
+        />
+        // </Suspense>
       )}
       {isOpenModalDisapprove && (
         <ModalConfirm

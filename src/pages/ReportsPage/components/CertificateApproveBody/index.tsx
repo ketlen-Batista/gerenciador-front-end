@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { useGetUserSchedules } from '@src/services/schedule/queries';
+import { colors } from '@src/styles/colors';
 import { schedulesTimeList } from '@src/utils/constants';
 import { format, parseISO } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
@@ -13,125 +14,122 @@ import { useCertificatesContext } from '../../hooks/useCertificatesContext';
 
 interface CertificateApproveBodyProps {
   employeeId: string;
-  dateInitCertificate: string;
-  dateEndCertificate: string;
+  // dateInitCertificate: string;
+  // dateEndCertificate: string;
   statusJustificationName: string;
+  idCertificate: number;
 }
-
 // type DatesProps = {
 //   date: string;
 //   dayOfWeekEN: string;
 //   dayOfWeekPT: string;
 // };
-
 const CertificateApproveBody = ({
   employeeId,
-  dateInitCertificate,
-  dateEndCertificate,
+  // dateInitCertificate,
+  // dateEndCertificate,
   statusJustificationName,
+  idCertificate,
 }: CertificateApproveBodyProps) => {
-  const { formik, getDaysBetweenDates, getUserSchedules, dates } =
-    useCertificatesContext();
+  const {
+    formik,
+    getDaysBetweenDates,
+    getUserSchedules,
+    scheduleData,
+    dates,
+    certificates,
+  } = useCertificatesContext();
 
-  // const { mutateAsync: getUserSchedules, data: scheduleData } =
-  //   useGetUserSchedules();
+  const dateInitCertificate = certificates?.find(
+    (certificate) => certificate?.id === idCertificate,
+  )?.dateStartCertificate;
+  const dateEndCertificate = certificates?.find(
+    (certificate) => certificate?.id === idCertificate,
+  )?.dateEndCertificate;
 
-  // const [dates, setDates] = useState<DatesProps[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // const getDaysBetweenDates = (
-  //   startDate: string,
-  //   endDate: string,
-  // ): { date: string; dayOfWeekPT: string; dayOfWeekEN: string }[] => {
-  //   const start = new Date(startDate);
-  //   const end = new Date(endDate);
-  //   const dates = [];
-
-  //   // Adiciona a data inicial
-  //   dates.push({
-  //     date: format(start, 'yyyy-MM-dd'),
-  //     dayOfWeekPT: format(start, 'EEEE', { locale: ptBR }),
-  //     dayOfWeekEN: format(start, 'EEEE', { locale: enUS }),
-  //   });
-
-  //   // Itera pelos dias intermediários
-  //   while (start < end) {
-  //     start.setDate(start.getDate() + 1); // Incrementa um dia
-  //     if (start <= end) {
-  //       dates.push({
-  //         date: format(new Date(start), 'yyyy-MM-dd'),
-  //         dayOfWeekPT: format(new Date(start), 'EEEE', { locale: ptBR }),
-  //         dayOfWeekEN: format(new Date(start), 'EEEE', { locale: enUS }),
-  //       });
-  //     }
-  //   }
-
-  //   // Adiciona a data final somente se for diferente da inicial
-  //   if (
-  //     format(new Date(startDate), 'yyyy-MM-dd') !==
-  //     format(new Date(endDate), 'yyyy-MM-dd')
-  //   ) {
-  //     dates.push({
-  //       date: format(end, 'yyyy-MM-dd'),
-  //       dayOfWeekPT: format(end, 'EEEE', { locale: ptBR }),
-  //       dayOfWeekEN: format(end, 'EEEE', { locale: enUS }),
-  //     });
-  //   }
-  //   setDates(dates);
-  //   return dates;
-  // };
+  const handleGetDaysBetweenDates = () => {
+    try {
+      setIsLoading(true);
+      const days = getDaysBetweenDates(dateInitCertificate, dateEndCertificate);
+      console.log('Dias entre as datas:', days);
+    } catch (error) {
+      console.error('Error ao buscar os dias entre as datas:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const days = getDaysBetweenDates(dateInitCertificate, dateEndCertificate);
-    console.log('Dias entre as datas:', days);
+    if (dateEndCertificate && dateInitCertificate) {
+      handleGetDaysBetweenDates();
+    }
   }, [dateInitCertificate, dateEndCertificate]);
 
   useEffect(() => {
-    getUserSchedules(employeeId)?.then((response) => {
-      const schedule = response;
-      console.log({ schedule });
-      if (schedule) {
-        formik.setValues({
-          userId: schedule?.[0]?.userId,
-          mondayWork: schedule?.[0]?.mondayWork,
-          mondayEntryTime: schedule?.[0]?.mondayEntryTime,
-          mondayPauseTime: schedule?.[0]?.mondayPauseTime,
-          mondayReturnTime: schedule?.[0]?.mondayReturnTime,
-          mondayExitTime: schedule?.[0]?.mondayExitTime,
-          tuesdayWork: schedule?.[0]?.tuesdayWork,
-          tuesdayEntryTime: schedule?.[0]?.tuesdayEntryTime,
-          tuesdayPauseTime: schedule?.[0]?.tuesdayPauseTime,
-          tuesdayReturnTime: schedule?.[0]?.tuesdayReturnTime,
-          tuesdayExitTime: schedule?.[0]?.tuesdayExitTime,
-          wednesdayWork: schedule?.[0]?.wednesdayWork,
-          wednesdayEntryTime: schedule?.[0]?.wednesdayEntryTime,
-          wednesdayPauseTime: schedule?.[0]?.wednesdayPauseTime,
-          wednesdayReturnTime: schedule?.[0]?.wednesdayReturnTime,
-          wednesdayExitTime: schedule?.[0]?.wednesdayExitTime,
-          thursdayWork: schedule?.[0]?.thursdayWork,
-          thursdayEntryTime: schedule?.[0]?.thursdayEntryTime,
-          thursdayPauseTime: schedule?.[0]?.thursdayPauseTime,
-          thursdayReturnTime: schedule?.[0]?.thursdayReturnTime,
-          thursdayExitTime: schedule?.[0]?.thursdayExitTime,
-          fridayWork: schedule?.[0]?.fridayWork,
-          fridayEntryTime: schedule?.[0]?.fridayEntryTime,
-          fridayPauseTime: schedule?.[0]?.fridayPauseTime,
-          fridayReturnTime: schedule?.[0]?.fridayReturnTime,
-          fridayExitTime: schedule?.[0]?.fridayExitTime,
-          saturdayWork: schedule?.[0]?.saturdayWork,
-          saturdayEntryTime: schedule?.[0]?.saturdayEntryTime,
-          saturdayPauseTime: schedule?.[0]?.saturdayPauseTime,
-          saturdayReturnTime: schedule?.[0]?.saturdayReturnTime,
-          saturdayExitTime: schedule?.[0]?.saturdayExitTime,
-          sundayWork: schedule?.[0]?.sundayWork,
-          sundayEntryTime: schedule?.[0]?.sundayEntryTime,
-          sundayPauseTime: schedule?.[0]?.sundayPauseTime,
-          sundayReturnTime: schedule?.[0]?.sundayReturnTime,
-          sundayExitTime: schedule?.[0]?.sundayExitTime,
-        });
-      }
-    });
+    if (employeeId !== formik.values.userId) {
+      getUserSchedules(employeeId);
+    }
   }, []);
-  console.log({ dates });
+
+  // useEffect(() => {
+  //   if (scheduleData?.[0]?.userId !== employeeId) {
+  //     formik.setValues({
+  //       userId: scheduleData?.[0]?.userId,
+  //       mondayWork: scheduleData?.[0]?.mondayWork,
+  //       mondayEntryTime: scheduleData?.[0]?.mondayEntryTime,
+  //       mondayPauseTime: scheduleData?.[0]?.mondayPauseTime,
+  //       mondayReturnTime: scheduleData?.[0]?.mondayReturnTime,
+  //       mondayExitTime: scheduleData?.[0]?.mondayExitTime,
+  //       tuesdayWork: scheduleData?.[0]?.tuesdayWork,
+  //       tuesdayEntryTime: scheduleData?.[0]?.tuesdayEntryTime,
+  //       tuesdayPauseTime: scheduleData?.[0]?.tuesdayPauseTime,
+  //       tuesdayReturnTime: scheduleData?.[0]?.tuesdayReturnTime,
+  //       tuesdayExitTime: scheduleData?.[0]?.tuesdayExitTime,
+  //       wednesdayWork: scheduleData?.[0]?.wednesdayWork,
+  //       wednesdayEntryTime: scheduleData?.[0]?.wednesdayEntryTime,
+  //       wednesdayPauseTime: scheduleData?.[0]?.wednesdayPauseTime,
+  //       wednesdayReturnTime: scheduleData?.[0]?.wednesdayReturnTime,
+  //       wednesdayExitTime: scheduleData?.[0]?.wednesdayExitTime,
+  //       thursdayWork: scheduleData?.[0]?.thursdayWork,
+  //       thursdayEntryTime: scheduleData?.[0]?.thursdayEntryTime,
+  //       thursdayPauseTime: scheduleData?.[0]?.thursdayPauseTime,
+  //       thursdayReturnTime: scheduleData?.[0]?.thursdayReturnTime,
+  //       thursdayExitTime: scheduleData?.[0]?.thursdayExitTime,
+  //       fridayWork: scheduleData?.[0]?.fridayWork,
+  //       fridayEntryTime: scheduleData?.[0]?.fridayEntryTime,
+  //       fridayPauseTime: scheduleData?.[0]?.fridayPauseTime,
+  //       fridayReturnTime: scheduleData?.[0]?.fridayReturnTime,
+  //       fridayExitTime: scheduleData?.[0]?.fridayExitTime,
+  //       saturdayWork: scheduleData?.[0]?.saturdayWork,
+  //       saturdayEntryTime: scheduleData?.[0]?.saturdayEntryTime,
+  //       saturdayPauseTime: scheduleData?.[0]?.saturdayPauseTime,
+  //       saturdayReturnTime: scheduleData?.[0]?.saturdayReturnTime,
+  //       saturdayExitTime: scheduleData?.[0]?.saturdayExitTime,
+  //       sundayWork: scheduleData?.[0]?.sundayWork,
+  //       sundayEntryTime: scheduleData?.[0]?.sundayEntryTime,
+  //       sundayPauseTime: scheduleData?.[0]?.sundayPauseTime,
+  //       sundayReturnTime: scheduleData?.[0]?.sundayReturnTime,
+  //       sundayExitTime: scheduleData?.[0]?.sundayExitTime,
+  //     });
+  //   }
+  // }, [scheduleData?.[0]?.userId]);
+  console.log('formik?.values', formik?.values);
+
+  if (!formik.values || !dates.length || isLoading) {
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        color={colors.basic.black}
+        my={4}
+      >
+        <CircularProgress color="primary" size={60} />
+      </Box>
+    );
+  }
   return (
     <Box>
       {dates?.map((day) => (
@@ -173,5 +171,4 @@ const CertificateApproveBody = ({
     </Box>
   );
 };
-
-export default CertificateApproveBody;
+export default React.memo(CertificateApproveBody);

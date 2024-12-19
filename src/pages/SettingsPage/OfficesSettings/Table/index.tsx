@@ -106,7 +106,11 @@ function Table({
   return (
     !isPending && (
       <>
-        <TableDataGrid columns={columns} rows={customJobs(jobs || [])} />
+        <TableDataGrid
+          columns={columns}
+          rows={customJobs(jobs || [])}
+          loading={isPending}
+        />
       </>
     )
   );

@@ -150,9 +150,11 @@ interface CertificatesContextType {
     string,
     unknown
   >;
+  scheduleData: any;
   dates: DatesProps[];
   statusJustificationValue: number;
   setStatusJustificationValue: React.Dispatch<any>;
+  isLoadingCertificatesGet: boolean;
 }
 
 const validationSchema = Yup.object({
@@ -219,92 +221,68 @@ export const CertificatesProvider = ({ children }) => {
   const [employeeIdSelected, setEmployeeIdSelected] = useState('');
   const [statusJustificationValue, setStatusJustificationValue] =
     useState(null);
+  const [dates, setDates] = useState<DatesProps[]>([]);
 
   const { data: jobs, mutate: getJobs } = useGetJobPositions();
   const { data: contracts, mutate: getContracts } = useGetContracts();
   const { data: sectors, mutate: getSectors } = useGetSectors();
   const { data: fetchedUsers, mutate: getUsers } = useGetUsers();
-  const { mutateAsync: fetchCertificates } = useListDocuments();
+  const {
+    mutateAsync: fetchCertificates,
+    isPending: isLoadingCertificatesGet,
+  } = useListDocuments();
   const {
     mutateAsync: updateDocument,
     isPending: loadingUpdateDocument,
     isSuccess: isSuccessUpdateDocument,
   } = useUpdateDocument();
-
-  const TYPE_DOCUMENT_CERTIFICATES = [4, 5];
-
   const { mutateAsync: getUserSchedules, data: scheduleData } =
     useGetUserSchedules();
 
-  const [dates, setDates] = useState<DatesProps[]>([]);
+  const TYPE_DOCUMENT_CERTIFICATES = [4, 5];
 
   const getDaysBetweenDates = (
     startDate: string,
     endDate: string,
   ): { date: string; dayOfWeekPT: string; dayOfWeekEN: string }[] => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    if (startDate && endDate) {
+      console.log('entrou aqyu');
+      const start = new Date(startDate);
+      const end = new Date(endDate);
 
-    // Normaliza para o início do dia em UTC
-    start.setUTCHours(0, 0, 0, 0);
-    end.setUTCHours(0, 0, 0, 0);
+      // Normaliza para o início do dia em UTC
+      start.setUTCHours(0, 0, 0, 0);
+      end.setUTCHours(0, 0, 0, 0);
 
-    const dates: {
-      date: string;
-      dayOfWeekPT: string;
-      dayOfWeekEN: string;
-    }[] = [];
+      const dates: {
+        date: string;
+        dayOfWeekPT: string;
+        dayOfWeekEN: string;
+      }[] = [];
 
-    const current = new Date(start);
-    while (current <= end) {
-      const zonedDate = toZonedTime(current, 'UTC'); // Força timezone UTC
+      const current = new Date(start);
+      while (current <= end) {
+        const zonedDate = toZonedTime(current, 'UTC'); // Força timezone UTC
 
-      dates.push({
-        date: current.toISOString().split('T')[0],
-        dayOfWeekPT: format(zonedDate, 'EEEE', { locale: ptBR }),
-        dayOfWeekEN: format(zonedDate, 'EEEE', { locale: enUS }),
-      });
+        dates.push({
+          date: current.toISOString().split('T')[0],
+          dayOfWeekPT: format(zonedDate, 'EEEE', { locale: ptBR }),
+          dayOfWeekEN: format(zonedDate, 'EEEE', { locale: enUS }),
+        });
 
-      current.setUTCDate(current.getUTCDate() + 1); // Incrementa um dia no UTC
+        current.setUTCDate(current.getUTCDate() + 1); // Incrementa um dia no UTC
+      }
+
+      setDates(dates);
+      console.log('saiu aqui');
+      return dates;
     }
-
-    setDates(dates);
-    return dates;
   };
 
-  // const getDaysBetweenDates = (
-  //   startDate: string,
-  //   endDate: string,
-  // ): { date: string; dayOfWeekPT: string; dayOfWeekEN: string }[] => {
-  //   // Converte para data (ignorando hora, mantendo só a data em UTC)
-  //   const start = new Date(startDate);
-  //   const end = new Date(endDate);
-
-  //   // Normaliza a hora para 00:00 no UTC
-  //   start.setUTCHours(0, 0, 0, 0);
-  //   end.setUTCHours(0, 0, 0, 0);
-
-  //   const dates: {
-  //     date: string;
-  //     dayOfWeekPT: string;
-  //     dayOfWeekEN: string;
-  //   }[] = [];
-
-  //   // Itera entre as datas
-  //   const current = new Date(start);
-  //   while (current <= end) {
-  //     dates.push({
-  //       date: current.toISOString().split('T')[0], // Pega apenas a data (YYYY-MM-DD)
-  //       dayOfWeekPT: format(current, 'EEEE', { locale: ptBR }),
-  //       dayOfWeekEN: format(current, 'EEEE', { locale: enUS }),
-  //     });
-
-  //     // Incrementa um dia no UTC
-  //     current.setUTCDate(current.getUTCDate() + 1);
-  //   }
-
-  //   setDates(dates);
-  //   return dates;
+  // Uso do React Hook para atualizar o estado
+  // const handleCalculateDates = () => {
+  //   const dates = getDaysBetweenDates('2024-12-01', '2024-12-10');
+  //   setDates(dates); // Atualiza o estado em React
   // };
 
   const createPoint = async ({
@@ -322,105 +300,92 @@ export const CertificatesProvider = ({ children }) => {
       userId: userId,
       checkpointType: pointType,
       timestamp: datePoint,
-      // latitude: location.coords.latitude,
-      // longitude: location.coords.longitude,
       status_value: statusJustificationValue,
     });
   };
 
-  const handleSubmit = async (values: any) => {
-    try {
-      // await createOrUpdateSchedule(values);
-    } catch (error) {
-      console.error('Erro ao enviar os dados:', error);
-    }
+  const handleSubmit = (values) => {
+    dates?.map((day) => {
+      formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}EntryTime`] !==
+        '' &&
+        createPoint({
+          userId: values.userId,
+          pointType: 'entrada',
+          datePoint: `${day?.date}T${addHoursToTime(formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}EntryTime`], 3)}:00.000Z`,
+          statusJustificationValue: statusJustificationValue,
+        });
+      formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}PauseTime`] !==
+        '' &&
+        createPoint({
+          userId: values.userId,
+          pointType: 'pausa',
+          datePoint: `${day?.date}T${addHoursToTime(formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}PauseTime`], 3)}:00.000Z`,
+          statusJustificationValue: statusJustificationValue,
+        });
+      formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}ReturnTime`] !==
+        '' &&
+        createPoint({
+          userId: values.userId,
+          pointType: 'retorno',
+          datePoint: `${day?.date}T${addHoursToTime(formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}ReturnTime`], 3)}:00.000Z`,
+          statusJustificationValue: statusJustificationValue,
+        });
+      formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}ExitTime`] !==
+        '' &&
+        createPoint({
+          userId: values.userId,
+          pointType: 'saída',
+          datePoint: `${day?.date}T${addHoursToTime(formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}ExitTime`], 3)}:00.000Z`,
+          statusJustificationValue: statusJustificationValue,
+        });
+    });
   };
 
   const formik = useFormik({
     initialValues: {
-      userId: employeeIdSelected,
-      mondayWork: false,
-      mondayEntryTime: '',
-      mondayPauseTime: '',
-      mondayReturnTime: '',
-      mondayExitTime: '',
-      tuesdayWork: false,
-      tuesdayEntryTime: '',
-      tuesdayPauseTime: '',
-      tuesdayReturnTime: '',
-      tuesdayExitTime: '',
-      wednesdayWork: false,
-      wednesdayEntryTime: '',
-      wednesdayPauseTime: '',
-      wednesdayReturnTime: '',
-      wednesdayExitTime: '',
-      thursdayWork: false,
-      thursdayEntryTime: '',
-      thursdayPauseTime: '',
-      thursdayReturnTime: '',
-      thursdayExitTime: '',
-      fridayWork: false,
-      fridayEntryTime: '',
-      fridayPauseTime: '',
-      fridayReturnTime: '',
-      fridayExitTime: '',
-      saturdayWork: false,
-      saturdayEntryTime: '',
-      saturdayPauseTime: '',
-      saturdayReturnTime: '',
-      saturdayExitTime: '',
-      sundayWork: false,
-      sundayEntryTime: '',
-      sundayPauseTime: '',
-      sundayReturnTime: '',
-      sundayExitTime: '',
+      userId: scheduleData?.[0]?.userId ?? '',
+      mondayWork: scheduleData?.[0]?.mondayWork ?? '',
+      mondayEntryTime: scheduleData?.[0]?.mondayEntryTime ?? '',
+      mondayPauseTime: scheduleData?.[0]?.mondayPauseTime ?? '',
+      mondayReturnTime: scheduleData?.[0]?.mondayReturnTime ?? '',
+      mondayExitTime: scheduleData?.[0]?.mondayExitTime ?? '',
+      tuesdayWork: scheduleData?.[0]?.tuesdayWork ?? '',
+      tuesdayEntryTime: scheduleData?.[0]?.tuesdayEntryTime ?? '',
+      tuesdayPauseTime: scheduleData?.[0]?.tuesdayPauseTime ?? '',
+      tuesdayReturnTime: scheduleData?.[0]?.tuesdayReturnTime ?? '',
+      tuesdayExitTime: scheduleData?.[0]?.tuesdayExitTime ?? '',
+      wednesdayWork: scheduleData?.[0]?.wednesdayWork ?? '',
+      wednesdayEntryTime: scheduleData?.[0]?.wednesdayEntryTime ?? '',
+      wednesdayPauseTime: scheduleData?.[0]?.wednesdayPauseTime ?? '',
+      wednesdayReturnTime: scheduleData?.[0]?.wednesdayReturnTime ?? '',
+      wednesdayExitTime: scheduleData?.[0]?.wednesdayExitTime ?? '',
+      thursdayWork: scheduleData?.[0]?.thursdayWork ?? '',
+      thursdayEntryTime: scheduleData?.[0]?.thursdayEntryTime ?? '',
+      thursdayPauseTime: scheduleData?.[0]?.thursdayPauseTime ?? '',
+      thursdayReturnTime: scheduleData?.[0]?.thursdayReturnTime ?? '',
+      thursdayExitTime: scheduleData?.[0]?.thursdayExitTime ?? '',
+      fridayWork: scheduleData?.[0]?.fridayWork ?? '',
+      fridayEntryTime: scheduleData?.[0]?.fridayEntryTime ?? '',
+      fridayPauseTime: scheduleData?.[0]?.fridayPauseTime ?? '',
+      fridayReturnTime: scheduleData?.[0]?.fridayReturnTime ?? '',
+      fridayExitTime: scheduleData?.[0]?.fridayExitTime ?? '',
+      saturdayWork: scheduleData?.[0]?.saturdayWork,
+      saturdayEntryTime: scheduleData?.[0]?.saturdayEntryTime ?? '',
+      saturdayPauseTime: scheduleData?.[0]?.saturdayPauseTime ?? '',
+      saturdayReturnTime: scheduleData?.[0]?.saturdayReturnTime ?? '',
+      saturdayExitTime: scheduleData?.[0]?.saturdayExitTime ?? '',
+      sundayWork: scheduleData?.[0]?.sundayWork ?? '',
+      sundayEntryTime: scheduleData?.[0]?.sundayEntryTime ?? '',
+      sundayPauseTime: scheduleData?.[0]?.sundayPauseTime ?? '',
+      sundayReturnTime: scheduleData?.[0]?.sundayReturnTime ?? '',
+      sundayExitTime: scheduleData?.[0]?.sundayExitTime ?? '',
     },
     enableReinitialize: true,
     validationSchema,
     onSubmit: (values) => {
-      // handleSubmit(values);
-      dates?.map((day) => {
-        formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}EntryTime`] !==
-          '' &&
-          createPoint({
-            userId: values.userId,
-            pointType: 'entrada',
-            datePoint: `${day?.date}T${addHoursToTime(formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}EntryTime`], 3)}:00.000Z`,
-            statusJustificationValue: statusJustificationValue,
-          });
-
-        formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}PauseTime`] !==
-          '' &&
-          createPoint({
-            userId: values.userId,
-            pointType: 'pausa',
-            datePoint: `${day?.date}T${addHoursToTime(formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}PauseTime`], 3)}:00.000Z`,
-            statusJustificationValue: statusJustificationValue,
-          });
-
-        formik?.values?.[
-          `${day.dayOfWeekEN?.toLocaleLowerCase()}ReturnTime`
-        ] !== '' &&
-          createPoint({
-            userId: values.userId,
-            pointType: 'retorno',
-            datePoint: `${day?.date}T${addHoursToTime(formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}ReturnTime`], 3)}:00.000Z`,
-            statusJustificationValue: statusJustificationValue,
-          });
-
-        formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}ExitTime`] !==
-          '' &&
-          createPoint({
-            userId: values.userId,
-            pointType: 'saída',
-            datePoint: `${day?.date}T${addHoursToTime(formik?.values?.[`${day.dayOfWeekEN?.toLocaleLowerCase()}ExitTime`], 3)}:00.000Z`,
-            statusJustificationValue: statusJustificationValue,
-          });
-      });
+      handleSubmit(values);
     },
   });
-
-  console.log('ter', addHoursToTime(formik?.values?.fridayEntryTime, 3));
 
   const handleDateFilter = (dateRange: {
     startDate: number | null;
@@ -430,7 +395,6 @@ export const CertificatesProvider = ({ children }) => {
   };
 
   const handleOpenModalPhoto = (photoId: number) => {
-    console.log({ photoId });
     setOpenModalPhoto(true);
     setPhotoId(photoId);
   };
@@ -552,6 +516,8 @@ export const CertificatesProvider = ({ children }) => {
       dates,
       statusJustificationValue,
       setStatusJustificationValue,
+      scheduleData,
+      isLoadingCertificatesGet,
     }),
     [
       filterUserId,
@@ -581,6 +547,8 @@ export const CertificatesProvider = ({ children }) => {
       dates,
       statusJustificationValue,
       setStatusJustificationValue,
+      scheduleData,
+      isLoadingCertificatesGet,
     ],
   );
 

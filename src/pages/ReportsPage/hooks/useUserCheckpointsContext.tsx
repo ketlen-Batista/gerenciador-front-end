@@ -29,6 +29,7 @@ export const useUserCheckpointsContext = () => {
     jobs,
     contracts,
     sectors,
+    isLoadingUserCheckpoints,
   } = useContext(UserCheckpointsContext);
 
   return {
@@ -57,5 +58,6 @@ export const useUserCheckpointsContext = () => {
     jobs,
     contracts,
     sectors,
+    isLoadingUserCheckpoints,
   };
 };

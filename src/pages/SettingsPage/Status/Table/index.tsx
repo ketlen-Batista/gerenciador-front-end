@@ -154,6 +154,7 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
           columns={columns}
           rows={customStatuss(status || [])}
           pageSize={7}
+          loading={isPending}
         />
         {openDialog && (
           <ModalStatus

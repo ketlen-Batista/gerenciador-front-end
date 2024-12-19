@@ -80,6 +80,7 @@ const UserCheckpointsList = () => {
     photoId,
     handleOpenModalPhoto,
     handleCloseModalPhoto,
+    isLoadingUserCheckpoints,
   } = useUserCheckpointsContext();
 
   const { isDesktop } = useResponsive();
@@ -295,7 +296,7 @@ const UserCheckpointsList = () => {
         <TableDataGrid
           rows={userCheckpoints || []}
           columns={columns}
-          loading={loading}
+          loading={isLoadingUserCheckpoints}
           // pageSizeOptions={[4, 8, 16]}
           pagination
           pageSize={4}
