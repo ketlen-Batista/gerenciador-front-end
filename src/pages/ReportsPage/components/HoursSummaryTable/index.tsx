@@ -107,6 +107,7 @@
 import React, { useState } from 'react';
 
 import { Box, Card, Modal, Typography } from '@mui/material';
+import { formatDate, formatDateDayMonthAndYear } from '@src/utils/dates';
 
 // Assumindo que você já tem esse componente implementado
 import ButtonCustom from '@src/components/ButtonCustom';
@@ -144,15 +145,20 @@ const HoursSummaryTable: React.FC<{ data: UserSummary[] }> = ({ data }) => {
       field: 'totalHours',
       headerName: 'Horas Trabalhadas',
       flex: 1,
-      renderCell: (params: any) => params.value?.toFixed(2),
+      renderCell: (params: any) => `${params.value?.toFixed(2)} h`,
     },
     {
       field: 'justifiedHours',
       headerName: 'Horas Justificadas',
       flex: 1,
-      renderCell: (params: any) => params.value?.toFixed(2),
+      renderCell: (params: any) => `${params.value?.toFixed(2)} h`,
     },
-    { field: 'absences', headerName: 'Ausências', flex: 1 },
+    {
+      field: 'absences',
+      headerName: 'Faltas (Horas)',
+      flex: 1,
+      renderCell: (params: any) => `${params.value?.toFixed(2)} h`,
+    },
     { field: 'daysWorked', headerName: 'Dias Trabalhados', flex: 1 },
     {
       field: 'userId',
@@ -176,7 +182,7 @@ const HoursSummaryTable: React.FC<{ data: UserSummary[] }> = ({ data }) => {
   ];
 
   return (
-    <Card sx={{ padding: 2, marginTop: 6 }}>
+    <Card sx={{ padding: 1, marginTop: 6 }}>
       {data?.length ? (
         <Typography variant="h6" gutterBottom>
           Banco de horas
@@ -207,7 +213,13 @@ const HoursSummaryTable: React.FC<{ data: UserSummary[] }> = ({ data }) => {
             </Typography>
             <TableDataGrid
               columns={[
-                { field: 'date', headerName: 'Data', flex: 1 },
+                {
+                  field: 'date',
+                  headerName: 'Data',
+                  flex: 1,
+                  renderCell: (params: any) =>
+                    formatDateDayMonthAndYear(params?.value),
+                },
                 {
                   field: 'workedHours',
                   headerName: 'Horas Trabalhadas',

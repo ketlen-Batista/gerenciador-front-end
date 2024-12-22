@@ -86,6 +86,11 @@ interface StatusColors {
   13: string;
   14: string;
   15: string;
+  16: string;
+  17: string;
+  18: string;
+  19: string;
+  20: string;
 }
 
 export interface Colors {

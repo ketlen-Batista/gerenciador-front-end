@@ -165,6 +165,7 @@ function TableDocuments() {
           <Tooltip title="Ver" placement="top">
             <IconButton
               onClick={() =>
+                (params.row?.document || params.row?.photoDocument?.id) &&
                 handleViewDocument(
                   params.row.id,
                   params.row.documentName,
@@ -175,7 +176,10 @@ function TableDocuments() {
               <div
                 style={{
                   display: 'flex',
-                  color: 'var(--Primary)',
+                  color:
+                    params.row?.document || params.row?.photoDocument?.id
+                      ? 'var(--Primary)'
+                      : colors.chip.enableBorder,
                 }}
               >
                 <VisibilityOutlinedIcon fontSize="medium" />

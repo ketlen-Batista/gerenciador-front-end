@@ -141,6 +141,7 @@ export default function TableDataGrid({
           }}
           classes={classes}
           {...rest}
+          autoHeight
         />
       )}
     </Box>

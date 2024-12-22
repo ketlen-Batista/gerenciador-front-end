@@ -1,11 +1,14 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 
+import { UserCheckpointFiltersDTO } from '@src/services/CheckinsPoints/dto';
 import { useListUserCheckpoints } from '@src/services/CheckinsPoints/queries';
 import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { useGetSectors } from '@src/services/sectorService/queries';
 import { useGetUsers } from '@src/services/users/queries';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
+import { UseMutateAsyncFunction } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useLocation } from 'react-router-dom';
 
 export interface Checkpoint {
@@ -72,6 +75,7 @@ interface UserCheckpointsContextType {
   contracts: any[];
   sectors: any[];
   isLoadingUserCheckpoints: boolean;
+  handleGetUserCheckpoints: () => void;
 }
 
 export const UserCheckpointsContext = createContext(
@@ -177,7 +181,7 @@ export const UserCheckpointsProvider = ({ children }) => {
       });
   }, []);
 
-  useEffect(() => {
+  const handleGetUserCheckpoints = () => {
     if (
       selectedDateRange.startDate ||
       selectedDateRange.endDate ||
@@ -221,6 +225,10 @@ export const UserCheckpointsProvider = ({ children }) => {
       );
       setUserCheckpoints(sortedData);
     });
+  };
+
+  useEffect(() => {
+    handleGetUserCheckpoints();
   }, [
     filterUserId,
     selectedDateRange.startDate,
@@ -264,6 +272,7 @@ export const UserCheckpointsProvider = ({ children }) => {
       contracts,
       sectors,
       isLoadingUserCheckpoints,
+      handleGetUserCheckpoints,
     }),
     [
       filterUserId,
@@ -284,6 +293,7 @@ export const UserCheckpointsProvider = ({ children }) => {
       contracts,
       sectors,
       isLoadingUserCheckpoints,
+      handleGetUserCheckpoints,
     ],
   );
 

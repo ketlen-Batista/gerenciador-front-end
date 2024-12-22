@@ -325,7 +325,6 @@ const processUserCheckpoints = (data: Checkpoint[]): UserSummary[] => {
       justifiedHours,
       absences: absenceHours,
       daysWorked,
-      // details,
       details: details.map((detail, index) => ({
         ...detail,
         id: `${userId}-${index}`, // Gerando um id único com base no userId e índice

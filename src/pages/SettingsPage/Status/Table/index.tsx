@@ -62,10 +62,10 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
   };
 
   const handleOpenModalDelete = (id: number) => {
-    // if (id > 7) {
-    setIsOpenModalDelete(true);
-    setStatusId(id);
-    // }
+    if (id > 10) {
+      setIsOpenModalDelete(true);
+      setStatusId(id);
+    }
   };
 
   const handleCloseModalDelete = () => {
@@ -135,9 +135,11 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
                 <DeleteOutlinedIcon
                   fontSize="medium"
                   color="inherit"
-                  // htmlColor={
-                  //   params.row.id < 4 ? colors.text.disabled : colors.error.dark
-                  // }
+                  htmlColor={
+                    params.row.id < 10
+                      ? colors.text.disabled
+                      : colors.error.dark
+                  }
                 />
               </Box>
             </IconButton>

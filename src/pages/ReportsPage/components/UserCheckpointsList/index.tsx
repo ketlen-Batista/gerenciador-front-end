@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   Grid,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
@@ -81,10 +82,12 @@ const UserCheckpointsList = () => {
     handleOpenModalPhoto,
     handleCloseModalPhoto,
     isLoadingUserCheckpoints,
+    handleGetUserCheckpoints,
   } = useUserCheckpointsContext();
 
   const { isDesktop } = useResponsive();
-  const { mutateAsync: deletePoint } = useDeleteUserCheckpoint();
+  const { mutateAsync: deletePoint, isPending: isLoadingDeletPoint } =
+    useDeleteUserCheckpoint();
 
   const [isOpenModalDeletePoint, setIsOpenModalDeletePoint] = useState(false);
   const [checkpointIdToDelete, setCheckpointIdToDelete] = useState(null);
@@ -97,6 +100,12 @@ const UserCheckpointsList = () => {
   const handleCloseModalDeletePoint = () => {
     setIsOpenModalDeletePoint(false);
     setCheckpointIdToDelete(null);
+    handleGetUserCheckpoints();
+  };
+
+  const handleDeletePoint = async () => {
+    await deletePoint(checkpointIdToDelete);
+    handleCloseModalDeletePoint();
   };
 
   // Colunas da Tabela (apenas para Desktop)
@@ -207,21 +216,28 @@ const UserCheckpointsList = () => {
       flex: 3,
       renderCell: (params) =>
         params?.row?.status?.value && (
-          <Box display="flex" justifyContent="flex-start" alignItems="center">
+          <Box
+            display="flex"
+            justifyContent="start"
+            alignItems="center"
+            height="100%"
+          >
             <Box
               component="div"
               display="flex"
               justifyContent="center"
               alignItems="center"
               borderRadius={4}
-              bgcolor={colors.statusColors[params?.row?.status?.value ?? 8]}
-              color={colors.basic.white}
+              bgcolor={
+                colors.statusColors[params?.row?.status?.value ?? 20] ??
+                colors.statusColors[20]
+              }
+              color={'#FFF'}
               fontWeight={'bold'}
               fontSize={'14px'}
               px={1}
-              sx={{
-                opacity: 0.9,
-              }}
+              height={'40px'}
+              minWidth={'100px'}
             >
               {params?.row?.status?.name ?? ''}
             </Box>
@@ -230,13 +246,22 @@ const UserCheckpointsList = () => {
     },
     {
       field: 'id',
-      headerName: 'Excluir ponto',
-      flex: 3,
+      headerName: '',
+      flex: 1.3,
       renderCell: (params) =>
         params?.value && (
-          <Box onClick={() => handleOpenModalDeletePoint(params.value)}>
-            <DeleteIcon />
-          </Box>
+          <Tooltip title="Excluir Ponto" arrow>
+            <Box
+              onClick={() => handleOpenModalDeletePoint(params.value)}
+              sx={{ cursor: 'pointer' }}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="100%"
+            >
+              <DeleteIcon />
+            </Box>
+          </Tooltip>
         ),
     },
   ];
@@ -334,11 +359,12 @@ const UserCheckpointsList = () => {
         <ModalConfirm
           openDialog={isOpenModalDeletePoint}
           handleClose={handleCloseModalDeletePoint}
-          handleConfirm={() => deletePoint(checkpointIdToDelete)}
+          handleConfirm={handleDeletePoint}
           titleModal="Excluir Ponto"
           text="Tem certeza que deseja excluir este ponto?"
           textButtonConfirm="Excluir"
           colorButtonConfirm={colors.error.dark}
+          isLoading={isLoadingDeletPoint}
         />
       )}
     </Box>

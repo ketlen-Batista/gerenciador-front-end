@@ -68,40 +68,40 @@ const schedulesTimeList = [
 const validationSchema = Yup.object({
   userId: Yup.string().required('User ID é obrigatório'),
   mondayWork: Yup.boolean(),
-  mondayEntryTime: Yup.string().nullable(),
-  mondayPauseTime: Yup.string().nullable(),
-  mondayReturnTime: Yup.string().nullable(),
-  mondayExitTime: Yup.string().nullable(),
+  mondayEntryTime: Yup.string().optional(),
+  mondayPauseTime: Yup.string().optional(),
+  mondayReturnTime: Yup.string().optional(),
+  mondayExitTime: Yup.string().optional(),
   tuesdayWork: Yup.boolean(),
-  tuesdayEntryTime: Yup.string().nullable(),
-  tuesdayPauseTime: Yup.string().nullable(),
-  tuesdayReturnTime: Yup.string().nullable(),
-  tuesdayExitTime: Yup.string().nullable(),
+  tuesdayEntryTime: Yup.string().optional(),
+  tuesdayPauseTime: Yup.string().optional(),
+  tuesdayReturnTime: Yup.string().optional(),
+  tuesdayExitTime: Yup.string().optional(),
   wednesdayWork: Yup.boolean(),
-  wednesdayEntryTime: Yup.string().nullable(),
-  wednesdayPauseTime: Yup.string().nullable(),
-  wednesdayReturnTime: Yup.string().nullable(),
-  wednesdayExitTime: Yup.string().nullable(),
+  wednesdayEntryTime: Yup.string().optional(),
+  wednesdayPauseTime: Yup.string().optional(),
+  wednesdayReturnTime: Yup.string().optional(),
+  wednesdayExitTime: Yup.string().optional(),
   thursdayWork: Yup.boolean(),
-  thursdayEntryTime: Yup.string().nullable(),
-  thursdayPauseTime: Yup.string().nullable(),
-  thursdayReturnTime: Yup.string().nullable(),
-  thursdayExitTime: Yup.string().nullable(),
+  thursdayEntryTime: Yup.string().optional(),
+  thursdayPauseTime: Yup.string().optional(),
+  thursdayReturnTime: Yup.string().optional(),
+  thursdayExitTime: Yup.string().optional(),
   fridayWork: Yup.boolean(),
-  fridayEntryTime: Yup.string().nullable(),
-  fridayPauseTime: Yup.string().nullable(),
-  fridayReturnTime: Yup.string().nullable(),
-  fridayExitTime: Yup.string().nullable(),
+  fridayEntryTime: Yup.string().optional(),
+  fridayPauseTime: Yup.string().optional(),
+  fridayReturnTime: Yup.string().optional(),
+  fridayExitTime: Yup.string().optional(),
   saturdayWork: Yup.boolean(),
-  saturdayEntryTime: Yup.string().nullable(),
-  saturdayPauseTime: Yup.string().nullable(),
-  saturdayReturnTime: Yup.string().nullable(),
-  saturdayExitTime: Yup.string().nullable(),
+  saturdayEntryTime: Yup.string().optional(),
+  saturdayPauseTime: Yup.string().optional(),
+  saturdayReturnTime: Yup.string().optional(),
+  saturdayExitTime: Yup.string().optional(),
   sundayWork: Yup.boolean(),
-  sundayEntryTime: Yup.string().nullable(),
-  sundayPauseTime: Yup.string().nullable(),
-  sundayReturnTime: Yup.string().nullable(),
-  sundayExitTime: Yup.string().nullable(),
+  sundayEntryTime: Yup.string().optional(),
+  sundayPauseTime: Yup.string().optional(),
+  sundayReturnTime: Yup.string().optional(),
+  sundayExitTime: Yup.string().optional(),
 });
 
 // Função para preparar o payload
@@ -110,94 +110,94 @@ const preparePayload = (values: ScheduleData) => ({
   mondayWork: values.mondayWork,
   mondayEntryTime: values.mondayEntryTime
     ? new Date(values.mondayEntryTime).toISOString()
-    : null,
+    : '',
   mondayPauseTime: values.mondayPauseTime
     ? new Date(values.mondayPauseTime).toISOString()
-    : null,
+    : '',
   mondayReturnTime: values.mondayReturnTime
     ? new Date(values.mondayReturnTime).toISOString()
-    : null,
+    : '',
   mondayExitTime: values.mondayExitTime
     ? new Date(values.mondayExitTime).toISOString()
-    : null,
+    : '',
   tuesdayWork: values.tuesdayWork,
   tuesdayEntryTime: values.tuesdayEntryTime
     ? new Date(values.tuesdayEntryTime).toISOString()
-    : null,
+    : '',
   tuesdayPauseTime: values.tuesdayPauseTime
     ? new Date(values.tuesdayPauseTime).toISOString()
-    : null,
+    : '',
   tuesdayReturnTime: values.tuesdayReturnTime
     ? new Date(values.tuesdayReturnTime).toISOString()
-    : null,
+    : '',
   tuesdayExitTime: values.tuesdayExitTime
     ? new Date(values.tuesdayExitTime).toISOString()
-    : null,
+    : '',
   wednesdayWork: values.wednesdayWork,
   wednesdayEntryTime: values.wednesdayEntryTime
     ? new Date(values.wednesdayEntryTime).toISOString()
-    : null,
+    : '',
   wednesdayPauseTime: values.wednesdayPauseTime
     ? new Date(values.wednesdayPauseTime).toISOString()
-    : null,
+    : '',
   wednesdayReturnTime: values.wednesdayReturnTime
     ? new Date(values.wednesdayReturnTime).toISOString()
-    : null,
+    : '',
   wednesdayExitTime: values.wednesdayExitTime
     ? new Date(values.wednesdayExitTime).toISOString()
-    : null,
+    : '',
   thursdayWork: values.thursdayWork,
   thursdayEntryTime: values.thursdayEntryTime
     ? new Date(values.thursdayEntryTime).toISOString()
-    : null,
+    : '',
   thursdayPauseTime: values.thursdayPauseTime
     ? new Date(values.thursdayPauseTime).toISOString()
-    : null,
+    : '',
   thursdayReturnTime: values.thursdayReturnTime
     ? new Date(values.thursdayReturnTime).toISOString()
-    : null,
+    : '',
   thursdayExitTime: values.thursdayExitTime
     ? new Date(values.thursdayExitTime).toISOString()
-    : null,
+    : '',
   fridayWork: values.fridayWork,
   fridayEntryTime: values.fridayEntryTime
     ? new Date(values.fridayEntryTime).toISOString()
-    : null,
+    : '',
   fridayPauseTime: values.fridayPauseTime
     ? new Date(values.fridayPauseTime).toISOString()
-    : null,
+    : '',
   fridayReturnTime: values.fridayReturnTime
     ? new Date(values.fridayReturnTime).toISOString()
-    : null,
+    : '',
   fridayExitTime: values.fridayExitTime
     ? new Date(values.fridayExitTime).toISOString()
-    : null,
+    : '',
   saturdayWork: values.saturdayWork,
   saturdayEntryTime: values.saturdayEntryTime
     ? new Date(values.saturdayEntryTime).toISOString()
-    : null,
+    : '',
   saturdayPauseTime: values.saturdayPauseTime
     ? new Date(values.saturdayPauseTime).toISOString()
-    : null,
+    : '',
   saturdayReturnTime: values.saturdayReturnTime
     ? new Date(values.saturdayReturnTime).toISOString()
-    : null,
+    : '',
   saturdayExitTime: values.saturdayExitTime
     ? new Date(values.saturdayExitTime).toISOString()
-    : null,
+    : '',
   sundayWork: values.sundayWork,
   sundayEntryTime: values.sundayEntryTime
     ? new Date(values.sundayEntryTime).toISOString()
-    : null,
+    : '',
   sundayPauseTime: values.sundayPauseTime
     ? new Date(values.sundayPauseTime).toISOString()
-    : null,
+    : '',
   sundayReturnTime: values.sundayReturnTime
     ? new Date(values.sundayReturnTime).toISOString()
-    : null,
+    : '',
   sundayExitTime: values.sundayExitTime
     ? new Date(values.sundayExitTime).toISOString()
-    : null,
+    : '',
 });
 
 interface Props {
@@ -210,8 +210,8 @@ const HourScheduleComponent = ({ employeeId, fieldsDisabled }: Props) => {
     useGetUserSchedules();
   const { mutateAsync: createOrUpdateSchedule } = useCreateOrUpdateSchedule();
 
-  const handleSubmit = async (values: any) => {
-    console.log('entrou', values);
+  const handleSubmitFunction = async (values: any) => {
+    console.log('entrou111111', values);
     try {
       // const payload: ScheduleData = preparePayload(values);
       // Enviar os dados para o endpoint
@@ -264,7 +264,7 @@ const HourScheduleComponent = ({ employeeId, fieldsDisabled }: Props) => {
     enableReinitialize: true,
     validationSchema,
     onSubmit: (values) => {
-      handleSubmit(values);
+      handleSubmitFunction(values);
     },
   });
 
@@ -274,42 +274,42 @@ const HourScheduleComponent = ({ employeeId, fieldsDisabled }: Props) => {
       console.log({ schedule });
       if (schedule) {
         formik.setValues({
-          userId: schedule?.[0]?.userId,
+          userId: schedule?.[0]?.userId ?? employeeId,
           mondayWork: schedule?.[0]?.mondayWork,
-          mondayEntryTime: schedule?.[0]?.mondayEntryTime,
-          mondayPauseTime: schedule?.[0]?.mondayPauseTime,
-          mondayReturnTime: schedule?.[0]?.mondayReturnTime,
-          mondayExitTime: schedule?.[0]?.mondayExitTime,
+          mondayEntryTime: schedule?.[0]?.mondayEntryTime ?? '',
+          mondayPauseTime: schedule?.[0]?.mondayPauseTime ?? '',
+          mondayReturnTime: schedule?.[0]?.mondayReturnTime ?? '',
+          mondayExitTime: schedule?.[0]?.mondayExitTime ?? '',
           tuesdayWork: schedule?.[0]?.tuesdayWork,
-          tuesdayEntryTime: schedule?.[0]?.tuesdayEntryTime,
-          tuesdayPauseTime: schedule?.[0]?.tuesdayPauseTime,
-          tuesdayReturnTime: schedule?.[0]?.tuesdayReturnTime,
-          tuesdayExitTime: schedule?.[0]?.tuesdayExitTime,
+          tuesdayEntryTime: schedule?.[0]?.tuesdayEntryTime ?? '',
+          tuesdayPauseTime: schedule?.[0]?.tuesdayPauseTime ?? '',
+          tuesdayReturnTime: schedule?.[0]?.tuesdayReturnTime ?? '',
+          tuesdayExitTime: schedule?.[0]?.tuesdayExitTime ?? '',
           wednesdayWork: schedule?.[0]?.wednesdayWork,
-          wednesdayEntryTime: schedule?.[0]?.wednesdayEntryTime,
-          wednesdayPauseTime: schedule?.[0]?.wednesdayPauseTime,
-          wednesdayReturnTime: schedule?.[0]?.wednesdayReturnTime,
-          wednesdayExitTime: schedule?.[0]?.wednesdayExitTime,
+          wednesdayEntryTime: schedule?.[0]?.wednesdayEntryTime ?? '',
+          wednesdayPauseTime: schedule?.[0]?.wednesdayPauseTime ?? '',
+          wednesdayReturnTime: schedule?.[0]?.wednesdayReturnTime ?? '',
+          wednesdayExitTime: schedule?.[0]?.wednesdayExitTime ?? '',
           thursdayWork: schedule?.[0]?.thursdayWork,
-          thursdayEntryTime: schedule?.[0]?.thursdayEntryTime,
-          thursdayPauseTime: schedule?.[0]?.thursdayPauseTime,
-          thursdayReturnTime: schedule?.[0]?.thursdayReturnTime,
-          thursdayExitTime: schedule?.[0]?.thursdayExitTime,
+          thursdayEntryTime: schedule?.[0]?.thursdayEntryTime ?? '',
+          thursdayPauseTime: schedule?.[0]?.thursdayPauseTime ?? '',
+          thursdayReturnTime: schedule?.[0]?.thursdayReturnTime ?? '',
+          thursdayExitTime: schedule?.[0]?.thursdayExitTime ?? '',
           fridayWork: schedule?.[0]?.fridayWork,
-          fridayEntryTime: schedule?.[0]?.fridayEntryTime,
-          fridayPauseTime: schedule?.[0]?.fridayPauseTime,
-          fridayReturnTime: schedule?.[0]?.fridayReturnTime,
-          fridayExitTime: schedule?.[0]?.fridayExitTime,
+          fridayEntryTime: schedule?.[0]?.fridayEntryTime ?? '',
+          fridayPauseTime: schedule?.[0]?.fridayPauseTime ?? '',
+          fridayReturnTime: schedule?.[0]?.fridayReturnTime ?? '',
+          fridayExitTime: schedule?.[0]?.fridayExitTime ?? '',
           saturdayWork: schedule?.[0]?.saturdayWork,
-          saturdayEntryTime: schedule?.[0]?.saturdayEntryTime,
-          saturdayPauseTime: schedule?.[0]?.saturdayPauseTime,
-          saturdayReturnTime: schedule?.[0]?.saturdayReturnTime,
-          saturdayExitTime: schedule?.[0]?.saturdayExitTime,
+          saturdayEntryTime: schedule?.[0]?.saturdayEntryTime ?? '',
+          saturdayPauseTime: schedule?.[0]?.saturdayPauseTime ?? '',
+          saturdayReturnTime: schedule?.[0]?.saturdayReturnTime ?? '',
+          saturdayExitTime: schedule?.[0]?.saturdayExitTime ?? '',
           sundayWork: schedule?.[0]?.sundayWork,
-          sundayEntryTime: schedule?.[0]?.sundayEntryTime,
-          sundayPauseTime: schedule?.[0]?.sundayPauseTime,
-          sundayReturnTime: schedule?.[0]?.sundayReturnTime,
-          sundayExitTime: schedule?.[0]?.sundayExitTime,
+          sundayEntryTime: schedule?.[0]?.sundayEntryTime ?? '',
+          sundayPauseTime: schedule?.[0]?.sundayPauseTime ?? '',
+          sundayReturnTime: schedule?.[0]?.sundayReturnTime ?? '',
+          sundayExitTime: schedule?.[0]?.sundayExitTime ?? '',
         });
       }
     });
@@ -359,17 +359,19 @@ const HourScheduleComponent = ({ employeeId, fieldsDisabled }: Props) => {
       </Button> */}
 
       <Grid item xs={12} pt={2}>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          onClick={() => formik?.handleSubmit()}
-          disabled={fieldsDisabled}
-          size="medium"
-          fullWidth
-        >
-          Salvar
-        </Button>
+        <form onSubmit={formik?.handleSubmit}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={() => formik?.handleSubmit()}
+            disabled={fieldsDisabled}
+            size="medium"
+            fullWidth
+          >
+            Salvar
+          </Button>
+        </form>
       </Grid>
     </div>
   );
