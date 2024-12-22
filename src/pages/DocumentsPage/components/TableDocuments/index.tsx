@@ -32,7 +32,7 @@ function TableDocuments() {
 
   const { mutate: handleDeleteDocuments, isPending: isPendingDeleteDocuments } =
     useDeleteDocument();
-  const { mutate: getDocumentById } = useGetDocumentById(); // Use o hook para obter o documento pelo ID
+
   const handleOpenModalDelete = (documentId: number) => {
     setIsOpenModal(true);
     setDocumentIdToDelete(documentId);
