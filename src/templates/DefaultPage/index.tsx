@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { Switch } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,8 +12,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box, Menu, MenuItem, MenuList } from '@mui/material';
 import { useAuth } from '@src/hooks/useAuth';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
+import { getImageUrlServer } from '@src/utils/functions';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
+
+import ImageAvatar from '@src/components/ImageAvatar';
 
 import Sidebar from '@components/Sidebar';
 
@@ -47,6 +50,7 @@ function DefaultPage({ children, pageTitle }: Props) {
   };
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [photoUrl, setPhotoUrl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -60,6 +64,15 @@ function DefaultPage({ children, pageTitle }: Props) {
   const handleNavigate = (page) => {
     navigate(page || '');
   };
+  console.log('userHeader', user);
+  useEffect(() => {
+    if (user?.photo_avatar_id) {
+      (async () => {
+        const urlImage = await getImageUrlServer(user?.photo_avatar_id);
+        setPhotoUrl(urlImage);
+      })();
+    }
+  }, [user?.photo_avatar_id]);
 
   return (
     <div theme-mode={isDark ? 'dark' : 'ligth'} className={classes.root}>
@@ -84,14 +97,16 @@ function DefaultPage({ children, pageTitle }: Props) {
           </IconButton>
           <Typography
             component="h1"
-            variant="h6"
+            variant="h5"
             color="inherit"
             noWrap
             className={classes.title}
           >
             GIC
           </Typography>
-          {user.name}
+          <Box fontWeight="bold" textTransform="capitalize">
+            {user.name}
+          </Box>
           <IconButton
             color="inherit"
             id="basic-button"
@@ -100,7 +115,14 @@ function DefaultPage({ children, pageTitle }: Props) {
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
           >
-            <AccountCircleIcon />
+            {/* <AccountCircleIcon /> */}
+            <ImageAvatar
+              imageSrc={photoUrl ?? null}
+              height={'35px'}
+              width={'35px'}
+              mt="0px"
+              mb="0px"
+            />
           </IconButton>
           <Menu
             id="basic-menu"

@@ -27,6 +27,14 @@ export function useGetDocumentById(handleReturn?: HandleReturn) {
   });
 }
 
+export function useGetDocumentUrlById(handleReturn?: HandleReturn) {
+  return useCustomMutation({
+    key: 'getDocumentById',
+    request: (documentId: number) => API.getDocumentUrlById(documentId),
+    handleReturn,
+  });
+}
+
 export function useDeleteDocument(handleReturn?: HandleReturn) {
   return useCustomMutation({
     key: 'deleteDocument',

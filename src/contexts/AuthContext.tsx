@@ -140,6 +140,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { UserDTO } from '@dtos/UserDTO';
 import { api } from '@src/lib/axios';
 import { useGetPermissions } from '@src/services/permissions/queries';
+import { useGetUser } from '@src/services/users/queries';
 import {
   storageAuthTokenGet,
   storageAuthTokenRemove,
@@ -160,6 +161,7 @@ export type AuthContextDataProps = {
   signOut: () => Promise<void>;
   userPhoto: string;
   permissions: any;
+  // updateUserGeneral: () => void;
 };
 
 type AuthContextProviderProps = {
@@ -175,6 +177,22 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [isLoadingStorageData, setIsLoadingStorageData] = useState(true);
   const [userPhoto, setUserPhoto] = useState<string>('');
   const [permissions, setPermissions] = useState<any>();
+
+  // const {
+  //   mutateAsync: getDataUser,
+  //   data: dataUser,
+  //   isSuccess: isSuccessGetUser,
+  //   isPending: isPendingGetUser,
+  // } = useGetUser();
+
+  // async function updateUserGeneral() {
+  //   // loadUserData();
+  //   getDataUser({
+  //     userId: user?.id,
+  //   });
+  // }
+
+  // console.log({ user });
 
   async function headerUserAndTokenUpdate(userData: UserDTO, token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -225,6 +243,26 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  // async function signIn(cpf: string, password: string) {
+  //   try {
+  //     setIsLoadingStorageData(true);
+  //     const response = await api.post('/sessions', { cpf, password });
+
+  //     const { token, refreshToken, user: userData } = response.data;
+
+  //     // setMustChangePassword(response?.data?.mustChangePassword);
+
+  //     if (userData && token && refreshToken) {
+  //       await storageUserAndTokenSave(userData, token, refreshToken);
+  //       headerUserAndTokenUpdate(userData, token);
+  //     }
+  //   } catch {
+  //     console.log('error');
+  //   } finally {
+  //     setIsLoadingStorageData(false);
+  //   }
+  // }
+
   async function signOut() {
     try {
       setIsLoadingStorageData(true);
@@ -255,8 +293,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
-  function getPhotoUser(imageAvatarId: number) {
-    setUserPhoto(getImageUrlServer(imageAvatarId));
+  async function getPhotoUser(imageAvatarId: number) {
+    if (imageAvatarId) {
+      const imageAvatarUrl = await getImageUrlServer(imageAvatarId);
+      setUserPhoto(imageAvatarUrl); // A URL é retornada com o campo 'photoUrl' do banco de dados
+      return;
+    }
+    setUserPhoto(`${api.defaults.baseURL}/photos/serve/${imageAvatarId}`);
   }
 
   async function getPermissions(jobPositionId: number) {
@@ -278,6 +321,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   useEffect(() => {
     loadUserData();
   }, []);
+
+  // useEffect(() => {
+  //   setUser(dataUser);
+  // }, []);
 
   useEffect(() => {
     const unsubscribe = api.registerInterceptTokenManager(signOut);
@@ -325,6 +372,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         signOut,
         userPhoto,
         permissions,
+        // updateUserGeneral,
       }}
     >
       {children}

@@ -226,8 +226,8 @@ const UserFilter = () => {
   const { isDesktop } = useResponsive();
 
   const usersCustomSelect = users.map((user) => ({
-    value: user.id,
-    name: user.name,
+    value: user?.id,
+    name: user?.name,
   }));
 
   const handleChangeFilter = (name: string, value?: number | string | null) => {
@@ -248,24 +248,24 @@ const UserFilter = () => {
 
   return (
     <Grid
+      // container
+      // spacing={2}
+      // alignItems="center"
       container
       spacing={2}
-      alignItems="center"
       direction={isDesktop ? 'row' : 'column'} // Ajusta a direção do layout com base na responsividade
     >
-      <Grid item xs={12} md={3}>
-        <FormControl fullWidth>
-          <Select
-            label="Usuário"
-            options={usersCustomSelect}
-            value={filterUserId}
-            onChange={(e) => setFilterUserId(e.value as string)}
-            clearable
-          />
-        </FormControl>
+      <Grid item xs={!isDesktop ? 12 : 2}>
+        <Select
+          label="Usuário"
+          options={usersCustomSelect}
+          value={filterUserId}
+          onChange={(e) => setFilterUserId(e.value as string)}
+          clearable
+        />
       </Grid>
 
-      <Grid item xs={12} md={2}>
+      <Grid item xs={!isDesktop ? 12 : 2}>
         <Select
           options={jobs}
           value={cargo}
@@ -274,7 +274,7 @@ const UserFilter = () => {
           clearable
         />
       </Grid>
-      <Grid item xs={12} md={2}>
+      <Grid item xs={!isDesktop ? 12 : 2}>
         <Select
           options={contracts}
           value={contrato}
@@ -283,7 +283,7 @@ const UserFilter = () => {
           clearable
         />
       </Grid>
-      <Grid item xs={12} md={2}>
+      <Grid item xs={!isDesktop ? 12 : 3}>
         <Select
           options={sectors}
           value={setor}
@@ -292,7 +292,7 @@ const UserFilter = () => {
           clearable
         />
       </Grid>
-      <Grid item xs={12} md={3}>
+      <Grid item xs={!isDesktop ? 12 : 3}>
         <DateFilter
           ref={ref}
           initialRange={INIT_DATE_RANGE}

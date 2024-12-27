@@ -1,35 +1,20 @@
 import React, { ReactNode, useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
-import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
-import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Box, Grid, Pagination, Tooltip } from '@mui/material';
 import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
 import useResponsive from '@src/hooks/useResponsive';
-import {
-  useDeleteUserCheckpoint,
-  useUpdateUserCheckpoint,
-} from '@src/services/CheckinsPoints/queries';
+import { useDeleteUserCheckpoint } from '@src/services/CheckinsPoints/queries';
 import { colors } from '@src/styles/colors';
+import { OPTIONS_TYPES_POINTS } from '@src/utils/constants';
 import { formatDate } from '@src/utils/dates';
 
 import PhotoModal from '../../../../components/PhotoModal';
 import ModalConfirm from '@src/components/ModalConfirm';
 import TableDataGrid from '@src/components/TableDataGrid';
 
-import HoursSummaryTable from '../HoursSummaryTable';
+import { CardCheckPoint } from '../CardCheckPoint';
 import LocalizationModal from '../LocalizationModal';
-import UserHoursDashboard from '../UserHoursDashboard';
 
 export type OptionProps = {
   id: number;
@@ -38,35 +23,7 @@ export type OptionProps = {
   icon?: ReactNode;
 };
 
-export const OPTIONS_TYPES_POINTS: OptionProps[] = [
-  {
-    id: 1,
-    title: 'Entrada',
-    bgColor: '#00B37E',
-    icon: <ExitToAppOutlinedIcon />,
-  },
-
-  {
-    id: 2,
-    title: 'Pausa',
-    bgColor: '#0000FF',
-    icon: <EmojiFoodBeverageIcon />,
-  },
-
-  {
-    id: 3,
-    title: 'Retorno',
-    bgColor: '#FFA500',
-    icon: <FreeBreakfastOutlinedIcon />,
-  },
-
-  {
-    id: 4,
-    title: 'Saída',
-    bgColor: '#FF0000',
-    icon: <LogoutOutlinedIcon />,
-  },
-];
+const ITEMS_PER_PAGE = 4;
 
 const UserCheckpointsList = () => {
   const {
@@ -91,6 +48,20 @@ const UserCheckpointsList = () => {
 
   const [isOpenModalDeletePoint, setIsOpenModalDeletePoint] = useState(false);
   const [checkpointIdToDelete, setCheckpointIdToDelete] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setCurrentPage(value);
+  };
+
+  const paginatedCheckpoints = userCheckpoints?.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
 
   const handleOpenModalDeletePoint = (checkpointId: number) => {
     setIsOpenModalDeletePoint(true);
@@ -267,74 +238,68 @@ const UserCheckpointsList = () => {
   ];
 
   // Renderização do Card para dispositivos mobile
-  const renderCard = (checkpoint) => {
-    const user = users.find((user) => user.id === checkpoint.userId)?.name;
-
-    return (
-      <Card key={checkpoint.id} sx={{ marginBottom: 2 }}>
-        <CardContent>
-          <Typography variant="h6" component="div">
-            Usuário: {user}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Data e horário: {formatDate(checkpoint.timestamp)}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Tipo: {checkpoint.checkpointType}
-          </Typography>
-          {checkpoint.latitude && checkpoint.longitude && (
-            <Button
-              onClick={() =>
-                handleOpenModalLocalization(
-                  checkpoint.latitude,
-                  checkpoint.longitude,
-                )
-              }
-              sx={{ marginTop: 1 }}
-            >
-              Ver Localização
-            </Button>
-          )}
-          {checkpoint.photo_user_checkin_id && (
-            <Button
-              onClick={() =>
-                handleOpenModalPhoto(checkpoint.photo_user_checkin_id)
-              }
-              sx={{ marginTop: 1 }}
-            >
-              Ver Foto
-            </Button>
-          )}
-          <Typography variant="body2" color="text.secondary">
-            Status: {checkpoint.status}
-          </Typography>
-        </CardContent>
-      </Card>
-    );
-  };
 
   return (
-    <Box mt={5} bgcolor={colors.basic.white}>
+    <Box
+      mt={5}
+      // bgcolor={colors.basic.white}
+    >
       {isDesktop ? (
         // Renderiza a tabela no desktop
-
-        <TableDataGrid
-          rows={userCheckpoints || []}
-          columns={columns}
-          loading={isLoadingUserCheckpoints}
-          // pageSizeOptions={[4, 8, 16]}
-          pagination
-          pageSize={4}
-        />
+        <Box bgcolor={colors.basic.white}>
+          <TableDataGrid
+            rows={userCheckpoints || []}
+            columns={columns}
+            loading={isLoadingUserCheckpoints}
+            // pageSizeOptions={[4, 8, 16]}
+            pagination
+            pageSize={4}
+          />
+        </Box>
       ) : (
         // Renderiza os cards no mobile
-        <Grid container spacing={2}>
-          {userCheckpoints.map((checkpoint) => (
-            <Grid item xs={12} key={checkpoint.id}>
-              {renderCard(checkpoint)}
-            </Grid>
-          ))}
-        </Grid>
+        //   <Grid container spacing={2}>
+        //     {userCheckpoints?.map((checkpoint) =>
+        //       checkpoint?.id ? (
+        //         <Grid item xs={12} key={checkpoint?.id}>
+        //           <CardCheckPoint
+        //             checkpointObject={checkpoint}
+        //             handleOpenModalLocalization={handleOpenModalLocalization}
+        //             handleOpenModalPhoto={handleOpenModalPhoto}
+        //           />
+        //         </Grid>
+        //       ) : null,
+        //     )}
+        //   </Grid>
+        // )}
+
+        <>
+          <Grid container spacing={2}>
+            {paginatedCheckpoints?.map((checkpoint) =>
+              checkpoint?.id ? (
+                <Grid item xs={12} key={checkpoint?.id}>
+                  <CardCheckPoint
+                    checkpointObject={checkpoint}
+                    handleOpenModalLocalization={handleOpenModalLocalization}
+                    handleOpenModalPhoto={handleOpenModalPhoto}
+                  />
+                </Grid>
+              ) : null,
+            )}
+          </Grid>
+
+          {userCheckpoints && userCheckpoints.length > ITEMS_PER_PAGE && (
+            <Box display="flex" justifyContent="center" mt={2} mx={1}>
+              <Pagination
+                count={Math.ceil(userCheckpoints.length / ITEMS_PER_PAGE)}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+                siblingCount={0}
+              />
+            </Box>
+          )}
+        </>
       )}
 
       {openModalLocalization && (

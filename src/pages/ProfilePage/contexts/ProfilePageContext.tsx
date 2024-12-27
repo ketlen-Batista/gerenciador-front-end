@@ -24,30 +24,28 @@ interface GetUser {
 }
 
 interface User {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    cpf: string;
-    address: string;
-    registration: string;
-    dateOfBirth: string;
-    status: string;
-    jobPosition_id: number;
-    role: string;
-    created_at: string;
-    contracts_value: number;
-    sector_value: number;
-    documents_id: number;
-    photo_avatar_id: number;
-    photo: {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  cpf: string;
+  address: string;
+  registration: string;
+  dateOfBirth: string;
+  status: string;
+  jobPosition_id: number;
+  role: string;
+  created_at: string;
+  contracts_value: number;
+  sector_value: number;
+  documents_id: number;
+  photo_avatar_id: number;
+  photo: {
+    id: number;
+    photoFile: {
       id: number;
-      photoFile: {
-        id: number;
-        type: string;
-        data: number[];
-      };
+      type: string;
+      data: number[];
     };
   };
 }
@@ -98,6 +96,7 @@ export const ProfilePageProvider = ({ children }) => {
     mutate: getUser,
     isPending: isLoadingUser,
   } = useGetUser();
+  console.log('USERRRRRRRRRRRRRRKKKKKKKKKKKKKKK', user);
 
   const formik = useFormik({
     initialValues: {
@@ -167,7 +166,7 @@ export const ProfilePageProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       formik,
-      user,
+      user: user?.user,
       getUser,
       isLoadingUser,
     }),

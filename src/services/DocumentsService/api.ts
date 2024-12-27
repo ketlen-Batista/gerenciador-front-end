@@ -67,6 +67,16 @@ export async function getDocumentById(documentId: number) {
   }
 }
 
+export async function getDocumentUrlById(documentId: number) {
+  try {
+    const { data } = await api.get(`/documents/get/url/id/${documentId}`);
+    return data;
+  } catch (error) {
+    console.error(`Erro ao buscar documento com ID ${documentId}:`, error);
+    throw error;
+  }
+}
+
 export async function deleteDocument(documentId: number) {
   try {
     await api.delete(`/documents/delete/id/${documentId}`);

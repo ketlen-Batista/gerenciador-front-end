@@ -18,13 +18,37 @@ export const formatDate = ({
   return value.charAt(0).toUpperCase() + value.slice(1);
 };
 
-export function getImageUrlServer(idPhoto: number) {
-  return `${api.defaults.baseURL}/photos/serve/${idPhoto}`;
+// export function getImageUrlServer(idPhoto: number) {
+//   return `${api.defaults.baseURL}/photos/serve/${idPhoto}`;
+// }
+
+export async function getImageUrlServer(idPhoto: number) {
+  try {
+    const { data } = await api.get(`/photosUrl/${idPhoto}`); // Buscar a URL do banco de dados
+    console.log('URL-PHOTO-AGORA', data);
+    if (data?.url) {
+      return data.url; // Retornar a URL do Cloudflare R2
+    }
+  } catch (error) {
+    console.error(`Erro ao obter URL da foto com IDssss ${idPhoto}:`, error);
+  }
 }
 
-export function getPdfUrlServer(idPdf: number) {
-  return `${api.defaults.baseURL}/documents/serve/${idPdf}`;
+export async function getPdfUrlServer(idPhoto: number) {
+  try {
+    const { data } = await api.get(`/documents/get/url/id/${idPhoto}`); // Buscar a URL do banco de dados
+    console.log('PDF-PHOTO-AGORA', data);
+    if (data?.url) {
+      return data.url; // Retornar a URL do Cloudflare R2
+    }
+  } catch (error) {
+    console.error(`Erro ao obter URL da foto com IDssss ${idPhoto}:`, error);
+  }
 }
+
+// export function getPdfUrlServer(idPdf: number) {
+//   return `${api.defaults.baseURL}/documents/serve/${idPdf}`;
+// }
 
 export function formatDateToCustomString(date) {
   // Obtenha os componentes da data

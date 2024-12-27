@@ -18,7 +18,10 @@ export interface Checkpoint {
   status_value: number | null;
   justification: string | null;
   medicalCertificate: string | null;
+  latitude: number;
+  longitude: number;
   userId: string;
+  photo_user_checkin_id?: number;
   User: {
     id: string;
     name: string;

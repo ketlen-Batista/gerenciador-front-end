@@ -36,7 +36,7 @@
 // };
 // export default ReportsPage;
 ///////////////////////////////////////////////////////////
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import DefaultPage from '@src/templates/DefaultPage';
 import { useLocation } from 'react-router-dom';
@@ -86,11 +86,17 @@ const ReportsPage = () => {
   ]?.filter((tab) => tab.isVisible); // Filtra as abas com base na visibilidade
 
   const [currentTabId, setCurrentTabId] = useState<string>(
-    tab?.length ? tab : tabs?.[0]?.id, // Ajuste para não inicializar com uma aba vazia
+    tabs?.[0]?.id, // Ajuste para não inicializar com uma aba vazia
   );
 
+  useEffect(() => {
+    if (tab) {
+      setCurrentTabId(tab);
+    }
+  }, [tab]);
+
   return (
-    tabs.length && (
+    tabs?.length && (
       <DefaultPage pageTitle="Relatórios">
         <Tabs
           tabs={tabs}

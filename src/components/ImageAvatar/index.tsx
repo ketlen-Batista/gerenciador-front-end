@@ -10,9 +10,18 @@ type Props = {
   mt?: string;
   mb?: string;
   imageSrc?: string;
+  width?: string | number;
+  height?: string | number;
 };
 
-const ImageAvatar = ({ imageAvatar, mt, mb, imageSrc }: Props) => {
+const ImageAvatar = ({
+  imageAvatar,
+  mt,
+  mb,
+  imageSrc,
+  width,
+  height,
+}: Props) => {
   // Função para converter bytes em URL válida para exibição
   const getImageUrl = () => {
     if (imageAvatar && imageAvatar?.length > 0) {
@@ -26,13 +35,20 @@ const ImageAvatar = ({ imageAvatar, mt, mb, imageSrc }: Props) => {
 
   return (
     <div>
-      {imageAvatar && imageAvatar?.length > 0 ? (
-        <S.Image
-          style={{
-            marginTop: mt ?? '32px',
-            marginBottom: mb ?? '32px',
-          }}
-          src={imageSrc ?? getImageUrl()}
+      {imageSrc && imageSrc?.length > 0 ? (
+        <Box
+          component="img"
+          mt={mt ?? '32px'}
+          mb={mb ?? '32px'}
+          width={width ?? '150px'}
+          height={height ?? '150px'}
+          borderRadius={'50%'}
+          // style={{
+          //   marginTop: mt ?? '32px',
+          //   marginBottom: mb ?? '32px',
+          // }}
+          src={imageSrc}
+          // src={imageSrc}
         />
       ) : (
         <Box mt={mt ?? '32px'} mb={mb ?? '32px'} fontSize={120}>

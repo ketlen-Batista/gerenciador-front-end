@@ -50,16 +50,20 @@ function TableDocuments() {
     handleCloseModalDelete();
   };
 
-  const handleViewDocument = (
+  const handleViewDocument = async (
     documentId: number,
     nameDocument: string,
     photoId: number,
   ) => {
-    setUrlPdf(getPdfUrlServer(documentId));
     setDocumentName(nameDocument);
     setOpenModalPdf(true);
     setPhotoId(photoId);
+    if (documentId) {
+      const pdfUrl = await getPdfUrlServer(documentId);
+      setUrlPdf(pdfUrl);
+    }
   };
+
   const columns = [
     {
       field: 'documentName',
@@ -165,7 +169,7 @@ function TableDocuments() {
           <Tooltip title="Ver" placement="top">
             <IconButton
               onClick={() =>
-                (params.row?.document || params.row?.photoDocument?.id) &&
+                // (params.row?.document || params.row?.photoDocument?.id) &&
                 handleViewDocument(
                   params.row.id,
                   params.row.documentName,
@@ -177,9 +181,10 @@ function TableDocuments() {
                 style={{
                   display: 'flex',
                   color:
-                    params.row?.document || params.row?.photoDocument?.id
-                      ? 'var(--Primary)'
-                      : colors.chip.enableBorder,
+                    // params.row?.document || params.row?.photoDocument?.id
+                    //   ?
+                    'var(--Primary)',
+                  // : colors.chip.enableBorder,
                 }}
               >
                 <VisibilityOutlinedIcon fontSize="medium" />

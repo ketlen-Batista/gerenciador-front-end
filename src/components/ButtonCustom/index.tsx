@@ -24,6 +24,7 @@ export interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   p?: string;
   fontWeight?: string;
   onClick?: () => void;
+  fullWidth?: boolean;
 }
 
 function ButtonCustom({
@@ -38,6 +39,7 @@ function ButtonCustom({
   variant = 'contained',
   p = '8px',
   fontWeight = 'bold',
+  fullWidth = false,
   onClick,
   ...props
 }: Props) {
@@ -56,6 +58,7 @@ function ButtonCustom({
             ? colors.basic.black
             : `${color} !important`
         }
+        fullWidth={fullWidth}
         variant={variant}
         onClick={onClick}
         {...(isLoading && {

@@ -317,15 +317,29 @@ function MobileListDocuments() {
     handleCloseModalDelete();
   };
 
-  const handleViewDocument = (
+  // const handleViewDocument = (
+  //   documentId: number,
+  //   nameDocument: string,
+  //   photoId: number,
+  // ) => {
+  //   setUrlPdf(getPdfUrlServer(documentId));
+  //   setDocumentName(nameDocument);
+  //   setOpenModalPdf(true);
+  //   setPhotoId(photoId);
+  // };
+
+  const handleViewDocument = async (
     documentId: number,
     nameDocument: string,
     photoId: number,
   ) => {
-    setUrlPdf(getPdfUrlServer(documentId));
     setDocumentName(nameDocument);
     setOpenModalPdf(true);
     setPhotoId(photoId);
+    if (documentId) {
+      const pdfUrl = await getPdfUrlServer(documentId);
+      setUrlPdf(pdfUrl);
+    }
   };
 
   return (
@@ -378,6 +392,7 @@ function MobileListDocuments() {
           handleClose={() => setOpenModalPdf(false)}
           urlPdf={urlPdf}
           documentName={documentName}
+          fullScreen={true}
         />
       )}
 
@@ -387,6 +402,7 @@ function MobileListDocuments() {
           handleClose={() => setOpenModalPdf(false)}
           photoId={photoId}
           titleModal={documentName}
+          fullScreen={true}
         />
       )}
     </>

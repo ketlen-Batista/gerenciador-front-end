@@ -7,6 +7,7 @@ interface ModalPdfProps {
   handleClose: () => void;
   urlPdf: string;
   documentName: string;
+  fullScreen?: boolean;
 }
 
 const ModalPdf = ({
@@ -14,6 +15,7 @@ const ModalPdf = ({
   handleClose,
   urlPdf,
   documentName,
+  fullScreen,
 }: ModalPdfProps) => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
@@ -36,6 +38,7 @@ const ModalPdf = ({
       closeButtonPosition={'right'}
       title={documentName ?? ''}
       fullWidth
+      fullScreen={fullScreen}
       style={{ zIndex: 1300 }}
     >
       <iframe src={pdfUrl} width="100%" height="700px" title="pdf" />

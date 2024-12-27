@@ -8,6 +8,7 @@ import {
   DescriptionOutlined as DescriptionOutlinedIcon,
   EqualizerOutlined as EqualizerOutlinedIcon,
 } from '@material-ui/icons';
+import { Box } from '@mui/material';
 import { useProfilePage } from '@pages/ProfilePage/contexts/ProfilePageContext';
 import { useAuth } from '@src/hooks/useAuth';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
@@ -45,11 +46,16 @@ function Form() {
   const [isNewEmployee, setIsNewEmployee] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl] = useState(null);
 
-  const { user } = useAuth();
+  const {
+    user: userGeneralContext,
+    userPhoto,
+    // , updateUserGeneral
+  } = useAuth();
 
-  const { formik, getUser, isLoadingUser } = useProfilePage();
-  console.log({ user });
+  const { formik, getUser, isLoadingUser, user } = useProfilePage();
+
   const { mutate: handleDeleteUser, isPending: isPendingDeleteUser } =
     useDeleteUser();
 
@@ -78,24 +84,29 @@ function Form() {
   };
 
   useEffect(() => {
-    if (user?.id) {
-      getUser({ userId: user?.id });
+    if (userGeneralContext?.id) {
+      getUser({ userId: userGeneralContext?.id });
     } else {
       setIsNewEmployee(true);
     }
-  }, [user?.id, getUser]);
+    // updateUserGeneral();
+  }, [userGeneralContext?.id, getUser]);
 
+  useEffect(() => {
+    if (user?.photo_avatar_id) {
+      (async () => {
+        const urlImage = await getImageUrlServer(user?.photo_avatar_id);
+        setPhotoUrl(urlImage);
+      })();
+    }
+  }, [user?.photo_avatar_id]);
   return (
     <>
       <S.Container>
         <S.ContainerHeader>
           <ImageAvatar
             // imageAvatar={user?.photo_avatar_id ? getImageUrlServer(user?.photo_avatar_id) : null}
-            imageSrc={
-              user?.photo_avatar_id
-                ? getImageUrlServer(user?.photo_avatar_id)
-                : null
-            }
+            imageSrc={photoUrl ?? null}
           />
           {user?.id ? (
             <S.ContainerIcons>

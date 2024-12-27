@@ -355,7 +355,6 @@ const PdfGenerator: React.FC = () => {
       <Grid
         container
         spacing={isMobile ? 1 : 2}
-        alignItems="center"
         direction={isMobile ? 'column' : 'row'}
       >
         <Grid item xs={isMobile ? 12 : 3}>

@@ -113,16 +113,21 @@ const CertificatesList = () => {
     setIsOpenModalApprove(false);
   };
 
-  const handleViewDocument = ({
+  const handleViewDocument = async ({
     documentId,
     nameDocument,
   }: {
     documentId: number;
     nameDocument: string;
   }) => {
-    setUrlPdf(getPdfUrlServer(documentId));
+    // setUrlPdf(getPdfUrlServer(documentId));
     setDocumentName(nameDocument);
     setOpenModalPdf(true);
+
+    if (documentId) {
+      const pdfUrl = await getPdfUrlServer(documentId);
+      setUrlPdf(pdfUrl);
+    }
   };
 
   const columns = [

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { InfoOutlined } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
@@ -11,6 +11,7 @@ interface PhotoModalProps {
   openDialog: boolean;
   handleClose: () => void;
   titleModal?: string;
+  fullScreen?: boolean;
 }
 
 const PhotoModal = ({
@@ -18,7 +19,19 @@ const PhotoModal = ({
   openDialog,
   handleClose,
   titleModal,
+  fullScreen,
 }: PhotoModalProps) => {
+  const [photoUrl, setPhotoUrl] = useState(null);
+  console.log({ photoUrl });
+  useEffect(() => {
+    if (photoId) {
+      (async () => {
+        const urlImage = await getImageUrlServer(photoId);
+        setPhotoUrl(urlImage);
+      })();
+    }
+  }, [photoId]);
+
   return (
     <FullScreenDialog
       open={openDialog}
@@ -27,20 +40,19 @@ const PhotoModal = ({
       closeButtonPosition={'right'}
       title={titleModal}
       fullWidth
+      fullScreen={fullScreen}
+      style={{ zIndex: 1300 }}
     >
       {photoId ? (
         <Box
-          py={2}
-          px={8}
+          py={1}
+          px={1}
           width={'100%'}
+          height={'auto'}
           display={'flex'}
           justifyContent={'center'}
         >
-          <img
-            src={getImageUrlServer(photoId)}
-            height={'500px'}
-            width={'400px'}
-          />
+          <img src={photoUrl} height={'500px'} width={'400px'} />
         </Box>
       ) : (
         <Box

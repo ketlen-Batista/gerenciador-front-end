@@ -1,3 +1,12 @@
+import React from 'react';
+
+import EmojiFoodBeverageIcon from '@mui/icons-material/EmojiFoodBeverage';
+import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
+import FreeBreakfastOutlinedIcon from '@mui/icons-material/FreeBreakfastOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+
+import { OptionProps } from '@src/pages/ReportsPage/components/UserCheckpointsList';
+
 export const recebidos = [
   {
     name: 'Todos',
@@ -214,4 +223,34 @@ export const schedulesTimeList = [
   { label: '22:30', value: '22:30' },
   { label: '23:00', value: '23:00' },
   { label: '23:30', value: '23:30' },
+];
+
+export const OPTIONS_TYPES_POINTS: OptionProps[] = [
+  {
+    id: 1,
+    title: 'Entrada',
+    bgColor: '#00B37E',
+    icon: <ExitToAppOutlinedIcon />,
+  },
+
+  {
+    id: 2,
+    title: 'Pausa',
+    bgColor: '#0000FF',
+    icon: <EmojiFoodBeverageIcon />,
+  },
+
+  {
+    id: 3,
+    title: 'Retorno',
+    bgColor: '#FFA500',
+    icon: <FreeBreakfastOutlinedIcon />,
+  },
+
+  {
+    id: 4,
+    title: 'Saída',
+    bgColor: '#FF0000',
+    icon: <LogoutOutlinedIcon />,
+  },
 ];
