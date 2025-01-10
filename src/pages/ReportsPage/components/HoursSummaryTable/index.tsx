@@ -166,7 +166,6 @@ const HoursSummaryTable: React.FC<{ data: UserSummary[] }> = ({ data }) => {
       flex: 1,
       renderCell: (params: any) => (
         <>
-          {console.log({ params })}
           <ButtonCustom
             onClick={() =>
               handleOpenDetails(

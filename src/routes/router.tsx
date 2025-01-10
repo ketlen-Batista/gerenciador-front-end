@@ -74,7 +74,9 @@ import React from 'react';
 import DocumentsPage from '@pages/DocumentsPage';
 import EmployeeData from '@pages/EmployeeData';
 import Employees from '@pages/Employees';
+import ChangePassword from '@src/pages/ChangePassword';
 import CompanyData from '@src/pages/CompanyData';
+import ForgotPassword from '@src/pages/ForgotPassword';
 import HomePage from '@src/pages/HomePage';
 import ProfilePage from '@src/pages/ProfilePage';
 import ReportsPage from '@src/pages/ReportsPage';
@@ -162,6 +164,14 @@ const router = createBrowserRouter([
   {
     path: '*',
     element: <ErrorPage />,
+  },
+  {
+    path: '/recuperar-senha',
+    element: <ForgotPassword />,
+  },
+  {
+    path: '/redefinir-senha',
+    element: <ChangePassword />,
   },
 ]);
 

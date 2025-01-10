@@ -127,9 +127,11 @@
 //   );
 // };
 // export default SignIn;
-import * as React from 'react';
+import React, { useState } from 'react';
 
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { IconButton, InputAdornment } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -170,6 +172,13 @@ const defaultTheme = createTheme();
 const SignIn = () => {
   const { signIn } = useAuth();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
+  const handleTogglePassword = () => setShowPassword((prev) => !prev);
+  const handleTogglePasswordConfirm = () =>
+    setShowPasswordConfirm((prev) => !prev);
 
   const formik = useFormik({
     initialValues: {
@@ -241,7 +250,7 @@ const SignIn = () => {
               fullWidth
               name="password"
               label="Senha"
-              type="password"
+              type={showPasswordConfirm ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               value={formik.values.password}
@@ -249,6 +258,19 @@ const SignIn = () => {
               onBlur={formik.handleBlur}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle confirm password visibility"
+                      onClick={handleTogglePasswordConfirm}
+                      edge="end"
+                    >
+                      {showPasswordConfirm ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"
@@ -257,6 +279,18 @@ const SignIn = () => {
               sx={{ mt: 3, mb: 2 }}
             >
               Entrar
+            </Button>
+
+            <Box display="flex" justifyContent="center" mt={5}>
+              Esqueci minha senha:
+            </Box>
+            <Button
+              fullWidth
+              variant="outlined"
+              sx={{ mt: 1, mb: 2 }}
+              onClick={() => navigate('/recuperar-senha')}
+            >
+              Recuperar senha
             </Button>
           </Box>
         </Box>
