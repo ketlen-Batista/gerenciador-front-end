@@ -17,6 +17,7 @@ type ProtectedRouteProps = {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredPermission,
   redirectPath = '/error',
+  // redirectPath = '/gerenciador-gic/error',
   children,
 }) => {
   const { user, permissions, isLoadingStorageData } = useAuth();

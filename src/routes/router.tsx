@@ -165,6 +165,14 @@ const router = createBrowserRouter([
     path: '*',
     element: <ErrorPage />,
   },
+  // {
+  //   path: AvailableRoutes.error404,
+  //   element: (
+  //     // <ProtectedRoute>
+  //     <ErrorPage />
+  //     // </ProtectedRoute>
+  //   ),
+  // },
   {
     path: '/recuperar-senha',
     element: <ForgotPassword />,

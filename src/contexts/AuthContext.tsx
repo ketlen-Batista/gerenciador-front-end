@@ -152,6 +152,7 @@ import {
   storageUserSave,
 } from '@storage/storageUser';
 
+// import { useNavigate } from 'react-router-dom';
 import { getImageUrlServer } from '@utils/functions';
 
 export type AuthContextDataProps = {
@@ -177,6 +178,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [isLoadingStorageData, setIsLoadingStorageData] = useState(true);
   const [userPhoto, setUserPhoto] = useState<string>('');
   const [permissions, setPermissions] = useState<any>();
+
+  // const navigate = useNavigate();
 
   // const {
   //   mutateAsync: getDataUser,
@@ -270,6 +273,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       setUser({} as UserDTO);
       await storageUserRemove();
       await storageAuthTokenRemove();
+      // navigate('/login');
     } catch (error) {
       console.error('Error during sign-out:', error);
     } finally {

@@ -40,8 +40,8 @@ const ImageAvatar = ({
           component="img"
           mt={mt ?? '32px'}
           mb={mb ?? '32px'}
-          width={width ?? '150px'}
-          height={height ?? '150px'}
+          width={width ?? '35px'}
+          height={height ?? '35px'}
           borderRadius={'50%'}
           // style={{
           //   marginTop: mt ?? '32px',
@@ -51,7 +51,7 @@ const ImageAvatar = ({
           // src={imageSrc}
         />
       ) : (
-        <Box mt={mt ?? '32px'} mb={mb ?? '32px'} fontSize={120}>
+        <Box mt={mt ?? '32px'} mb={mb ?? '32px'} fontSize={35}>
           <AccountCircleIcon fontSize="inherit" />
         </Box>
       )}
