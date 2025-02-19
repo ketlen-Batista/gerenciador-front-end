@@ -31,6 +31,7 @@ export const useUserCheckpointsContext = () => {
     sectors,
     isLoadingUserCheckpoints,
     handleGetUserCheckpoints,
+    bankHours,
   } = useContext(UserCheckpointsContext);
 
   return {
@@ -61,5 +62,6 @@ export const useUserCheckpointsContext = () => {
     sectors,
     isLoadingUserCheckpoints,
     handleGetUserCheckpoints,
+    bankHours,
   };
 };

@@ -73,3 +73,20 @@ export async function getUserCheckpointById(userCheckpointId: number) {
     throw error;
   }
 }
+
+export async function getBankHours(filters: DTO.UserCheckpointFiltersDTO) {
+  try {
+    const { data } = await api.patch(`/get-back-hours`, {
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+      userId: filters.userId,
+      sectorId: filters.sectorId,
+      contractId: filters.contractId,
+      jobId: filters.jobId,
+    });
+    return data;
+  } catch (error) {
+    console.error('Erro ao listar pontos batidos:', error);
+    throw error;
+  }
+}

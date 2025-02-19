@@ -1,7 +1,10 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 
 import { UserCheckpointFiltersDTO } from '@src/services/CheckinsPoints/dto';
-import { useListUserCheckpoints } from '@src/services/CheckinsPoints/queries';
+import {
+  useGetBankHours,
+  useListUserCheckpoints,
+} from '@src/services/CheckinsPoints/queries';
 import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { useGetSectors } from '@src/services/sectorService/queries';
@@ -48,6 +51,21 @@ interface User {
   sector_value: number;
 }
 
+interface BankHours {
+  userId: string;
+  name: string;
+  totalHours: number; // Horas totais trabalhadas
+  justifiedHours: number; // Horas justificadas
+  absences: number; // Número de dias ausentes
+  daysWorked: number; // Dias trabalhados
+  details: {
+    date: string;
+    workedHours: number;
+    justified: boolean;
+    justification?: string;
+  }[]; // Detalhes por dia
+}
+
 interface UserCheckpointsContextType {
   filterUserId: string;
   setFilterUserId: (userId: string) => void;
@@ -79,6 +97,7 @@ interface UserCheckpointsContextType {
   sectors: any[];
   isLoadingUserCheckpoints: boolean;
   handleGetUserCheckpoints: () => void;
+  bankHours: BankHours[];
 }
 
 export const UserCheckpointsContext = createContext(
@@ -100,6 +119,7 @@ export const UserCheckpointsProvider = ({ children }) => {
     useState<boolean>(false);
   const [filterUserId, setFilterUserId] = useState<string>(userId ?? '');
   const [userCheckpoints, setUserCheckpoints] = useState<Checkpoint[]>([]);
+  const [bankHours, setBankHours] = useState<BankHours[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState<{
@@ -124,6 +144,9 @@ export const UserCheckpointsProvider = ({ children }) => {
     isPending: isLoadingUserCheckpoints,
   } = useListUserCheckpoints();
 
+  const { mutateAsync: fetchGetBankHours, isPending: isLoadingGetBankHours } =
+    useGetBankHours();
+
   const handleOpenModalLocalization = (lat: number, lngt: number) => {
     setOpenModalLocalization(true);
     setCoordinates({ latitude: lat, longitude: lngt });
@@ -134,7 +157,6 @@ export const UserCheckpointsProvider = ({ children }) => {
   };
 
   const handleOpenModalPhoto = (photoId: number) => {
-    console.log({ photoId });
     setOpenModalPhoto(true);
     setPhotoId(photoId);
   };
@@ -156,16 +178,7 @@ export const UserCheckpointsProvider = ({ children }) => {
     getJobs({});
     getContracts({});
     getSectors({});
-    // fetchUserCheckpoints({
-    //   startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
-    //   endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
-    // })
-    //   .then((checkpoints) => {
-    //     setUserCheckpoints(checkpoints);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Erro ao buscar checkpoints:', error);
-    //   });
+
     fetchUserCheckpoints({
       startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
       endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
@@ -176,7 +189,6 @@ export const UserCheckpointsProvider = ({ children }) => {
           (a, b) =>
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
         );
-        console.log({ sortedData });
         setUserCheckpoints(sortedData);
       })
       .catch((error) => {
@@ -211,6 +223,21 @@ export const UserCheckpointsProvider = ({ children }) => {
         );
         setUserCheckpoints(sortedData);
       });
+      //////////////////////////////////
+      fetchGetBankHours({
+        userId: filterUserId,
+        sectorId: setor ? (setor as number) : undefined,
+        jobId: cargo ? (cargo as number) : undefined,
+        contractId: contrato ? (contrato as number) : undefined,
+        startDate: selectedDateRange.startDate
+          ? new Date(selectedDateRange.startDate).toISOString()
+          : new Date(INIT_DATE_RANGE.startDate).toISOString(),
+        endDate: selectedDateRange.endDate
+          ? new Date(selectedDateRange.endDate).toISOString()
+          : new Date(INIT_DATE_RANGE.endDate).toISOString(),
+      })?.then((checkpoints) => {
+        setBankHours(checkpoints);
+      });
       return;
     }
 
@@ -227,6 +254,17 @@ export const UserCheckpointsProvider = ({ children }) => {
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
       );
       setUserCheckpoints(sortedData);
+    });
+    //////////////////////////////////
+    fetchGetBankHours({
+      userId: filterUserId,
+      sectorId: setor ? (setor as number) : undefined,
+      jobId: cargo ? (cargo as number) : undefined,
+      contractId: contrato ? (contrato as number) : undefined,
+      startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
+      endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
+    })?.then((checkpoints) => {
+      setBankHours(checkpoints);
     });
   };
 
@@ -276,6 +314,7 @@ export const UserCheckpointsProvider = ({ children }) => {
       sectors,
       isLoadingUserCheckpoints,
       handleGetUserCheckpoints,
+      bankHours,
     }),
     [
       filterUserId,
@@ -297,6 +336,7 @@ export const UserCheckpointsProvider = ({ children }) => {
       sectors,
       isLoadingUserCheckpoints,
       handleGetUserCheckpoints,
+      bankHours,
     ],
   );
 
