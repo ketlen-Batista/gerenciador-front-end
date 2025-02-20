@@ -63,7 +63,6 @@ const Filters = () => {
             value={typeof filterUserId !== 'undefined' ? filterUserId : ''}
             onChange={(e) => setFilterUserId(e.value)}
             clearable
-            heightSelect={'100%'}
           />
         </FormControl>
       </Grid>

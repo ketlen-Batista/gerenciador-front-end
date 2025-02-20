@@ -87,16 +87,19 @@ const UserHoursDashboard = () => {
                 <Box bgcolor={colors.info.states.outlinedBorder} p={2}>
                   <Typography variant="h6">{item.name}</Typography>
                   <Typography variant="body2">
-                    Total de horas: {item.totalHours}
+                    Horas trabalhadas: {`${item.totalHours}h`}
                   </Typography>
                   <Typography variant="body2">
-                    Horas justificadas: {item.justifiedHours}
+                    Horas justificadas: {`${item.justifiedHours}h`}
                   </Typography>
                   <Typography variant="body2">
-                    Ausências: {item.absences}
+                    Faltas (horas): {`${item.absences}h`}
                   </Typography>
                   <Typography variant="body2">
                     Dias trabalhados: {item.daysWorked}
+                  </Typography>
+                  <Typography variant="body2">
+                    Total: {`${item.bankHours}h`}
                   </Typography>
                 </Box>
               </Card>
