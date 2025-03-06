@@ -47,15 +47,15 @@ const MobileHome = () => {
       position: 'top',
       horizontalAlign: 'center',
       verticalAlign: 'middle',
-      fontSize: '16px',
+      fontSize: '14px',
       fontWeight: 400,
     },
     responsive: [
       {
-        breakpoint: 480,
+        breakpoint: 280,
         options: {
           chart: {
-            width: 300,
+            width: 500,
           },
         },
       },
@@ -153,14 +153,21 @@ const MobileHome = () => {
         <Box
           display="flex"
           flexDirection="column"
-          bgcolor={colors.basic.white}
+          bgcolor={'var(--background'}
+          color={'var(--ColorFont)'}
           borderRadius={2}
           height={'390px'}
           px={1}
           pt={2}
           mx={4}
         >
-          <Typography variant="h6" fontWeight={600} mb={5}>
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            mb={5}
+            pl={6}
+            color={'var(--ColorFont)'}
+          >
             Status de funcionários
           </Typography>
 
@@ -171,7 +178,8 @@ const MobileHome = () => {
               justifyContent="center"
               gap={1}
               height="100%"
-              width="25rem"
+              width="20rem"
+              color={'var(--ColorFont)'}
             >
               <InfoOutlined color="warning" sx={{ height: 28, width: 28 }} />
               <Typography variant="body1" fontSize={17} color="warning.main">
@@ -183,7 +191,7 @@ const MobileHome = () => {
               options={options ?? []}
               series={options.series ?? []}
               type="pie"
-              width={350}
+              width={320}
             />
           )}
         </Box>

@@ -92,7 +92,7 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
     {
       field: 'actions',
       headerName: '',
-      flex: 1,
+      flex: 2,
       headerClassName: 'table-header',
       cellClassName: 'table-body',
       renderCell: (params) => (

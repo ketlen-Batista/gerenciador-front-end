@@ -12,6 +12,7 @@ import BedtimeIcon from '@mui/icons-material/Bedtime';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import { Box, Menu, MenuItem, MenuList } from '@mui/material';
 import { useAuth } from '@src/hooks/useAuth';
+import useResponsive from '@src/hooks/useResponsive';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
 import { getImageUrlServer } from '@src/utils/functions';
 import clsx from 'clsx';
@@ -35,6 +36,7 @@ type Props = {
 function DefaultPage({ children, pageTitle }: Props) {
   const classes = S.useStyles();
   const { user, signOut } = useAuth();
+  const { isMobile } = useResponsive();
 
   const [openSideBar, setOpenSideBar] = useState(false);
   const [isDark, setIsDark] = useState<boolean>(
@@ -175,7 +177,7 @@ function DefaultPage({ children, pageTitle }: Props) {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'row',
+              flexDirection: isMobile ? 'column-reverse' : 'row',
             }}
           >
             <div
@@ -193,12 +195,13 @@ function DefaultPage({ children, pageTitle }: Props) {
               flex={2}
               justifyContent="end"
               alignItems="center"
+              color="#fff"
             >
-              <WbSunnyIcon color={isDark ? 'disabled' : 'warning'} />
+              <WbSunnyIcon color={isDark ? 'inherit' : 'warning'} />
               <Switch
                 checked={isDark}
                 onChange={handleThemeMode}
-                color="default"
+                color="primary"
               />
               <BedtimeIcon color={isDark ? 'primary' : 'disabled'} />
             </Box>

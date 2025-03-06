@@ -158,6 +158,7 @@ export const DocumentsFilterProvider = ({ children }) => {
     if (dateRangeISO.startDate && dateRangeISO.endDate) {
       fetchDocuments(dateRangeISO);
       getUsers({});
+      return;
     }
     fetchDocuments({
       startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),

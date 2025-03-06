@@ -84,7 +84,7 @@ export default function Tabs({
   onChangeTab,
 }: Props) {
   const { isDesktop } = useResponsive();
-  console.log({ isDesktop });
+
   const initialTab = tabs?.find((tab) => tab?.isInitialTab) || tabs?.[0];
   const [currentTabId, setCurrentTabId] = useState(initialTab?.id);
 

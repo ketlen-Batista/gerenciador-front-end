@@ -291,6 +291,7 @@ const CertificatesList = () => {
             border="1px solid gray"
             borderRadius="8px"
             bgcolor={colors.basic.white}
+            color="text.primary"
           >
             <div>
               <strong>Usuário:</strong>{' '}

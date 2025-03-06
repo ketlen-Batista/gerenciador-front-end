@@ -10,10 +10,12 @@ export const TabList = MUIStyled(MUITabList)({
 
 export const Tab = MUIStyled(MUITab)({
   textTransform: 'none',
+  color: 'var(--ColorFont) !important',
 });
 
 export const TabPanel = MUIStyled(MUITabPanel)({
   padding: '1rem',
+  color: 'var(--ColorFont) !important',
 });
 
 export const MobileTabSelect = styled.select`

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Grid } from '@material-ui/core';
+import useResponsive from '@src/hooks/useResponsive';
 
 import TextInput from '@components/TextInput';
 
@@ -10,6 +11,7 @@ import * as S from './styles';
 
 function Form() {
   const { formik, getCompany, isLoadingCompany } = useCompanyData();
+  const { isDesktop } = useResponsive();
 
   useEffect(() => {
     getCompany();
@@ -19,7 +21,7 @@ function Form() {
     <S.Container>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="name"
               label="Nome da Empresa"
@@ -31,7 +33,7 @@ function Form() {
               helperText={formik.touched.name && formik.errors.name}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="address"
               label="Endereço"
@@ -43,7 +45,7 @@ function Form() {
               helperText={formik.touched.address && formik.errors.address}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="phone"
               label="Telefone"
@@ -55,7 +57,7 @@ function Form() {
               helperText={formik.touched.phone && formik.errors.phone}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="email"
               label="Email"
@@ -67,7 +69,7 @@ function Form() {
               helperText={formik.touched.email && formik.errors.email}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="website"
               label="Website"
