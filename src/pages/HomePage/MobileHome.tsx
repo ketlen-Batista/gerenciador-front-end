@@ -26,36 +26,51 @@ const MobileHome = () => {
     useGetStatusCountHome();
 
   const { permissions } = useAuth();
-  console.log({ permissions });
+
+  const IsOptions = statusCountHome?.filter((item) => item.count > 0);
+
   const options = {
-    series: statusCountHome
-      ? statusCountHome.map((item) => item?.count || 0)
-      : [],
+    series: IsOptions ? IsOptions?.map((item) => item?.count || 0) : [],
     chart: {
       type: 'pie',
       width: 500,
     },
-    labels: statusCountHome
-      ? statusCountHome.map((item) => item?.name || 'Desconhecido')
-      : [],
-    colors: ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0'],
+    labels: IsOptions ? IsOptions?.map((item) => item?.name) : [],
+    colors: [
+      '#008FFB',
+      '#00E396',
+      '#FEB019',
+      '#FF4560',
+      '#775DD0',
+      '#546E7A',
+      '#26a69a',
+      '#D10CE8',
+      '#FF8F00',
+      '#FFC400',
+      '#FF5733',
+      '#D3D3D3',
+      '#909090',
+      '#5E5E5E',
+      '#323232',
+      '#000000',
+    ],
     legend: {
       show: true,
       showForSingleSeries: false,
       showForNullSeries: true,
       showForZeroSeries: true,
-      position: 'top',
+      position: 'left',
       horizontalAlign: 'center',
       verticalAlign: 'middle',
-      fontSize: '14px',
+      fontSize: '16px',
       fontWeight: 400,
     },
     responsive: [
       {
-        breakpoint: 280,
+        breakpoint: 480,
         options: {
           chart: {
-            width: 500,
+            width: 300,
           },
         },
       },
