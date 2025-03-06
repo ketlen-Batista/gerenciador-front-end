@@ -15,31 +15,59 @@ interface GetUser {
   userId: string;
 }
 
+// interface User {
+//   user: {
+//     id: string;
+//     name: string;
+//     email: string;
+//     phone: string;
+//     cpf: string;
+//     address: string;
+//     registration: string;
+//     dateOfBirth: string;
+//     status: string;
+//     jobPosition_id: number;
+//     role: string;
+//     created_at: string;
+//     contracts_value: number;
+//     sector_value: number;
+//     documents_id: number;
+//     photo_avatar_id: number;
+//     photo: {
+//       id: number;
+//       photoFile: {
+//         id: number;
+//         type: string;
+//         data: number[];
+//       };
+//     };
+//   };
+// }
+
 interface User {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    cpf: string;
-    address: string;
-    registration: string;
-    dateOfBirth: string;
-    status: string;
-    jobPosition_id: number;
-    role: string;
-    created_at: string;
-    contracts_value: number;
-    sector_value: number;
-    documents_id: number;
-    photo_avatar_id: number;
-    photo: {
+  user: any;
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  cpf: string;
+  address: string;
+  registration: string;
+  dateOfBirth: string;
+  status: string;
+  jobPosition_id: number;
+  role: string;
+  created_at: string;
+  contracts_value: number;
+  sector_value: number;
+  documents_id: number;
+  photo_avatar_id: number;
+  photo: {
+    id: number;
+    photoFile: {
       id: number;
-      photoFile: {
-        id: number;
-        type: string;
-        data: number[];
-      };
+      type: string;
+      data: number[];
     };
   };
 }
@@ -144,7 +172,6 @@ export const EmployeeDataProvider = ({ children }) => {
       photo_avatar_id: Yup.number().nullable().optional(),
     }),
     onSubmit: (values) => {
-      console.log('Form data:', values);
       if (values.id) {
         updateUser({
           id: values.id,

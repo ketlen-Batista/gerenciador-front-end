@@ -5,9 +5,8 @@ import { Box, Switch } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Autocomplete, FormControlLabel, Grid, TextField } from '@mui/material';
 import BoxMui from '@mui/material/Box';
+import useResponsive from '@src/hooks/useResponsive';
 import { colors } from '@src/styles/colors';
-
-import Typography from '@src/components/Typography';
 
 interface Options {
   label?: string;
@@ -28,6 +27,7 @@ type propTypes = {
   ReturnTime?: string;
   ExitTime?: string;
   statusJustificationName?: string;
+  fieldsDisabled?: boolean;
 };
 
 const SwitchWithHoursSelectComponent = ({
@@ -43,7 +43,10 @@ const SwitchWithHoursSelectComponent = ({
   ReturnTime,
   ExitTime,
   statusJustificationName = '',
+  fieldsDisabled,
 }: propTypes) => {
+  const { isDesktop } = useResponsive();
+
   const handleSliceByOptions = (
     prevValue: string | undefined,
     options: Options[],
@@ -58,7 +61,7 @@ const SwitchWithHoursSelectComponent = ({
   return (
     <Box component="div" display="flex">
       <Grid container mt={3}>
-        <Grid item xs={6}>
+        <Grid item xs={isDesktop ? 6 : 12}>
           <Tooltip title={titleTooltip}>
             <BoxMui
               fontSize={{
@@ -72,7 +75,12 @@ const SwitchWithHoursSelectComponent = ({
           </Tooltip>
         </Grid>
 
-        <Grid item xs={6} display={'flex'} justifyContent={'flex-end'}>
+        <Grid
+          item
+          xs={isDesktop ? 6 : 12}
+          display={'flex'}
+          justifyContent={isDesktop ? 'flex-end' : 'flex-start'}
+        >
           {statusJustificationName?.length ? (
             <BoxMui
               component="div"
@@ -94,7 +102,12 @@ const SwitchWithHoursSelectComponent = ({
           ) : (
             <FormControlLabel
               control={
-                <Switch checked={active} onChange={onClick} color="primary" />
+                <Switch
+                  checked={active}
+                  onChange={onClick}
+                  color="primary"
+                  disabled={!!fieldsDisabled}
+                />
               }
               label={active ? 'Trabalho' : 'Folga'}
             />
@@ -121,7 +134,7 @@ const SwitchWithHoursSelectComponent = ({
               onChange={(e, newValue) => {
                 onChange?.(dayOfWeek, 'EntryTime', newValue?.value);
               }}
-              disabled={!active}
+              disabled={!active || !!fieldsDisabled}
               disableClearable
             />
           </Box>
@@ -145,7 +158,7 @@ const SwitchWithHoursSelectComponent = ({
             onChange={(e, newValue) => {
               onChange?.(dayOfWeek, 'PauseTime', newValue?.value);
             }}
-            disabled={!active}
+            disabled={!active || !!fieldsDisabled}
             disableClearable
           />
         </Box>
@@ -166,7 +179,7 @@ const SwitchWithHoursSelectComponent = ({
             onChange={(e, newValue) => {
               onChange?.(dayOfWeek, 'ReturnTime', newValue?.value);
             }}
-            disabled={!active}
+            disabled={!active || !!fieldsDisabled}
             disableClearable
           />
         </Box>
@@ -187,7 +200,7 @@ const SwitchWithHoursSelectComponent = ({
             onChange={(e, newValue) => {
               onChange?.(dayOfWeek, 'ExitTime', newValue?.value);
             }}
-            disabled={!active}
+            disabled={!active || !!fieldsDisabled}
             disableClearable
           />
         </Box>

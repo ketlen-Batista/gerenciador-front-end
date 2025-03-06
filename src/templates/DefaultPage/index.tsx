@@ -8,7 +8,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import BedtimeIcon from '@mui/icons-material/Bedtime';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import { Box, Menu, MenuItem, MenuList } from '@mui/material';
 import { useAuth } from '@src/hooks/useAuth';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
@@ -36,10 +37,22 @@ function DefaultPage({ children, pageTitle }: Props) {
   const { user, signOut } = useAuth();
 
   const [openSideBar, setOpenSideBar] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState<boolean>(
+    localStorage.getItem('isDark') === 'true',
+  );
+  const [photoUrl, setPhotoUrl] = useState<string | null>(
+    localStorage.getItem('photoUrl') || null,
+  );
+  const [photoIdAvatar, setPhotoIdAvatar] = useState<number | null>(
+    Number(localStorage.getItem('photoIdAvatar')) || null,
+  );
 
   const handleThemeMode = () => {
-    setIsDark(!isDark);
+    setIsDark((prev) => {
+      const newTheme = !prev;
+      localStorage.setItem('isDark', String(newTheme));
+      return newTheme;
+    });
   };
 
   const handleDrawerOpen = () => {
@@ -50,7 +63,7 @@ function DefaultPage({ children, pageTitle }: Props) {
   };
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [photoUrl, setPhotoUrl] = useState(null);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -64,13 +77,17 @@ function DefaultPage({ children, pageTitle }: Props) {
   const handleNavigate = (page) => {
     navigate(page || '');
   };
-  console.log('userHeader', user);
+
   useEffect(() => {
-    if (user?.photo_avatar_id) {
-      (async () => {
-        const urlImage = await getImageUrlServer(user?.photo_avatar_id);
+    if (user?.photo_avatar_id && user.photo_avatar_id !== photoIdAvatar) {
+      getImageUrlServer(user.photo_avatar_id).then((urlImage) => {
+        setPhotoIdAvatar(user.photo_avatar_id);
         setPhotoUrl(urlImage);
-      })();
+
+        // Salva no localStorage para evitar requisições desnecessárias
+        localStorage.setItem('photoUrl', urlImage);
+        localStorage.setItem('photoIdAvatar', String(user.photo_avatar_id));
+      });
     }
   }, [user?.photo_avatar_id]);
 
@@ -171,13 +188,20 @@ function DefaultPage({ children, pageTitle }: Props) {
             >
               <h1>{pageTitle}</h1>
             </div>
-            <div style={{ display: 'flex', flex: 2, justifyContent: 'end' }}>
+            <Box
+              display="flex"
+              flex={2}
+              justifyContent="end"
+              alignItems="center"
+            >
+              <WbSunnyIcon color={isDark ? 'disabled' : 'warning'} />
               <Switch
                 checked={isDark}
                 onChange={handleThemeMode}
                 color="default"
               />
-            </div>
+              <BedtimeIcon color={isDark ? 'primary' : 'disabled'} />
+            </Box>
           </div>
 
           {/* TELAS */}

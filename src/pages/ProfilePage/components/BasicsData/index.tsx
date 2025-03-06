@@ -136,26 +136,6 @@ function BasicsData({ user }) {
       <Grid item xs={4}>
         <S.FieldBox>
           <Select
-            label="Status"
-            options={status}
-            value={formik.values.status_value}
-            name={
-              status?.find((item) => item.value === formik.values.status_value)
-                ?.name
-            }
-            onChange={(e) => formik.setFieldValue('status_value', e.value)}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.status_value && Boolean(formik.errors.status_value)
-            }
-            //   helperText={formik.touched.jobPosition_id && formik.errors.jobPosition_id}
-            clearable
-          />
-        </S.FieldBox>
-      </Grid>
-      <Grid item xs={4}>
-        <S.FieldBox>
-          <Select
             label="Cargo"
             options={jobs}
             value={formik.values.jobPosition_id}

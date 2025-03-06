@@ -1,15 +1,19 @@
 import React, { useEffect } from 'react';
+
 import { Grid } from '@material-ui/core';
-import * as S from './styles';
+
 import TextInput from '@components/TextInput';
+
 import { useCompanyData } from '../contexts/CompanyDataContext';
+
+import * as S from './styles';
 
 function Form() {
   const { formik, getCompany, isLoadingCompany } = useCompanyData();
 
   useEffect(() => {
     getCompany();
-  }, [getCompany]);
+  }, []);
 
   return (
     <S.Container>
@@ -63,18 +67,6 @@ function Form() {
               helperText={formik.touched.email && formik.errors.email}
             />
           </Grid>
-          {/* <Grid item xs={6}>
-            <TextInput
-              name="registrationNumber"
-              label="Número de Registro"
-              value={formik.values.registrationNumber}
-              placeholder="Número de Registro"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.registrationNumber && Boolean(formik.errors.registrationNumber)}
-              helperText={formik.touched.registrationNumber && formik.errors.registrationNumber}
-            />
-          </Grid> */}
           <Grid item xs={6}>
             <TextInput
               name="website"
@@ -85,19 +77,6 @@ function Form() {
               onBlur={formik.handleBlur}
               error={formik.touched.website && Boolean(formik.errors.website)}
               helperText={formik.touched.website && formik.errors.website}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextInput
-              name="emailPassword"
-              label="Senha do Email"
-              type="password"
-              value={formik.values.emailPassword}
-              placeholder="Senha do Email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.emailPassword && Boolean(formik.errors.emailPassword)}
-              helperText={formik.touched.emailPassword && formik.errors.emailPassword}
             />
           </Grid>
         </Grid>

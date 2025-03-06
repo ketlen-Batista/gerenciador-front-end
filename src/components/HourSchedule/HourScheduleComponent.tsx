@@ -211,12 +211,10 @@ const HourScheduleComponent = ({ employeeId, fieldsDisabled }: Props) => {
   const { mutateAsync: createOrUpdateSchedule } = useCreateOrUpdateSchedule();
 
   const handleSubmitFunction = async (values: any) => {
-    console.log('entrou111111', values);
     try {
       // const payload: ScheduleData = preparePayload(values);
       // Enviar os dados para o endpoint
       await createOrUpdateSchedule(values);
-      console.log('Dados enviados com sucesso');
     } catch (error) {
       console.error('Erro ao enviar os dados:', error);
     }
@@ -351,6 +349,7 @@ const HourScheduleComponent = ({ employeeId, fieldsDisabled }: Props) => {
               !formik?.values?.[`${day.value}Work`],
             )
           }
+          fieldsDisabled={fieldsDisabled}
         />
       ))}
 

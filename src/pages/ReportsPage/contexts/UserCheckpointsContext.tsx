@@ -58,6 +58,7 @@ interface BankHours {
   justifiedHours: number; // Horas justificadas
   absences: number; // Número de dias ausentes
   daysWorked: number; // Dias trabalhados
+  bankHours: number;
   details: {
     date: string;
     workedHours: number;

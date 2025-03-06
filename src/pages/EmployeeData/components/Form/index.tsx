@@ -6,14 +6,15 @@ import {
   DateRangeOutlined as DateRangeOutlinedIcon,
   DeleteOutline as DeleteOutlineIcon,
   DescriptionOutlined as DescriptionOutlinedIcon,
-  EqualizerOutlined as EqualizerOutlinedIcon,
 } from '@material-ui/icons';
 import { Box, Grid } from '@mui/material';
 import { useEmployeeData } from '@pages/EmployeeData/contexts/EmployeeDataContext';
+import { useAuth } from '@src/hooks/useAuth';
 import useResponsive from '@src/hooks/useResponsive';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
-import { useDeleteUser, useGetUser } from '@src/services/users/queries';
+import { useDeleteUser } from '@src/services/users/queries';
 import { colors } from '@src/styles/colors';
+import { getImageUrlServer } from '@src/utils/functions';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import BasicsData from '@pages/EmployeeData/components/BasicsData';
@@ -49,8 +50,13 @@ function Form() {
   const [isNewEmployee, setIsNewEmployee] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl] = useState(null);
 
-  const { getUser, user } = useEmployeeData();
+  const { getUser, user: userEmployeeData } = useEmployeeData();
+
+  const { user: userGeneralContext } = useAuth();
+
+  const user = userEmployeeData?.user;
 
   const { isDesktop } = useResponsive();
 
@@ -59,7 +65,7 @@ function Form() {
 
   const handleOpenModalDelete = () => {
     setIsOpenModal(true);
-    setUserIdToDelete(user?.user?.id);
+    setUserIdToDelete(user?.id);
   };
 
   const handleCloseModalDelete = () => {
@@ -81,13 +87,30 @@ function Form() {
     navigate(page || '', { state: { userId: userId ?? '', tab: tab ?? '' } });
   };
 
+  // useEffect(() => {
+  //   if (employeeId) {
+  //     getUser({ userId: employeeId });
+  //   } else {
+  //     setIsNewEmployee(true);
+  //   }
+  // }, [employeeId, getUser]);
+
   useEffect(() => {
     if (employeeId) {
       getUser({ userId: employeeId });
     } else {
       setIsNewEmployee(true);
     }
-  }, [employeeId, getUser]);
+  }, [employeeId, userGeneralContext?.id, getUser]);
+
+  useEffect(() => {
+    if (user?.photo_avatar_id) {
+      (async () => {
+        const urlImage = await getImageUrlServer(user?.photo_avatar_id);
+        setPhotoUrl(urlImage);
+      })();
+    }
+  }, [user?.photo_avatar_id]);
 
   return (
     <>
@@ -95,7 +118,11 @@ function Form() {
         {isDesktop ? (
           <S.ContainerHeader>
             <ImageAvatar
-              imageAvatar={user?.user?.photo?.photoFile?.data ?? null}
+              // imageAvatar={user?.photo?.photoFile?.data ?? null}
+              imageSrc={photoUrl ?? null}
+              height={'100px'}
+              width={'100px'}
+              fontSize={100}
             />
             {employeeId ? (
               <S.ContainerIcons>
@@ -149,9 +176,11 @@ function Form() {
                 alignItems={'center'}
               >
                 <ImageAvatar
-                  imageAvatar={user?.user?.photo?.photoFile?.data ?? null}
-                  mt="0px"
-                  mb="0px"
+                  // imageAvatar={user?.photo?.photoFile?.data ?? null}
+                  imageSrc={photoUrl ?? null}
+                  height={'100px'}
+                  width={'100px'}
+                  fontSize={50}
                 />
               </Box>
             </Grid>

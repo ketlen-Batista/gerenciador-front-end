@@ -105,51 +105,11 @@ function Form() {
       <S.Container>
         <S.ContainerHeader>
           <ImageAvatar
-            // imageAvatar={user?.photo_avatar_id ? getImageUrlServer(user?.photo_avatar_id) : null}
             imageSrc={photoUrl ?? null}
+            height={'100px'}
+            width={'100px'}
+            fontSize={100}
           />
-          {user?.id ? (
-            <S.ContainerIcons>
-              {/* <IconTooltip
-              title="Relatórios"
-              icon={<EqualizerOutlinedIcon fontSize="medium" />}
-            /> */}
-              <IconTooltip
-                title="Registro de Serviços"
-                icon={<CameraAltOutlinedIcon fontSize="medium" />}
-                onClick={() =>
-                  handleNavigate(
-                    AvailableRoutes.reportsPage,
-                    user?.id,
-                    'serviceRegister',
-                  )
-                }
-              />
-              <IconTooltip
-                title="Documentos"
-                icon={<DescriptionOutlinedIcon fontSize="medium" />}
-                onClick={() =>
-                  handleNavigate(AvailableRoutes.documentsPage, user?.id)
-                }
-              />
-              <IconTooltip
-                title="Folha de Ponto"
-                icon={<DateRangeOutlinedIcon fontSize="medium" />}
-                onClick={() =>
-                  handleNavigate(
-                    AvailableRoutes.reportsPage,
-                    user?.id,
-                    'pointCheckins',
-                  )
-                }
-              />
-              {/* <IconTooltip
-                title="Deletar"
-                icon={<DeleteOutlineIcon fontSize="medium" />}
-                onClick={handleOpenModalDelete}
-              /> */}
-            </S.ContainerIcons>
-          ) : null}
         </S.ContainerHeader>
 
         <AccordionCustom
