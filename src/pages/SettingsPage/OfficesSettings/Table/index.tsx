@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { IconButton, Tooltip } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import {
   useDeleteJobPosition,
   useGetJobPositions,
@@ -43,6 +44,8 @@ function Table({
     }));
   };
 
+  const { permissions } = useAuth();
+
   useEffect(() => {
     getJobs({});
   }, []);
@@ -72,13 +75,15 @@ function Table({
           }}
         >
           <Tooltip title="Editar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() => handleOpenModal(params.row.name, params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--GrayDark200)',
                 }}
-                onClick={() => handleOpenModal(params.row.name, params.row.id)}
               >
                 <CreateOutlinedIcon fontSize="medium" />
               </div>
@@ -86,13 +91,15 @@ function Table({
           </Tooltip>
 
           <Tooltip title="Deletar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() => handleOpenModalDelete(params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--Danger)',
                 }}
-                onClick={() => handleOpenModalDelete(params.row.id)}
               >
                 <DeleteOutlinedIcon fontSize="medium" />
               </div>

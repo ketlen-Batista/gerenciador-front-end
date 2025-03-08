@@ -61,6 +61,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import useResponsive from '@src/hooks/useResponsive';
 // Importe o hook customizado
 import {
@@ -82,6 +83,7 @@ import * as S from '../styles';
 const SectorSettings = () => {
   // const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { isMobile } = useResponsive(); // Utilize o hook customizado
+  const { permissions } = useAuth();
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [sectorName, setSectorName] = useState(null);
@@ -161,7 +163,10 @@ const SectorSettings = () => {
 
           <Box display="flex" justifyContent="flex-end" mb={2}>
             <S.ContainerButtonsAdd>
-              <S.ButtonClick onClick={() => handleOpenModal()}>
+              <S.ButtonClick
+                onClick={() => handleOpenModal()}
+                disabled={!permissions?.['editUser']}
+              >
                 {`+Adicionar ${basicNames.section.singular}`}
               </S.ButtonClick>
             </S.ContainerButtonsAdd>
@@ -177,7 +182,10 @@ const SectorSettings = () => {
           <Grid item xs={12}>
             <Box display="flex" justifyContent="flex-end" mb={2}>
               <S.ContainerButtonsAdd>
-                <S.ButtonClick onClick={() => handleOpenModal()}>
+                <S.ButtonClick
+                  onClick={() => handleOpenModal()}
+                  disabled={!permissions?.['editUser']}
+                >
                   {`+Adicionar ${basicNames.section.singular}`}
                 </S.ButtonClick>
               </S.ContainerButtonsAdd>

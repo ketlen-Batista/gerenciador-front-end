@@ -60,6 +60,7 @@ import React, { useState } from 'react';
 import { useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import { Box, Grid } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import {
   useDeleteContract,
   useGetContracts,
@@ -78,6 +79,7 @@ import * as S from '../styles';
 
 const SettingsContracts = () => {
   // const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const { permissions } = useAuth();
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [contractName, setContractName] = useState(null);
@@ -155,6 +157,7 @@ const SettingsContracts = () => {
             <S.ContainerButtonsAdd>
               <S.ButtonClick
                 onClick={() => handleOpenModal()}
+                disabled={!permissions?.['editUser']}
               >{`+Adicionar ${basicNames.sector.singular}`}</S.ButtonClick>
             </S.ContainerButtonsAdd>
           </Box>
@@ -166,6 +169,7 @@ const SettingsContracts = () => {
             <S.ContainerButtonsAdd>
               <S.ButtonClick
                 onClick={() => handleOpenModal()}
+                disabled={!permissions?.['editUser']}
               >{`+Adicionar ${basicNames.sector.singular}`}</S.ButtonClick>
             </S.ContainerButtonsAdd>
           </Grid>

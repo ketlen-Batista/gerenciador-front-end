@@ -48,6 +48,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import useResponsive from '@src/hooks/useResponsive';
 import {
   useDeleteJobPosition,
@@ -67,6 +68,7 @@ const OfficesSettings = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const { data: jobs, mutate: getJobs, isPending } = useGetJobPositions();
   const { isMobile } = useResponsive();
+  const { permissions } = useAuth();
 
   const { mutateAsync: handleDeleteJob, isPending: isPendingDelete } =
     useDeleteJobPosition();
@@ -139,7 +141,10 @@ const OfficesSettings = () => {
         {!isMobile && (
           <Box display="flex" justifyContent="flex-end" mb={2}>
             <S.ContainerButtonsAdd>
-              <S.ButtonClick onClick={() => handleOpenModal()}>
+              <S.ButtonClick
+                onClick={() => handleOpenModal()}
+                disabled={!permissions?.['editUser']}
+              >
                 +Adicionar Cargo
               </S.ButtonClick>
             </S.ContainerButtonsAdd>
@@ -157,7 +162,10 @@ const OfficesSettings = () => {
         {isMobile && (
           <Grid item xs={12} mt={isMobile ? 2 : 0}>
             <S.ContainerButtonsAdd>
-              <S.ButtonClick onClick={() => handleOpenModal()}>
+              <S.ButtonClick
+                onClick={() => handleOpenModal()}
+                disabled={!permissions?.['editUser']}
+              >
                 +Adicionar Cargo
               </S.ButtonClick>
             </S.ContainerButtonsAdd>

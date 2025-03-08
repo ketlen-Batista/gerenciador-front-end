@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { Box, IconButton, Tooltip } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import { useDeleteStatus } from '@src/services/status/queries';
 import { colors } from '@src/styles/colors';
 import { basicNames } from '@src/utils/constants';
@@ -35,6 +36,8 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
   const [statusName, setStatusName] = useState(null);
   const [statusId, setStatusId] = useState(null);
+
+  const { permissions } = useAuth();
 
   const customStatuss = (
     statusparams: CustomStatussRequest[],
@@ -106,20 +109,25 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
           }}
         >
           <Tooltip title="Editar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() => handleOpenModal(params.row.name, params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--GrayDark200)',
                 }}
-                onClick={() => handleOpenModal(params.row.name, params.row.id)}
               >
                 <CreateOutlinedIcon fontSize="medium" />
               </div>
             </IconButton>
           </Tooltip>
           <Tooltip title="Deletar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() => handleOpenModalDelete(params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <Box
                 // style={{
                 //   display: 'flex',
@@ -128,9 +136,9 @@ function Table({ status, getStatuss, isPending }: TableStatussProps) {
                 //       ? colors.text.disabled
                 //       : colors.error.dark,
                 // }}
+
                 display="flex"
                 color={colors.error.light}
-                onClick={() => handleOpenModalDelete(params.row.id)}
               >
                 <DeleteOutlinedIcon
                   fontSize="medium"

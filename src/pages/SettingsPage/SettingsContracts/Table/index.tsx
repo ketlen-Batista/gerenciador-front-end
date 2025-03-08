@@ -4,6 +4,7 @@ import { IconButton } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import { useAuth } from '@src/hooks/useAuth';
 import { useDeleteContract } from '@src/services/contractsService/queries';
 import { colors } from '@src/styles/colors';
 import { basicNames } from '@src/utils/constants';
@@ -47,6 +48,7 @@ function Table({ contracts, getContracts, isPending }: TableContractsProps) {
   const handleCloseModal = () => {
     setOpenDialog(false);
   };
+  const { permissions } = useAuth();
 
   const handleOpenModal = (name, id, status, validity) => {
     setOpenDialog(true);
@@ -137,20 +139,22 @@ function Table({ contracts, getContracts, isPending }: TableContractsProps) {
           }}
         >
           <Tooltip title="Editar" placement="top">
-            <IconButton>
+            <IconButton
+              disabled={!permissions?.['editUser']}
+              onClick={() =>
+                handleOpenModal(
+                  params.row.name,
+                  params.row.id,
+                  params.row.status,
+                  params.row.validity,
+                )
+              }
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--GrayDark200)',
                 }}
-                onClick={() =>
-                  handleOpenModal(
-                    params.row.name,
-                    params.row.id,
-                    params.row.status,
-                    params.row.validity,
-                  )
-                }
               >
                 <CreateOutlinedIcon fontSize="medium" />
               </div>
@@ -158,13 +162,15 @@ function Table({ contracts, getContracts, isPending }: TableContractsProps) {
           </Tooltip>
 
           <Tooltip title="Deletar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() => handleOpenModalDelete(params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--Danger)',
                 }}
-                onClick={() => handleOpenModalDelete(params.row.id)}
               >
                 <DeleteOutlinedIcon fontSize="medium" />
               </div>

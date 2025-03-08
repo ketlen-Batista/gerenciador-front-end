@@ -52,6 +52,7 @@ import React, { useState } from 'react';
 
 import { Box, Grid, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { useAuth } from '@src/hooks/useAuth';
 import { useGetStatus } from '@src/services/status/queries';
 
 import ModalStatus from './ModalStatus';
@@ -63,6 +64,7 @@ const Status = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const { data: status, mutate: getStatuss, isPending } = useGetStatus();
+  const { permissions } = useAuth();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Verifica se é mobile
@@ -85,7 +87,10 @@ const Status = () => {
         {!isMobile && (
           <Box display="flex" justifyContent="flex-end" mb={2}>
             <S.ContainerButtonsAdd>
-              <S.ButtonClick onClick={handleOpenModal}>
+              <S.ButtonClick
+                onClick={handleOpenModal}
+                disabled={!permissions?.['editUser']}
+              >
                 +Adicionar Cargo
               </S.ButtonClick>
             </S.ContainerButtonsAdd>
@@ -97,7 +102,10 @@ const Status = () => {
         {isMobile && (
           <Grid item xs={12} mb={3}>
             <S.ContainerButtonsAdd>
-              <S.ButtonClick onClick={handleOpenModal}>
+              <S.ButtonClick
+                onClick={handleOpenModal}
+                disabled={!permissions?.['editUser']}
+              >
                 +Adicionar Cargo
               </S.ButtonClick>
             </S.ContainerButtonsAdd>
