@@ -3,6 +3,7 @@ import React from 'react';
 import { Grid, IconButton, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import { useAuth } from '@src/hooks/useAuth';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
 import { basicNames } from '@src/utils/constants';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +18,7 @@ import * as S from './styles';
 export const Filters = () => {
   const classes = S.useStyles();
   const navigate = useNavigate();
+  const { permissions } = useAuth();
   const {
     search,
     setSearch,
@@ -125,6 +127,7 @@ export const Filters = () => {
         className={classes.button}
         startIcon={<PersonAddAltRoundedIcon />}
         onClick={handleAddEmployee}
+        disabled={!permissions?.['editUser']}
       >
         Adicionar Funcionário
       </S.ButtonAdd>

@@ -6,6 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import { useDocumentsFilter } from '@pages/DocumentsPage/hooks/useDocumentsFilter';
+import { useAuth } from '@src/hooks/useAuth';
 import { useDeleteDocument } from '@src/services/DocumentsService/queries';
 import { useGetDocumentById } from '@src/services/DocumentsService/queries';
 import { colors } from '@src/styles/colors';
@@ -29,6 +30,8 @@ function TableDocuments() {
   const [urlPdf, setUrlPdf] = useState('');
   const [documentName, setDocumentName] = useState('');
   const [photoId, setPhotoId] = useState(null);
+
+  const { permissions } = useAuth();
 
   const { mutate: handleDeleteDocuments, isPending: isPendingDeleteDocuments } =
     useDeleteDocument();
@@ -192,7 +195,10 @@ function TableDocuments() {
             </IconButton>
           </Tooltip>
           <Tooltip title="Deletar" placement="top">
-            <IconButton onClick={() => handleOpenModalDelete(params.row.id)}>
+            <IconButton
+              onClick={() => handleOpenModalDelete(params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',

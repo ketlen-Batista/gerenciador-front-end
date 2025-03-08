@@ -4,6 +4,7 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import { useAuth } from '@src/hooks/useAuth';
 import useResponsive from '@src/hooks/useResponsive';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
 import { useDeleteUser } from '@src/services/users/queries';
@@ -21,6 +22,7 @@ function TableEmployees() {
   const navigate = useNavigate();
 
   const { isDesktop } = useResponsive();
+  const { permissions } = useAuth();
 
   const { jobs, contracts, sectors, filteredUsers, isLoadingUsers } =
     useEmployeesFilter();
@@ -140,6 +142,7 @@ function TableEmployees() {
                   false,
                 )
               }
+              disabled={!permissions?.['editUser']}
             >
               <div
                 style={{
@@ -152,7 +155,10 @@ function TableEmployees() {
             </IconButton>
           </Tooltip>
           <Tooltip title="Deletar" placement="top">
-            <IconButton onClick={() => handleOpenModalDelete(params.row.id)}>
+            <IconButton
+              disabled={!permissions?.['editUser']}
+              onClick={() => handleOpenModalDelete(params.row.id)}
+            >
               <div
                 style={{
                   display: 'flex',

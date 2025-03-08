@@ -141,6 +141,7 @@ import { UserDTO } from '@dtos/UserDTO';
 import { api } from '@src/lib/axios';
 import { useGetPermissions } from '@src/services/permissions/queries';
 import { useGetUser } from '@src/services/users/queries';
+import { PermissionsType } from '@src/utils/interfaces';
 import {
   storageAuthTokenGet,
   storageAuthTokenRemove,
@@ -161,7 +162,7 @@ export type AuthContextDataProps = {
   isLoadingStorageData: boolean;
   signOut: () => Promise<void>;
   userPhoto: string;
-  permissions: any;
+  permissions: PermissionsType;
   // updateUserGeneral: () => void;
 };
 
@@ -177,8 +178,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
   const [isLoadingStorageData, setIsLoadingStorageData] = useState(true);
   const [userPhoto, setUserPhoto] = useState<string>('');
-  const [permissions, setPermissions] = useState<any>();
-
+  const [permissions, setPermissions] = useState<PermissionsType>();
+  console.log('permissions123456677889', permissions);
   // const navigate = useNavigate();
 
   // const {

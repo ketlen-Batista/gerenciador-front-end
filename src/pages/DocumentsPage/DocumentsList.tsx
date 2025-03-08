@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import { Box, Grid } from '@mui/material';
 import { DocumentsFilterProvider } from '@pages/DocumentsPage/contexts/DocumentsFilterContext';
+import { useAuth } from '@src/hooks/useAuth';
 import useResponsive from '@src/hooks/useResponsive';
 import DefaultPage from '@templates/DefaultPage';
 
@@ -18,6 +19,7 @@ import * as S from './styles';
 function DocumentsList() {
   const classes = S.useStyles();
   const { isDesktop } = useResponsive();
+  const { permissions } = useAuth();
 
   const { handleCloseModalAdd, handleOpenModalAdd, openDialogAdd } =
     useDocumentsFilter();
@@ -39,8 +41,9 @@ function DocumentsList() {
                 startIcon={<PostAddRoundedIcon />}
                 title="Enviar Documentos"
                 onClick={handleOpenModalAdd}
+                disabled={!permissions?.['editUser']}
               >
-                Enviar Documentos
+                Enviar Documento
               </S.ButtonAdd>
             </S.ContainerButton>
           </S.ContainerButtonAndTitle>
@@ -66,6 +69,7 @@ function DocumentsList() {
               startIcon={<PostAddRoundedIcon />}
               title="Enviar Documentos"
               onClick={handleOpenModalAdd}
+              disabled={!permissions?.['editUser']}
             >
               Enviar Documento
             </S.ButtonAdd>

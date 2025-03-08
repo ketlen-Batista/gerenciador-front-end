@@ -28,7 +28,6 @@ const Sidebar = ({ classes, open, handleDrawerClose }) => {
       <List>
         <ListItems />
       </List>
-      {/* <Divider /> */}
     </Drawer>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Button, Grid } from '@material-ui/core';
+import { useAuth } from '@src/hooks/useAuth';
 // import { Button } from '@mui/material';
 import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
@@ -25,6 +26,9 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
   const { data: contracts, mutateAsync: getContracts } = useGetContracts();
   const { data: sectors, mutateAsync: getSectors } = useGetSectors();
   const { data: status, mutateAsync: getStatus } = useGetStatus();
+  const { permissions } = useAuth();
+
+  const fieldsDisabledCondicion = fieldsDisabled || !permissions?.['editUser'];
 
   const { formik } = useEmployeeData();
 
@@ -47,7 +51,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.name && Boolean(formik?.errors?.name)}
           helperText={formik?.touched?.name && formik?.errors?.name}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
           required
         />
@@ -62,7 +66,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.phone && Boolean(formik?.errors?.phone)}
           helperText={formik?.touched?.phone && formik?.errors?.phone}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -76,7 +80,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.email && Boolean(formik?.errors?.email)}
           helperText={formik?.touched?.email && formik?.errors?.email}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
           required
         />
@@ -91,7 +95,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.cpf && Boolean(formik?.errors?.cpf)}
           helperText={formik?.touched?.cpf && formik?.errors?.cpf}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
           required
         />
@@ -111,7 +115,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           helperText={
             formik?.touched?.registration && formik?.errors?.registration
           }
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -129,7 +133,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           helperText={
             formik?.touched?.dateOfBirth && formik?.errors?.dateOfBirth
           }
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -143,7 +147,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.cep && Boolean(formik?.errors?.cep)}
           helperText={formik?.touched?.cep && formik?.errors?.cep}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -157,7 +161,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.address && Boolean(formik?.errors?.address)}
           helperText={formik?.touched?.address && formik?.errors?.address}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -171,7 +175,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.city && Boolean(formik?.errors?.city)}
           helperText={formik?.touched?.city && formik?.errors?.city}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -185,7 +189,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.state && Boolean(formik?.errors?.state)}
           helperText={formik?.touched?.state && formik?.errors?.state}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -201,7 +205,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
               formik?.touched?.status_value &&
               Boolean(formik?.errors?.status_value)
             }
-            disabled={!!fieldsDisabled}
+            disabled={!!fieldsDisabledCondicion}
             clearable
             required
           />
@@ -219,7 +223,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
               formik?.touched?.jobPosition_id &&
               Boolean(formik?.errors?.jobPosition_id)
             }
-            disabled={!!fieldsDisabled}
+            disabled={!!fieldsDisabledCondicion}
             clearable
             required
           />
@@ -237,7 +241,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
               formik?.touched?.contracts_value &&
               Boolean(formik?.errors?.contracts_value)
             }
-            disabled={!!fieldsDisabled}
+            disabled={!!fieldsDisabledCondicion}
             clearable
             required
           />
@@ -255,7 +259,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
               formik?.touched?.sector_value &&
               Boolean(formik?.errors?.sector_value)
             }
-            disabled={!!fieldsDisabled}
+            disabled={!!fieldsDisabledCondicion}
             clearable
             required
           />
@@ -277,7 +281,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
             formik?.touched?.emergencyContact &&
             formik?.errors?.emergencyContact
           }
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -293,7 +297,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
             formik?.touched?.supervisor && Boolean(formik?.errors?.supervisor)
           }
           helperText={formik?.touched?.supervisor && formik?.errors?.supervisor}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -307,7 +311,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
           onBlur={formik?.handleBlur}
           error={formik?.touched?.guardian && Boolean(formik?.errors?.guardian)}
           helperText={formik?.touched?.guardian && formik?.errors?.guardian}
-          disabled={!!fieldsDisabled}
+          disabled={!!fieldsDisabledCondicion}
           mini
         />
       </Grid>
@@ -317,7 +321,7 @@ function BasicsData({ fieldsDisabled }: BasicsDataProps) {
             type="submit"
             variant="contained"
             color="primary"
-            disabled={!!fieldsDisabled}
+            disabled={!!fieldsDisabledCondicion}
             onClick={() => formik?.handleSubmit()}
             size="medium"
             fullWidth

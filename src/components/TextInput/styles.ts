@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme) =>
   createStyles({
     styledInput: {
       heigth: 'auto !important',
-      backgroundColor: 'var(--Light)',
+      backgroundColor: 'var(--Light) !important',
       border: `1px solid ${colors.extra.avatarFill}`,
       borderRadius: 4,
       'box-sizing': 'border-box',

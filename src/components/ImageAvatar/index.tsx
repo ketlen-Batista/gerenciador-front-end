@@ -35,7 +35,12 @@ const ImageAvatar = ({
           src={imageSrc}
         />
       ) : (
-        <Box mt={mt ?? '32px'} mb={mb ?? '32px'} fontSize={fontSize}>
+        <Box
+          mt={mt ?? '32px'}
+          mb={mb ?? '32px'}
+          fontSize={fontSize}
+          color="var(--ColorFont)"
+        >
           <AccountCircleIcon fontSize="inherit" />
         </Box>
       )}

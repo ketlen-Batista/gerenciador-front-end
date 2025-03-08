@@ -2,6 +2,7 @@ import React, { Suspense, useState } from 'react';
 
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import { Box, CircularProgress, Tooltip } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import useResponsive from '@src/hooks/useResponsive';
 import { colors } from '@src/styles/colors';
 import { formatDateDayMonthAndYear } from '@src/utils/dates';
@@ -44,6 +45,7 @@ const CertificatesList = () => {
   const [dateEndCertificate, setDateEndCertificate] = useState('');
   const [statusJustificationName, setStatusJustificationName] = useState('');
 
+  const { permissions } = useAuth();
   const { isMobile } = useResponsive();
 
   const handleCloseModalDisapprove = () => {
@@ -159,7 +161,9 @@ const CertificatesList = () => {
       headerName: 'Documento',
       flex: 2,
       renderCell: (params) =>
-        (params.value || params.row?.photoDocument?.id) && (
+        (params.row.documentName ||
+          params.row.id ||
+          params.row?.photoDocument?.id) && (
           <div
             onClick={() => {
               params?.row?.photoDocument?.id
@@ -238,9 +242,12 @@ const CertificatesList = () => {
         >
           <Tooltip title="Aprovar" placement="top">
             <Box
+              component={'button'}
               display={'flex'}
               mr={5}
               sx={{ cursor: 'pointer' }}
+              border="none"
+              bgcolor="transparent"
               onClick={() =>
                 params.row.approve === true
                   ? null
@@ -253,6 +260,7 @@ const CertificatesList = () => {
                       params.row.status?.name as string,
                     )
               }
+              disabled={!permissions?.['editUser']}
             >
               <AssignmentTurnedInIcon
                 htmlColor={params.row.approve === true ? '#464646' : '#1E90FF'}
@@ -261,13 +269,17 @@ const CertificatesList = () => {
           </Tooltip>
           <Tooltip title="Reprovar" placement="top">
             <Box
+              component={'button'}
               display={'flex'}
               sx={{ cursor: 'pointer' }}
+              border="none"
+              bgcolor="transparent"
               onClick={() =>
                 params.row.approve === false
                   ? null
                   : handleOpenModalDisapprove(params.row.id as number)
               }
+              disabled={!permissions?.['editUser']}
             >
               <AssignmentTurnedInIcon
                 htmlColor={params.row.approve === false ? '#464646' : '#FF0000'}

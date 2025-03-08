@@ -3,6 +3,7 @@ import React, { ReactNode, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Grid, Pagination, Tooltip } from '@mui/material';
 import { useUserCheckpointsContext } from '@pages/ReportsPage/hooks/useUserCheckpointsContext';
+import { useAuth } from '@src/hooks/useAuth';
 import useResponsive from '@src/hooks/useResponsive';
 import { useDeleteUserCheckpoint } from '@src/services/CheckinsPoints/queries';
 import { colors } from '@src/styles/colors';
@@ -50,6 +51,8 @@ const UserCheckpointsList = () => {
   const [checkpointIdToDelete, setCheckpointIdToDelete] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  const { permissions } = useAuth();
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -223,12 +226,16 @@ const UserCheckpointsList = () => {
         params?.value && (
           <Tooltip title="Excluir Ponto" arrow>
             <Box
+              component="button"
               onClick={() => handleOpenModalDeletePoint(params.value)}
               sx={{ cursor: 'pointer' }}
               display="flex"
               justifyContent="center"
               alignItems="center"
               height="100%"
+              border="none"
+              bgcolor="transparent"
+              disabled={!permissions?.['editUser']}
             >
               <DeleteIcon />
             </Box>

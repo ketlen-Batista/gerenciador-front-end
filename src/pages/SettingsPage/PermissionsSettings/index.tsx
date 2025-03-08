@@ -38,7 +38,6 @@ const PermissionsSettings = () => {
   const { data: jobs, mutate: getJobs } = useGetJobPositions();
   const { showSnackbar } = useSnackbar();
   const { isDesktop } = useResponsive();
-
   useEffect(() => {
     if (cargo?.value) {
       fetchPermissions(Number(cargo.value))
@@ -77,6 +76,11 @@ const PermissionsSettings = () => {
   const permissionsNames = [
     { id: 'mobile', name: translate('mobile', 'pt') },
     { id: 'desktop', name: translate('desktop', 'pt') },
+  ];
+
+  const subPermissionsNames = [
+    // { id: 'mobile', name: translate('mobile', 'pt') },
+    // { id: 'desktop', name: translate('desktop', 'pt') },
     { id: 'home', name: translate('home', 'pt') },
     // { id: 'homeAdmin', name: translate('homeAdmin', 'pt') },
     // { id: 'homeBasic', name: translate('homeBasic', 'pt') },
@@ -93,11 +97,20 @@ const PermissionsSettings = () => {
     // { id: 'documentsAdmin', name: translate('documentsAdmin', 'pt') },
     // { id: 'documentsBasic', name: translate('documentsBasic', 'pt') },
     { id: 'configs', name: translate('configs', 'pt') },
+    // { id: 'configContract', name: translate('configContract', 'pt') },
+    // { id: 'configSector', name: translate('configSector', 'pt') },
+    // { id: 'configOffice', name: translate('configOffice', 'pt') },
+    // { id: 'configPermission', name: translate('configPermission', 'pt') },
+  ];
+
+  const configSubPermissionsNames = [
     { id: 'configContract', name: translate('configContract', 'pt') },
     { id: 'configSector', name: translate('configSector', 'pt') },
     { id: 'configOffice', name: translate('configOffice', 'pt') },
     { id: 'configPermission', name: translate('configPermission', 'pt') },
   ];
+
+  console.log({ permissionsNames });
   return (
     <div>
       {isDesktop ? (
@@ -149,8 +162,8 @@ const PermissionsSettings = () => {
       )}
       {cargo?.value ? (
         <>
-          <Grid container>
-            {permissionsNames.map((permission) => (
+          {permissionsNames?.map((permission) => (
+            <Grid container>
               <Grid
                 item
                 xs={12}
@@ -159,20 +172,86 @@ const PermissionsSettings = () => {
                 px={1}
                 pb={5}
                 borderRadius={1}
-                bgcolor={colors.secondary.states.focus}
+                bgcolor={colors.secondary.states.focusVisible}
                 key={permission.id}
               >
-                <Checkbox
-                  label={permission.name}
-                  name={permission.id}
-                  checked={permissions[permission.id] || false}
-                  onChange={() => handleCheckboxChange(permission.id)}
-                  color="primary"
-                  size="medium"
-                />
+                <Box display="flex" flexDirection="column">
+                  <Checkbox
+                    label={permission.name}
+                    name={permission.id}
+                    checked={permissions[permission.id] || false}
+                    onChange={() => handleCheckboxChange(permission.id)}
+                    color="primary"
+                    size="medium"
+                  />
+
+                  {permission.id === 'desktop' && !!permissions['desktop'] && (
+                    <Box mt={2} ml={2}>
+                      <Checkbox
+                        label={'Edição'}
+                        name={'editUser'}
+                        checked={permissions['editUser'] || false}
+                        onChange={() => handleCheckboxChange('editUser')}
+                        color="warning"
+                        size="small"
+                      />
+
+                      <Typography variant="body2" color="textSecondary">
+                        Habilita a edição em geral de dados na visão
+                        desktop(site web).
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+              </Grid>
+            </Grid>
+          ))}
+
+          {!!permissions['desktop'] &&
+            subPermissionsNames?.map((permission) => (
+              <Grid container>
+                <Grid
+                  item
+                  xs={12}
+                  mb={1}
+                  pt={1}
+                  px={1}
+                  pb={5}
+                  borderRadius={1}
+                  bgcolor={colors.secondary.states.focus}
+                  key={permission.id}
+                >
+                  <Box display="flex" flexDirection="column">
+                    <Checkbox
+                      label={permission.name}
+                      name={permission.id}
+                      checked={permissions[permission.id] || false}
+                      onChange={() => handleCheckboxChange(permission.id)}
+                      color="primary"
+                      size="medium"
+                    />
+
+                    {permission.id === 'configs' &&
+                      !!permissions['configs'] &&
+                      configSubPermissionsNames?.map((configPermission) => (
+                        <Box mt={2} ml={2}>
+                          <Checkbox
+                            label={configPermission.name}
+                            name={configPermission.id}
+                            checked={permissions[configPermission.id] || false}
+                            onChange={() =>
+                              handleCheckboxChange(configPermission.id)
+                            }
+                            color="primary"
+                            size="small"
+                          />
+                        </Box>
+                      ))}
+                  </Box>
+                </Grid>
               </Grid>
             ))}
-          </Grid>
+
           <Box mt={2}>
             <Box display="flex" justifyContent="flex-end" width="100%">
               <S.ButtonClick onClick={handleSave}>

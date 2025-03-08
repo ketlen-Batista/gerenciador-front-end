@@ -11,12 +11,14 @@ import {
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import { useAuth } from '@src/hooks/useAuth';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
 import { colors } from '@src/styles/colors';
 import { useNavigate } from 'react-router-dom';
 
 const EmployeeCard = ({ employee, jobs, contracts, sectors, onDelete }) => {
   const navigate = useNavigate();
+  const { permissions } = useAuth();
 
   const handleNavigate = (
     page: string,
@@ -70,12 +72,16 @@ const EmployeeCard = ({ employee, jobs, contracts, sectors, onDelete }) => {
                 false,
               )
             }
+            disabled={!permissions?.['editUser']}
           >
             <CreateOutlinedIcon style={{ color: colors.secondary.dark }} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Deletar" placement="top">
-          <IconButton onClick={() => onDelete(employee.id)}>
+          <IconButton
+            onClick={() => onDelete(employee.id)}
+            disabled={!permissions?.['editUser']}
+          >
             <DeleteOutlinedIcon style={{ color: colors.error.dark }} />
           </IconButton>
         </Tooltip>

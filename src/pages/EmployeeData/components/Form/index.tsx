@@ -32,15 +32,29 @@ interface IconTooltipProps {
   title: string;
   icon: React.ReactElement;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
-const IconTooltip = ({ title, icon, onClick }: IconTooltipProps) => (
-  <Tooltip title={title} placement="top">
-    <div onClick={onClick ?? null}>
-      <S.CircleIcon>{icon}</S.CircleIcon>
-    </div>
-  </Tooltip>
-);
+const IconTooltip = ({
+  title,
+  icon,
+  onClick,
+  disabled = false,
+}: IconTooltipProps) => {
+  return (
+    <Tooltip title={title} placement="top">
+      <Box
+        component="button"
+        onClick={onClick ?? null}
+        disabled={disabled}
+        border="none"
+        borderRadius="100%"
+      >
+        <S.CircleIcon>{icon}</S.CircleIcon>
+      </Box>
+    </Tooltip>
+  );
+};
 
 function Form() {
   const location = useLocation();
@@ -54,7 +68,7 @@ function Form() {
 
   const { getUser, user: userEmployeeData } = useEmployeeData();
 
-  const { user: userGeneralContext } = useAuth();
+  const { user: userGeneralContext, permissions } = useAuth();
 
   const user = userEmployeeData?.user;
 
@@ -163,6 +177,7 @@ function Form() {
                   title="Deletar"
                   icon={<DeleteOutlineIcon fontSize="medium" />}
                   onClick={handleOpenModalDelete}
+                  disabled={fieldsDisabled || !permissions?.['editUser']}
                 />
               </S.ContainerIcons>
             ) : null}
@@ -180,7 +195,8 @@ function Form() {
                   imageSrc={photoUrl ?? null}
                   height={'100px'}
                   width={'100px'}
-                  fontSize={50}
+                  fontSize={100}
+                  mb="2"
                 />
               </Box>
             </Grid>
