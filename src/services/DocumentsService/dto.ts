@@ -3,7 +3,12 @@ export interface ListDocumentsDTO {
   recipientId?: string;
   startDate?: string;
   endDate?: string;
-  typeDocumentValue?: number;
+  typeDocumentValue?: Array<number>;
+  endDateCertificate?: string;
+  startDateCertificate?: string;
+  sectorValue?: number;
+  contractValue?: number;
+  jobId?: number;
 }
 
 export interface LinkDocumentToUsersDTO {

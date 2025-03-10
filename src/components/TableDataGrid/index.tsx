@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 import { makeStyles } from '@material-ui/core';
 import { InfoOutlined } from '@mui/icons-material';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { DataGrid, DataGridProps, GridValidRowModel } from '@mui/x-data-grid';
 import { colors } from '@src/styles/colors';
 
@@ -45,8 +45,9 @@ interface TableProps extends DataGridProps {
   columns: Array<any>;
   pageSize?: number | any;
   messageNoRows?: string;
+  loading?: boolean;
   //   hidePagination?: boolean;
-  //   [propName: string]: any;
+  [propName: string]: any;
 }
 
 export default function TableDataGrid({
@@ -54,9 +55,10 @@ export default function TableDataGrid({
   columns,
   pageSize,
   messageNoRows,
+  loading,
   //   hidePagination,
   //   extraStyles = {},
-  //   ...rest
+  ...rest
 }: TableProps): JSX.Element {
   const classes = useStyles();
 
@@ -73,10 +75,26 @@ export default function TableDataGrid({
     </Box>
   );
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        color={colors.basic.black}
+        my={4}
+        width={'100%'}
+        minHeight={'200px'}
+      >
+        <CircularProgress color="primary" size={60} />
+      </Box>
+    );
+  }
+
   return (
     // <div style={{ width: '100%', ...extraStyles }}>
 
-    <Box width="100%">
+    <Box width="100%" height={'100%'}>
       {!rows?.length ? (
         <Box
           display="flex"
@@ -91,21 +109,39 @@ export default function TableDataGrid({
           </Typography>
         </Box>
       ) : (
+        // <DataGrid
+        //   rows={rows || []}
+        //   columns={columns}
+        //   autoHeight
+        //   disableColumnMenu
+        //   initialState={{
+        //     pagination: {
+        //       paginationModel: {
+        //         pageSize: pageSize || 5,
+        //       },
+        //     },
+        //   }}
+        //   // pageSizeOptions={[5]}
+        //   // pagination
+        //   disableRowSelectionOnClick
+        //   classes={classes}
+        //   {...rest}
+        // />
+
         <DataGrid
           rows={rows || []}
           columns={columns}
-          autoHeight
+          // autoHeight
           disableColumnMenu
+          disableRowSelectionOnClick
           initialState={{
             pagination: {
-              paginationModel: {
-                pageSize: pageSize || 5,
-              },
+              paginationModel: { pageSize: pageSize || 5 },
             },
           }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
           classes={classes}
+          {...rest}
+          autoHeight
         />
       )}
     </Box>

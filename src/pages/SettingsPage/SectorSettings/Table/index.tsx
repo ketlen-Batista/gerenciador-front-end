@@ -4,6 +4,7 @@ import { IconButton } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import { useAuth } from '@src/hooks/useAuth';
 import { useDeleteSector } from '@src/services/sectorService/queries';
 import { colors } from '@src/styles/colors';
 import { basicNames } from '@src/utils/constants';
@@ -26,7 +27,7 @@ interface TableSectorsProps {
   isPending: boolean;
 }
 
-function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
+function Table({ sectors, isPending, getSectors }: TableSectorsProps) {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [sectorName, setSectorName] = useState(null);
   const [contractId, setContractId] = useState(null);
@@ -37,6 +38,8 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
   const [daySignature, setDaySignature] = useState(null);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
   const [sectorIdToDelete, setSectorIdToDelete] = useState<number | null>(null);
+
+  const { permissions } = useAuth();
 
   const {
     mutateAsync: deleteContract,
@@ -154,22 +157,24 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
           }}
         >
           <Tooltip title="Editar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() =>
+                handleOpenModal(
+                  params.row.name,
+                  params.row.id,
+                  params.row.contractId,
+                  params.row.linkLocation,
+                  params.row.email,
+                  params.row.signatureDate,
+                )
+              }
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--GrayDark200)',
                 }}
-                onClick={() =>
-                  handleOpenModal(
-                    params.row.name,
-                    params.row.id,
-                    params.row.contractId,
-                    params.row.linkLocation,
-                    params.row.email,
-                    params.row.signatureDate,
-                  )
-                }
               >
                 <CreateOutlinedIcon fontSize="medium" />
               </div>
@@ -177,13 +182,15 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
           </Tooltip>
 
           <Tooltip title="Deletar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() => handleOpenModalDelete(params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--Danger)',
                 }}
-                onClick={() => handleOpenModalDelete(params.row.id)}
               >
                 <DeleteOutlinedIcon fontSize="medium" />
               </div>
@@ -196,7 +203,7 @@ function Table({ sectors, getSectors, isPending }: TableSectorsProps) {
 
   return !isPending ? (
     <>
-      <TableDataGrid columns={columns} rows={sectors} />
+      <TableDataGrid columns={columns} rows={sectors} loading={isPending} />
 
       {openDialog && (
         <ModalSectors

@@ -18,6 +18,7 @@ export const useDocumentsFilter = () => {
     openDialogAdd,
     handleCloseModalAdd,
     handleOpenModalAdd,
+    areArraysEqual,
   } = useContext(DocumentsFilterContext);
   return {
     filterUserId,
@@ -34,5 +35,6 @@ export const useDocumentsFilter = () => {
     openDialogAdd,
     handleCloseModalAdd,
     handleOpenModalAdd,
+    areArraysEqual,
   };
 };

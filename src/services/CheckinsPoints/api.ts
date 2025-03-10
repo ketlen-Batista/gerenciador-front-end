@@ -20,10 +20,7 @@ export async function updateUserCheckpoint(
   data: DTO.UpdateUserCheckpointDTO,
 ) {
   try {
-    await api.put(
-      `/user-checkpoints/update/${userCheckpointId}`,
-      data,
-    );
+    await api.put(`/user-checkpoints/update/${userCheckpointId}`, data);
   } catch (error) {
     console.error(
       `Erro ao atualizar ponto batido com ID ${userCheckpointId}:`,
@@ -35,9 +32,7 @@ export async function updateUserCheckpoint(
 
 export async function deleteUserCheckpoint(userCheckpointId: number) {
   try {
-    await api.delete(
-      `/user-checkpoints/delete/${userCheckpointId}`,
-    );
+    await api.delete(`/user-checkpoints/delete/${userCheckpointId}`);
   } catch (error) {
     console.error(
       `Erro ao deletar ponto batido com ID ${userCheckpointId}:`,
@@ -51,8 +46,13 @@ export async function listUserCheckpoints(
   filters: DTO.UserCheckpointFiltersDTO,
 ) {
   try {
-    const { data } = await api.get(`/list-checkpoints`, {
-      params: filters,
+    const { data } = await api.patch(`/list-checkpoints`, {
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+      userId: filters.userId,
+      sectorId: filters.sectorId,
+      contractId: filters.contractId,
+      jobId: filters.jobId,
     });
     return data;
   } catch (error) {
@@ -63,15 +63,30 @@ export async function listUserCheckpoints(
 
 export async function getUserCheckpointById(userCheckpointId: number) {
   try {
-    const { data } = await api.get(
-      `/user-checkpoints/${userCheckpointId}`,
-    );
+    const { data } = await api.get(`/user-checkpoints/${userCheckpointId}`);
     return data;
   } catch (error) {
     console.error(
       `Erro ao buscar ponto batido com ID ${userCheckpointId}:`,
       error,
     );
+    throw error;
+  }
+}
+
+export async function getBankHours(filters: DTO.UserCheckpointFiltersDTO) {
+  try {
+    const { data } = await api.patch(`/get-back-hours`, {
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+      userId: filters.userId,
+      sectorId: filters.sectorId,
+      contractId: filters.contractId,
+      jobId: filters.jobId,
+    });
+    return data;
+  } catch (error) {
+    console.error('Erro ao listar pontos batidos:', error);
     throw error;
   }
 }

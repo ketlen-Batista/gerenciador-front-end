@@ -1,21 +1,29 @@
 import React, { useEffect } from 'react';
+
 import { Grid } from '@material-ui/core';
-import * as S from './styles';
+import { useAuth } from '@src/hooks/useAuth';
+import useResponsive from '@src/hooks/useResponsive';
+
 import TextInput from '@components/TextInput';
+
 import { useCompanyData } from '../contexts/CompanyDataContext';
+
+import * as S from './styles';
 
 function Form() {
   const { formik, getCompany, isLoadingCompany } = useCompanyData();
+  const { isDesktop } = useResponsive();
+  const { permissions } = useAuth();
 
   useEffect(() => {
     getCompany();
-  }, [getCompany]);
+  }, []);
 
   return (
     <S.Container>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="name"
               label="Nome da Empresa"
@@ -25,9 +33,10 @@ function Form() {
               onBlur={formik.handleBlur}
               error={formik.touched.name && Boolean(formik.errors.name)}
               helperText={formik.touched.name && formik.errors.name}
+              disabled={!permissions?.['editUser']}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="address"
               label="Endereço"
@@ -37,9 +46,10 @@ function Form() {
               onBlur={formik.handleBlur}
               error={formik.touched.address && Boolean(formik.errors.address)}
               helperText={formik.touched.address && formik.errors.address}
+              disabled={!permissions?.['editUser']}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="phone"
               label="Telefone"
@@ -49,9 +59,10 @@ function Form() {
               onBlur={formik.handleBlur}
               error={formik.touched.phone && Boolean(formik.errors.phone)}
               helperText={formik.touched.phone && formik.errors.phone}
+              disabled={!permissions?.['editUser']}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="email"
               label="Email"
@@ -61,21 +72,10 @@ function Form() {
               onBlur={formik.handleBlur}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
+              disabled={!permissions?.['editUser']}
             />
           </Grid>
-          {/* <Grid item xs={6}>
-            <TextInput
-              name="registrationNumber"
-              label="Número de Registro"
-              value={formik.values.registrationNumber}
-              placeholder="Número de Registro"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.registrationNumber && Boolean(formik.errors.registrationNumber)}
-              helperText={formik.touched.registrationNumber && formik.errors.registrationNumber}
-            />
-          </Grid> */}
-          <Grid item xs={6}>
+          <Grid item xs={isDesktop ? 6 : 12}>
             <TextInput
               name="website"
               label="Website"
@@ -85,24 +85,16 @@ function Form() {
               onBlur={formik.handleBlur}
               error={formik.touched.website && Boolean(formik.errors.website)}
               helperText={formik.touched.website && formik.errors.website}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextInput
-              name="emailPassword"
-              label="Senha do Email"
-              type="password"
-              value={formik.values.emailPassword}
-              placeholder="Senha do Email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.emailPassword && Boolean(formik.errors.emailPassword)}
-              helperText={formik.touched.emailPassword && formik.errors.emailPassword}
+              disabled={!permissions?.['editUser']}
             />
           </Grid>
         </Grid>
         <S.ContainerButton>
-          <S.ButtonStyle type="submit" disableElevation>
+          <S.ButtonStyle
+            type="submit"
+            disableElevation
+            disabled={!permissions?.['editUser']}
+          >
             Salvar
           </S.ButtonStyle>
         </S.ContainerButton>

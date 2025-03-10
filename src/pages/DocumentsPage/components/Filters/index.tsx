@@ -9,6 +9,7 @@ import { INIT_DATE_RANGE } from '@src/utils/dates';
 
 import DateFilter from '@src/components/DateFilter';
 import Select from '@src/components/Select';
+import TextField from '@src/components/TextField';
 import TextInput from '@src/components/TextInput';
 
 const Filters = () => {
@@ -31,25 +32,28 @@ const Filters = () => {
     : [];
 
   return isDesktop ? (
-    <Grid container spacing={2} alignItems="center">
+    // <div>
+    <Grid container spacing={2}>
       <Grid item xs={4}>
-        <TextInput
-          name="search"
-          label="Buscar"
-          value={search}
-          placeholder="Buscar"
-          onChange={handleChangeSearch}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton aria-label="Clique para buscar">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          mini
-        />
+        <FormControl fullWidth>
+          <TextField
+            name="search"
+            label="Buscar"
+            value={search}
+            placeholder="Buscar"
+            onChange={handleChangeSearch}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="Clique para buscar">
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            // mini
+          />
+        </FormControl>
       </Grid>
       <Grid item xs={4}>
         <FormControl fullWidth>
@@ -63,7 +67,7 @@ const Filters = () => {
         </FormControl>
       </Grid>
       <Grid item xs={1}></Grid>
-      <Grid item xs={3}>
+      <Grid item xs={3} sm={6} md={3}>
         <DateFilter
           ref={ref}
           initialRange={INIT_DATE_RANGE}
@@ -72,6 +76,7 @@ const Filters = () => {
       </Grid>
     </Grid>
   ) : (
+    // </div>
     <Grid container spacing={2} alignItems="center">
       <Grid item xs={12}>
         <TextInput
@@ -89,7 +94,7 @@ const Filters = () => {
               </InputAdornment>
             ),
           }}
-          mini
+          // mini
         />
       </Grid>
       <Grid item xs={12}>
@@ -108,6 +113,7 @@ const Filters = () => {
           ref={ref}
           initialRange={INIT_DATE_RANGE}
           onFilter={handleDateFilter}
+          // style={{ minHeight: '50px' }}
         />
       </Grid>
     </Grid>

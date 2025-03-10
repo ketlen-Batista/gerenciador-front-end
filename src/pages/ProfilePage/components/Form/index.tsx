@@ -8,6 +8,7 @@ import {
   DescriptionOutlined as DescriptionOutlinedIcon,
   EqualizerOutlined as EqualizerOutlinedIcon,
 } from '@material-ui/icons';
+import { Box } from '@mui/material';
 import { useProfilePage } from '@pages/ProfilePage/contexts/ProfilePageContext';
 import { useAuth } from '@src/hooks/useAuth';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
@@ -45,11 +46,16 @@ function Form() {
   const [isNewEmployee, setIsNewEmployee] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl] = useState(null);
 
-  const { user } = useAuth();
+  const {
+    user: userGeneralContext,
+    userPhoto,
+    // , updateUserGeneral
+  } = useAuth();
 
-  const { formik, getUser, isLoadingUser } = useProfilePage();
-  console.log({ user });
+  const { formik, getUser, isLoadingUser, user } = useProfilePage();
+
   const { mutate: handleDeleteUser, isPending: isPendingDeleteUser } =
     useDeleteUser();
 
@@ -78,67 +84,32 @@ function Form() {
   };
 
   useEffect(() => {
-    if (user?.id) {
-      getUser({ userId: user?.id });
+    if (userGeneralContext?.id) {
+      getUser({ userId: userGeneralContext?.id });
     } else {
       setIsNewEmployee(true);
     }
-  }, [user?.id, getUser]);
+    // updateUserGeneral();
+  }, [userGeneralContext?.id, getUser]);
 
+  useEffect(() => {
+    if (user?.photo_avatar_id) {
+      (async () => {
+        const urlImage = await getImageUrlServer(user?.photo_avatar_id);
+        setPhotoUrl(urlImage);
+      })();
+    }
+  }, [user?.photo_avatar_id]);
   return (
     <>
       <S.Container>
         <S.ContainerHeader>
           <ImageAvatar
-            // imageAvatar={user?.photo_avatar_id ? getImageUrlServer(user?.photo_avatar_id) : null}
-            imageSrc={
-              user?.photo_avatar_id
-                ? getImageUrlServer(user?.photo_avatar_id)
-                : null
-            }
+            imageSrc={photoUrl ?? null}
+            height={'100px'}
+            width={'100px'}
+            fontSize={100}
           />
-          {user?.id ? (
-            <S.ContainerIcons>
-              {/* <IconTooltip
-              title="Relatórios"
-              icon={<EqualizerOutlinedIcon fontSize="medium" />}
-            /> */}
-              <IconTooltip
-                title="Registro de Serviços"
-                icon={<CameraAltOutlinedIcon fontSize="medium" />}
-                onClick={() =>
-                  handleNavigate(
-                    AvailableRoutes.reportsPage,
-                    user?.id,
-                    'serviceRegister',
-                  )
-                }
-              />
-              <IconTooltip
-                title="Documentos"
-                icon={<DescriptionOutlinedIcon fontSize="medium" />}
-                onClick={() =>
-                  handleNavigate(AvailableRoutes.documentsPage, user?.id)
-                }
-              />
-              <IconTooltip
-                title="Folha de Ponto"
-                icon={<DateRangeOutlinedIcon fontSize="medium" />}
-                onClick={() =>
-                  handleNavigate(
-                    AvailableRoutes.reportsPage,
-                    user?.id,
-                    'pointCheckins',
-                  )
-                }
-              />
-              {/* <IconTooltip
-                title="Deletar"
-                icon={<DeleteOutlineIcon fontSize="medium" />}
-                onClick={handleOpenModalDelete}
-              /> */}
-            </S.ContainerIcons>
-          ) : null}
         </S.ContainerHeader>
 
         <AccordionCustom

@@ -51,3 +51,12 @@ export function useGetUserCheckpointById(handleReturn?: HandleReturn) {
     handleReturn,
   });
 }
+
+export function useGetBankHours(handleReturn?: HandleReturn) {
+  return useCustomMutation({
+    key: 'getBankHours',
+    request: (filters: DTO.UserCheckpointFiltersDTO) =>
+      API.getBankHours(filters),
+    handleReturn,
+  });
+}

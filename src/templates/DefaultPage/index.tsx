@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { Switch } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,12 +8,17 @@ import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import BedtimeIcon from '@mui/icons-material/Bedtime';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import { Box, Menu, MenuItem, MenuList } from '@mui/material';
 import { useAuth } from '@src/hooks/useAuth';
+import useResponsive from '@src/hooks/useResponsive';
 import { AvailableRoutes } from '@src/routes/availableRoutes';
+import { getImageUrlServer } from '@src/utils/functions';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
+
+import ImageAvatar from '@src/components/ImageAvatar';
 
 import Sidebar from '@components/Sidebar';
 
@@ -31,12 +36,25 @@ type Props = {
 function DefaultPage({ children, pageTitle }: Props) {
   const classes = S.useStyles();
   const { user, signOut } = useAuth();
+  const { isMobile } = useResponsive();
 
   const [openSideBar, setOpenSideBar] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState<boolean>(
+    localStorage.getItem('isDark') === 'true',
+  );
+  const [photoUrl, setPhotoUrl] = useState<string | null>(
+    localStorage.getItem('photoUrl') || null,
+  );
+  const [photoIdAvatar, setPhotoIdAvatar] = useState<number | null>(
+    Number(localStorage.getItem('photoIdAvatar')) || null,
+  );
 
   const handleThemeMode = () => {
-    setIsDark(!isDark);
+    setIsDark((prev) => {
+      const newTheme = !prev;
+      localStorage.setItem('isDark', String(newTheme));
+      return newTheme;
+    });
   };
 
   const handleDrawerOpen = () => {
@@ -47,6 +65,7 @@ function DefaultPage({ children, pageTitle }: Props) {
   };
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -60,6 +79,19 @@ function DefaultPage({ children, pageTitle }: Props) {
   const handleNavigate = (page) => {
     navigate(page || '');
   };
+
+  useEffect(() => {
+    if (user?.photo_avatar_id && user.photo_avatar_id !== photoIdAvatar) {
+      getImageUrlServer(user.photo_avatar_id).then((urlImage) => {
+        setPhotoIdAvatar(user.photo_avatar_id);
+        setPhotoUrl(urlImage);
+
+        // Salva no localStorage para evitar requisições desnecessárias
+        localStorage.setItem('photoUrl', urlImage);
+        localStorage.setItem('photoIdAvatar', String(user.photo_avatar_id));
+      });
+    }
+  }, [user?.photo_avatar_id]);
 
   return (
     <div theme-mode={isDark ? 'dark' : 'ligth'} className={classes.root}>
@@ -84,14 +116,16 @@ function DefaultPage({ children, pageTitle }: Props) {
           </IconButton>
           <Typography
             component="h1"
-            variant="h6"
+            variant="h5"
             color="inherit"
             noWrap
             className={classes.title}
           >
             GIC
           </Typography>
-          {user.name}
+          <Box fontWeight="bold" textTransform="capitalize">
+            {user.name}
+          </Box>
           <IconButton
             color="inherit"
             id="basic-button"
@@ -100,7 +134,14 @@ function DefaultPage({ children, pageTitle }: Props) {
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
           >
-            <AccountCircleIcon />
+            {/* <AccountCircleIcon /> */}
+            <ImageAvatar
+              imageSrc={photoUrl ?? null}
+              height={'35px'}
+              width={'35px'}
+              mt="0px"
+              mb="0px"
+            />
           </IconButton>
           <Menu
             id="basic-menu"
@@ -136,7 +177,7 @@ function DefaultPage({ children, pageTitle }: Props) {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'row',
+              flexDirection: isMobile ? 'column-reverse' : 'row',
             }}
           >
             <div
@@ -149,13 +190,21 @@ function DefaultPage({ children, pageTitle }: Props) {
             >
               <h1>{pageTitle}</h1>
             </div>
-            <div style={{ display: 'flex', flex: 2, justifyContent: 'end' }}>
+            <Box
+              display="flex"
+              flex={2}
+              justifyContent="end"
+              alignItems="center"
+              color="#fff"
+            >
+              <WbSunnyIcon color={isDark ? 'inherit' : 'warning'} />
               <Switch
                 checked={isDark}
                 onChange={handleThemeMode}
-                color="default"
+                color="primary"
               />
-            </div>
+              <BedtimeIcon color={isDark ? 'primary' : 'disabled'} />
+            </Box>
           </div>
 
           {/* TELAS */}

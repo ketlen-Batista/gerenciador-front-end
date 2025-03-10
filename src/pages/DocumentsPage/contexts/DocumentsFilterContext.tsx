@@ -5,17 +5,17 @@ import { useGetUsers } from '@src/services/users/queries';
 import { INIT_DATE_RANGE } from '@src/utils/dates';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { getTime, parseISO } from 'date-fns';
 import { useLocation } from 'react-router-dom';
 
 interface Document {
-  id: string;
+  id: number;
   documentName: string;
   sentIn: string;
   sender: string;
   recipient: string;
   received: boolean;
   visa: boolean;
+  photoId: number;
 }
 interface DocumentsFilterContextType {
   filterUserId: string | number;
@@ -40,6 +40,7 @@ interface DocumentsFilterContextType {
   openDialogAdd: boolean;
   handleCloseModalAdd: () => void;
   handleOpenModalAdd: () => void;
+  areArraysEqual: (arr1: any, arr2: any) => boolean;
 }
 export const DocumentsFilterContext = createContext<DocumentsFilterContextType>(
   {} as DocumentsFilterContextType,
@@ -61,32 +62,50 @@ export const DocumentsFilterProvider = ({ children }) => {
     startDate: null,
     endDate: null,
   });
-  const { data: fetchedDocuments, mutate: fetchDocuments } = useListDocuments();
+  const {
+    data: fetchedDocuments,
+    mutate: fetchDocuments,
+    isPending: isLoadingGetDocuments,
+  } = useListDocuments();
   const { data: users, mutate: getUsers } = useGetUsers();
+
   const filterDocuments = () => {
-    let filteredDocs = fetchedDocuments || [];
-    if (filterUserId) {
-      filteredDocs = filteredDocs.filter(
-        (doc) =>
-          doc.recipientId?.includes(filterUserId) ||
-          doc.senderId === filterUserId,
+    try {
+      setLoading(true);
+
+      let filteredDocs = fetchedDocuments || [];
+      if (filterUserId) {
+        filteredDocs = filteredDocs.filter(
+          (doc) =>
+            doc.recipientId?.includes(filterUserId) ||
+            doc.senderId === filterUserId,
+        );
+      }
+      if (search) {
+        filteredDocs = filteredDocs.filter((doc) =>
+          doc.documentName.toLowerCase().includes(search.toLowerCase()),
+        );
+      }
+      if (selectedDateRange.startDate && selectedDateRange.endDate) {
+        const startDate = selectedDateRange.startDate;
+        const endDate = selectedDateRange.endDate;
+        filteredDocs = filteredDocs.filter((doc) => {
+          const docDate = new Date(doc.sentIn).getTime();
+          return docDate >= startDate && docDate <= endDate;
+        });
+      }
+
+      setDocumentsFiltered(
+        filteredDocs,
+        // ?.filter((doc) => doc?.document || doc?.photoId),
       );
+    } catch (e) {
+      console.log('Error filtering documents:', e);
+    } finally {
+      setLoading(false);
     }
-    if (search) {
-      filteredDocs = filteredDocs.filter((doc) =>
-        doc.documentName.toLowerCase().includes(search.toLowerCase()),
-      );
-    }
-    if (selectedDateRange.startDate && selectedDateRange.endDate) {
-      const startDate = selectedDateRange.startDate;
-      const endDate = selectedDateRange.endDate;
-      filteredDocs = filteredDocs.filter((doc) => {
-        const docDate = new Date(doc.sentIn).getTime();
-        return docDate >= startDate && docDate <= endDate;
-      });
-    }
-    setDocumentsFiltered(filteredDocs);
   };
+
   const handleDateFilter = (dateRange: {
     startDate: number | null;
     endDate: number | null;
@@ -96,6 +115,7 @@ export const DocumentsFilterProvider = ({ children }) => {
   const handleChangeSearch = (event) => {
     setSearch(event.target.value);
   };
+
   const handleCloseModalAdd = () => {
     setOpenDialogAdd(false);
     fetchDocuments({
@@ -103,9 +123,11 @@ export const DocumentsFilterProvider = ({ children }) => {
       endDate: new Date(INIT_DATE_RANGE.endDate).toISOString(),
     });
   };
+
   const handleOpenModalAdd = () => {
     setOpenDialogAdd(true);
   };
+
   const convertTimestampsToISO = (dateRange: {
     startDate: number | null;
     endDate: number | null;
@@ -119,11 +141,24 @@ export const DocumentsFilterProvider = ({ children }) => {
         : null,
     };
   };
+
+  function areArraysEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+
+    // Ordenar ambos os arrays
+    const sortedArr1 = arr1.slice().sort();
+    const sortedArr2 = arr2.slice().sort();
+
+    // Comparar os itens de cada array
+    return sortedArr1.every((value, index) => value === sortedArr2[index]);
+  }
+
   useEffect(() => {
     const dateRangeISO = convertTimestampsToISO(selectedDateRange);
     if (dateRangeISO.startDate && dateRangeISO.endDate) {
       fetchDocuments(dateRangeISO);
       getUsers({});
+      return;
     }
     fetchDocuments({
       startDate: new Date(INIT_DATE_RANGE.startDate).toISOString(),
@@ -131,6 +166,11 @@ export const DocumentsFilterProvider = ({ children }) => {
     });
     getUsers({});
   }, [selectedDateRange]);
+
+  useEffect(() => {
+    setLoading(isLoadingGetDocuments);
+  }, [isLoadingGetDocuments]);
+
   useEffect(() => {
     if (fetchedDocuments) {
       filterDocuments();
@@ -141,6 +181,7 @@ export const DocumentsFilterProvider = ({ children }) => {
     fetchedDocuments,
     // , selectedDateRange
   ]);
+
   const value = useMemo(
     () => ({
       filterUserId,
@@ -157,6 +198,7 @@ export const DocumentsFilterProvider = ({ children }) => {
       openDialogAdd,
       handleCloseModalAdd,
       handleOpenModalAdd,
+      areArraysEqual,
     }),
     [
       filterUserId,
@@ -170,6 +212,7 @@ export const DocumentsFilterProvider = ({ children }) => {
       openDialogAdd,
       handleCloseModalAdd,
       handleOpenModalAdd,
+      areArraysEqual,
     ],
   );
   return (

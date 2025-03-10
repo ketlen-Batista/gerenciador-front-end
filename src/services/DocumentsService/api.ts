@@ -31,6 +31,11 @@ export async function listDocuments({
   startDate,
   endDate,
   typeDocumentValue,
+  startDateCertificate,
+  endDateCertificate,
+  sectorValue,
+  contractValue,
+  jobId,
 }: DTO.ListDocumentsDTO) {
   try {
     const { data } = await api.patch(`/documents/listDocuments`, {
@@ -39,6 +44,11 @@ export async function listDocuments({
       startDate,
       endDate,
       typeDocumentValue,
+      startDateCertificate,
+      endDateCertificate,
+      sectorValue,
+      contractValue,
+      jobId,
     });
     return data;
   } catch (error) {
@@ -50,6 +60,16 @@ export async function listDocuments({
 export async function getDocumentById(documentId: number) {
   try {
     const { data } = await api.get(`/documents/get/id/${documentId}`);
+    return data;
+  } catch (error) {
+    console.error(`Erro ao buscar documento com ID ${documentId}:`, error);
+    throw error;
+  }
+}
+
+export async function getDocumentUrlById(documentId: number) {
+  try {
+    const { data } = await api.get(`/documents/get/url/id/${documentId}`);
     return data;
   } catch (error) {
     console.error(`Erro ao buscar documento com ID ${documentId}:`, error);
@@ -103,7 +123,6 @@ export async function addDocument({
   try {
     const formData = new FormData();
     // if (file) formData.append('file', file);
-    
 
     if (file) {
       // const blob = new Blob([file], { type: 'application/pdf' });

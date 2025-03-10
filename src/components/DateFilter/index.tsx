@@ -10,6 +10,7 @@ import React, {
 
 import { CalendarToday, KeyboardArrowDown } from '@mui/icons-material';
 import {
+  Box,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -17,13 +18,17 @@ import {
 } from '@mui/material';
 import { endOfDay, startOfDay } from 'date-fns';
 
-import Button from '@components/Button';
+import Button from '@src/components/ButtonCustom';
+
 import DatePicker from '@components/DatePicker';
 import { initDateRange, radioGroups } from '@components/DatePicker/constants';
 import DateRangePicker from '@components/DateRangePicker';
 import RadioButton from '@components/RadioButton';
 import TextField from '@components/TextField';
 import Typography from '@components/Typography';
+
+import Select from '../Select';
+import TextInput from '../TextInput';
 
 import { formatInputInfo } from './functions';
 import { GenericRef } from './interfaces';
@@ -72,7 +77,11 @@ function DateFilter(
 
   const handleClosePopover = () => setPopoverAnchor(null);
 
-  const handleOpenPopover = ({ currentTarget }: MouseEvent<HTMLElement>) => {
+  // const handleOpenPopover = ({ currentTarget }: MouseEvent<HTMLElement>) => {
+  //   setPopoverAnchor(popoverAnchor ? null : currentTarget);
+  // };
+
+  const handleOpenPopover = ({ currentTarget }: any) => {
     setPopoverAnchor(popoverAnchor ? null : currentTarget);
   };
 
@@ -140,6 +149,7 @@ function DateFilter(
       <TextField
         disableSelection
         value={inputInfo}
+        // label={inputInfo}
         onClick={handleOpenPopover}
         InputProps={{
           startAdornment: <CalendarToday className="start" />,
@@ -153,6 +163,7 @@ function DateFilter(
           ),
         }}
       />
+
       <S.CustomPopover
         open={popoverIsOpen}
         anchorEl={popoverAnchor}
@@ -253,7 +264,7 @@ function DateFilter(
             Limpar filtros
           </Button>
           <Button
-            color="secondary"
+            // color="secondary"
             onClick={handleOnFilter}
             disabled={disableFilterButton}
             isLoading={isLoading}

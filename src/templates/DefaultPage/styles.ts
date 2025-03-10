@@ -48,6 +48,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    fontWeight: 'bold',
   },
   drawerPaper: {
     position: 'relative',
@@ -62,6 +63,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   drawerPaperClose: {
     overflowX: 'hidden',
+    color: 'var(--ColorFont)',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,

@@ -20,10 +20,9 @@ export const INIT_DATE_RANGE = {
 };
 
 export const timestampToISO = (timestamp: number): string => {
-      const date = new Date(timestamp);
-      return date.toISOString();
-    };
-
+  const date = new Date(timestamp);
+  return date.toISOString();
+};
 
 export const formatDate = (isoDate: string) => {
   const date = new Date(isoDate);
@@ -37,6 +36,20 @@ export const formatDate = (isoDate: string) => {
 
   // Formatando no padrão desejado
   const formattedDate = `${day}/${month}/${year} às ${hours}:${minutes}`;
+
+  return formattedDate;
+};
+
+export const formatDateDayMonthAndYear = (isoDate: string) => {
+  const date = new Date(isoDate);
+
+  // Obtendo os componentes da data
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mês começa do zero, por isso soma 1
+  const year = date.getFullYear();
+
+  // Formatando no padrão desejado
+  const formattedDate = `${day}/${month}/${year}`;
 
   return formattedDate;
 };

@@ -17,11 +17,14 @@ export enum AvailableRoutes {
   employeesPage = `${rootPath}/funcionarios`,
 
   //PÁGINA DE CONFIGURAÇÕES
-  settingsPage = `${rootPath}/configuracoes`, 
+  settingsPage = `${rootPath}/configuracoes`,
 
   //PÁGINA MEU PERFIL
   profilePage = `${rootPath}/meu-perfil`,
 
   //PÁGINA DADOS DA EMPRESA
-  company = `${rootPath}/empresa`
+  company = `${rootPath}/empresa`,
+
+  //ERRO
+  // error404 = `${rootPath}/error`,
 }

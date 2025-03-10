@@ -26,6 +26,7 @@ interface EmployeesFilterContextType {
   sectors: any[];
   filteredSectors: any[];
   filteredContracts: any[];
+  isLoadingUsers: boolean;
 }
 
 const EmployeesFilterContext = createContext<EmployeesFilterContextType>({
@@ -43,6 +44,7 @@ const EmployeesFilterContext = createContext<EmployeesFilterContextType>({
   sectors: [],
   filteredSectors: [],
   filteredContracts: [],
+  isLoadingUsers: true,
 });
 
 type EmployeesFilterProviderProps = {
@@ -60,7 +62,11 @@ export const EmployeesFilterProvider = ({
   const { data: jobs, mutate: getJobs } = useGetJobPositions();
   const { data: contracts, mutate: getContracts } = useGetContracts();
   const { data: sectors, mutate: getSectors } = useGetSectors();
-  const { data: users, mutate: getUsers } = useGetUsers();
+  const {
+    data: users,
+    mutate: getUsers,
+    isPending: isLoadingUsers,
+  } = useGetUsers();
 
   let filteredUsers = users?.users?.filter((user) => {
     let matches = true;
@@ -142,6 +148,7 @@ export const EmployeesFilterProvider = ({
         sectors,
         filteredSectors,
         filteredContracts,
+        isLoadingUsers,
       }}
     >
       {children}

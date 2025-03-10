@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 
 import { Grid } from '@material-ui/core';
+import { useAuth } from '@src/hooks/useAuth';
+import useResponsive from '@src/hooks/useResponsive';
 import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { useGetSectors } from '@src/services/sectorService/queries';
@@ -25,6 +27,10 @@ function BasicsData({ user }) {
   const { data: sectors, mutate: getSectors } = useGetSectors();
   const { data: status, mutate: getStatus } = useGetStatus();
 
+  const { isMobile } = useResponsive();
+
+  const { permissions } = useAuth();
+
   const { formik } = useProfilePage();
 
   useEffect(() => {
@@ -37,7 +43,7 @@ function BasicsData({ user }) {
   return (
     // <form onSubmit={formik.handleSubmit}>
     <Grid container spacing={2}>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <TextInput
           name="name"
           label="Nome"
@@ -50,7 +56,7 @@ function BasicsData({ user }) {
           mini
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <TextInput
           name="phone"
           label="Telefone"
@@ -63,7 +69,7 @@ function BasicsData({ user }) {
           mini
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <TextInput
           name="email"
           label="Email"
@@ -76,7 +82,7 @@ function BasicsData({ user }) {
           mini
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <TextInput
           name="cpf"
           label="CPF"
@@ -90,7 +96,7 @@ function BasicsData({ user }) {
         />
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <TextInput
           name="registration"
           label="Matrícula"
@@ -102,10 +108,11 @@ function BasicsData({ user }) {
             formik.touched.registration && Boolean(formik.errors.registration)
           }
           helperText={formik.touched.registration && formik.errors.registration}
+          disabled={!permissions?.['editUser']}
           mini
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <TextInput
           name="dateOfBirth"
           label="Data de Nascimento"
@@ -120,7 +127,7 @@ function BasicsData({ user }) {
           mini
         />
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={isMobile ? 12 : 8}>
         <TextInput
           name="address"
           label="Endereço"
@@ -133,27 +140,7 @@ function BasicsData({ user }) {
           mini
         />
       </Grid>
-      <Grid item xs={4}>
-        <S.FieldBox>
-          <Select
-            label="Status"
-            options={status}
-            value={formik.values.status_value}
-            name={
-              status?.find((item) => item.value === formik.values.status_value)
-                ?.name
-            }
-            onChange={(e) => formik.setFieldValue('status_value', e.value)}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.status_value && Boolean(formik.errors.status_value)
-            }
-            //   helperText={formik.touched.jobPosition_id && formik.errors.jobPosition_id}
-            clearable
-          />
-        </S.FieldBox>
-      </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <S.FieldBox>
           <Select
             label="Cargo"
@@ -165,6 +152,7 @@ function BasicsData({ user }) {
             }
             onChange={(e) => formik.setFieldValue('jobPosition_id', e.value)}
             onBlur={formik.handleBlur}
+            disabled={!permissions?.['editUser']}
             error={
               formik.touched.jobPosition_id &&
               Boolean(formik.errors.jobPosition_id)
@@ -174,7 +162,7 @@ function BasicsData({ user }) {
           />
         </S.FieldBox>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <S.FieldBox>
           <Select
             label="Contrato"
@@ -191,12 +179,13 @@ function BasicsData({ user }) {
               formik.touched.contracts_value &&
               Boolean(formik.errors.contracts_value)
             }
+            disabled={!permissions?.['editUser']}
             //   helperText={formik.touched.contracts_value && formik.errors.contracts_value}
             clearable
           />
         </S.FieldBox>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isMobile ? 12 : 4}>
         <S.FieldBox>
           <Select
             label="Setor"
@@ -212,6 +201,7 @@ function BasicsData({ user }) {
             error={
               formik.touched.sector_value && Boolean(formik.errors.sector_value)
             }
+            disabled={!permissions?.['editUser']}
             //   helperText={formik.touched.sector_value && formik.errors.sector_value}
             clearable
           />

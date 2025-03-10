@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { IconButton, Tooltip } from '@mui/material';
+import { useAuth } from '@src/hooks/useAuth';
 import {
   useDeleteJobPosition,
   useGetJobPositions,
@@ -24,16 +25,16 @@ interface TableJobsProps {
   jobs: any[];
   getJobs?: UseMutateFunction<any, AxiosError<unknown, any>, unknown, unknown>;
   isPending: boolean;
+  handleOpenModal: (name: string, id: number) => void;
+  handleOpenModalDelete: (id: number) => void;
 }
-function Table({ jobs, getJobs, isPending }: TableJobsProps) {
-  const { mutateAsync: handleDeleteJob, isPending: isPendingDelete } =
-    useDeleteJobPosition();
-
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
-  const [jobName, setJobName] = useState(null);
-  const [jobId, setJobId] = useState(null);
-
+function Table({
+  jobs,
+  getJobs,
+  isPending,
+  handleOpenModal,
+  handleOpenModalDelete,
+}: TableJobsProps) {
   const customJobs = (
     jobsparams: CustomJobsRequest[],
   ): CustomJobsResponse[] => {
@@ -43,37 +44,11 @@ function Table({ jobs, getJobs, isPending }: TableJobsProps) {
     }));
   };
 
+  const { permissions } = useAuth();
+
   useEffect(() => {
     getJobs({});
   }, []);
-
-  const handleCloseModal = () => {
-    setOpenDialog(false);
-    setJobId(null);
-    getJobs({});
-  };
-
-  const handleOpenModal = (name, id) => {
-    setOpenDialog(true);
-    setJobName(name);
-    setJobId(id);
-  };
-
-  const handleOpenModalDelete = (id: number) => {
-    setIsOpenModalDelete(true);
-    setJobId(id);
-  };
-
-  const handleCloseModalDelete = () => {
-    setIsOpenModalDelete(false);
-    setJobId(null);
-    getJobs({});
-  };
-
-  const handleDelete = async () => {
-    await handleDeleteJob({ id: jobId });
-    handleCloseModalDelete();
-  };
 
   const columns = [
     {
@@ -100,13 +75,15 @@ function Table({ jobs, getJobs, isPending }: TableJobsProps) {
           }}
         >
           <Tooltip title="Editar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() => handleOpenModal(params.row.name, params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--GrayDark200)',
                 }}
-                onClick={() => handleOpenModal(params.row.name, params.row.id)}
               >
                 <CreateOutlinedIcon fontSize="medium" />
               </div>
@@ -114,13 +91,15 @@ function Table({ jobs, getJobs, isPending }: TableJobsProps) {
           </Tooltip>
 
           <Tooltip title="Deletar" placement="top">
-            <IconButton>
+            <IconButton
+              onClick={() => handleOpenModalDelete(params.row.id)}
+              disabled={!permissions?.['editUser']}
+            >
               <div
                 style={{
                   display: 'flex',
                   color: 'var(--Danger)',
                 }}
-                onClick={() => handleOpenModalDelete(params.row.id)}
               >
                 <DeleteOutlinedIcon fontSize="medium" />
               </div>
@@ -134,30 +113,11 @@ function Table({ jobs, getJobs, isPending }: TableJobsProps) {
   return (
     !isPending && (
       <>
-        <TableDataGrid columns={columns} rows={customJobs(jobs || [])} />
-        {openDialog && (
-          <ModalJob
-            openDialog={openDialog}
-            handleClose={handleCloseModal}
-            jobName={jobName}
-            jobId={jobId}
-            getJobs={getJobs}
-          />
-        )}
-        {isOpenModalDelete && (
-          <ModalConfirm
-            openDialog={isOpenModalDelete}
-            handleClose={handleCloseModalDelete}
-            handleConfirm={handleDelete}
-            isLoading={isPendingDelete}
-            textButtonConfirm={'Excluir'}
-            colorButtonConfirm={colors.error.dark}
-            text={
-              'Essa ação não poderá ser desfeita. Deseja realmente excluir este cargo?'
-            }
-            titleModal={'Excluir'}
-          />
-        )}
+        <TableDataGrid
+          columns={columns}
+          rows={customJobs(jobs || [])}
+          loading={isPending}
+        />
       </>
     )
   );

@@ -14,7 +14,11 @@ export async function getContracts() {
 
 export async function createContract(params: DTO.CreateContractRequest) {
   try {
-    const { data } = await api.post(`/contracts`, { name: params.name });
+    const { data } = await api.post(`/contracts`, {
+      name: params.name,
+      status: params.status,
+      validity: params.validity,
+    });
     return data;
   } catch (error) {
     console.error('Erro ao criar contrato:', error);
@@ -26,6 +30,8 @@ export async function updateContract(params: DTO.UpdateContractRequest) {
   try {
     const { data } = await api.patch(`/contracts/${params.id}`, {
       name: params.name,
+      status: params.status,
+      validity: params.validity,
     });
     return data;
   } catch (error) {

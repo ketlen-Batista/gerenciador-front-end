@@ -43,6 +43,7 @@ function ForwardedTextField(
       value={value}
       variant={variant}
       data-disable-selection={disableSelection}
+      size="small"
       {...(onPressEnter && {
         onKeyDown: (event) => {
           if (event.key === 'Enter') {

@@ -2,7 +2,7 @@ import MUIToolbar from '@mui/material/Toolbar';
 import { styled as MUIStyled } from '@mui/material/styles';
 import styled from 'styled-components';
 
-import MUIButton from '@components/Button';
+import MUIButton from '@src/components/ButtonCustom';
 
 import { colors } from '@styles/colors';
 

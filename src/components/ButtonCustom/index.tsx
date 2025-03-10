@@ -2,61 +2,74 @@ import React, { ReactNode } from 'react';
 
 // import { ButtonProps, TooltipProps } from '@mui/material';
 import {
+  Button,
   ButtonProps,
   CircularProgress,
   Tooltip,
   TooltipProps,
 } from '@material-ui/core';
+import { Box } from '@mui/material';
+import { colors } from '@src/styles/colors';
 
-import * as S from './styles';
-
-export interface Props extends ButtonProps {
+export interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   customType?: 'default' | 'icon';
-  dataTestId?: string;
   isLoading?: boolean;
   rounded?: boolean;
+  size?: 'small' | 'medium' | 'large';
+  variant?: 'contained' | 'outlined' | 'text';
   tooltipProps?: Omit<TooltipProps, 'children'>;
-  color?: 'default' | 'inherit' | 'primary' | 'secondary';
+  color?: string;
+  bgColor?: string;
+  p?: string;
+  fontWeight?: string;
+  onClick?: () => void;
+  fullWidth?: boolean;
 }
 
-function Button({
+function ButtonCustom({
   children,
-  className,
-  color = 'primary',
+  color = `${colors.basic.white}`,
+  bgColor = `${colors.primary.main}`,
   customType = 'default',
-  dataTestId,
   isLoading = false,
   rounded = false,
   size = 'large',
   tooltipProps,
   variant = 'contained',
+  p = '8px',
+  fontWeight = 'bold',
+  fullWidth = false,
+  onClick,
   ...props
 }: Props) {
-  const buttonDefaultClasses = `
-    ${customType}
-    ${rounded ? 'rounded' : ''}
-    ${isLoading ? 'loading' : ''}
-    ${className ?? ''}
-  `.trim();
-
   const getButtonComponent = () => {
     return (
-      <S.Button
+      <Box
+        component={Button}
+        bgcolor={
+          variant != 'contained' ? 'transparent' : `${bgColor} !important`
+        }
+        fontWeight={`${fontWeight} !important`}
+        p={`${p} !important`}
         size={size}
-        color={'primary'}
+        color={
+          variant != 'contained' && !color
+            ? colors.basic.black
+            : `${color} !important`
+        }
+        fullWidth={fullWidth}
         variant={variant}
-        className={buttonDefaultClasses}
-        {...(dataTestId && { 'data-testid': `${dataTestId}` })}
-        {...props}
+        onClick={onClick}
         {...(isLoading && {
           disabled: true,
           onClick: () => {},
         })}
+        {...props}
       >
         {isLoading && <CircularProgress color="inherit" />}
         {!isLoading && children}
-      </S.Button>
+      </Box>
     );
   };
 
@@ -72,4 +85,4 @@ function Button({
   return getButtonComponent();
 }
 
-export default Button;
+export default ButtonCustom;
