@@ -7,6 +7,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import WorkRoundedIcon from '@material-ui/icons/WorkRounded';
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import { Box, Tooltip } from '@mui/material';
 import { AvailableRoutes } from '@routes/availableRoutes';
 import { useAuth } from '@src/hooks/useAuth';
@@ -33,6 +34,20 @@ export const ListItems = () => {
           </ListItem>
         </Tooltip>
       )}
+
+      <Tooltip title="Ponto Digital" placement="right">
+        <ListItem
+          button
+          onClick={() => handleNavigate(AvailableRoutes.pointCheckin)}
+        >
+          <ListItemIcon>
+            <Box color="var(--ColorFont)">
+              <RadioButtonCheckedIcon />
+            </Box>
+          </ListItemIcon>
+          <ListItemText primary="Ponto Digital" />
+        </ListItem>
+      </Tooltip>
 
       {!!permissions?.['company'] && (
         <Tooltip title="Dados da empresa" placement="right">

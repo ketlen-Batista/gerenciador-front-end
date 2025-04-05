@@ -81,7 +81,7 @@ const MobileHome = () => {
     getItemsCountHome({});
     getStatusCountHome({});
   }, []);
-  // console.log({ itemsCountHome });
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} mt={6}>

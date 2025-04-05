@@ -46,8 +46,6 @@ const ModalAddDocument = ({
     isSuccess: isSuccessLinkDocumentToUsers,
   } = useLinkDocumentToUsers();
 
-  console.log({ file });
-
   const handleFileChange = (files: File[]) => {
     if (files && files?.length > 0) {
       setFile(files[0]);

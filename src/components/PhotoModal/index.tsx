@@ -22,7 +22,7 @@ const PhotoModal = ({
   fullScreen,
 }: PhotoModalProps) => {
   const [photoUrl, setPhotoUrl] = useState(null);
-  console.log({ photoUrl });
+
   useEffect(() => {
     if (photoId) {
       (async () => {

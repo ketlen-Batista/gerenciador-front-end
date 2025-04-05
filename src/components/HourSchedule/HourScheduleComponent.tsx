@@ -269,7 +269,6 @@ const HourScheduleComponent = ({ employeeId, fieldsDisabled }: Props) => {
   useEffect(() => {
     getUserSchedules(employeeId)?.then((response) => {
       const schedule = response;
-      console.log({ schedule });
       if (schedule) {
         formik.setValues({
           userId: schedule?.[0]?.userId ?? employeeId,

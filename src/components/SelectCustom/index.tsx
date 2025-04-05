@@ -56,8 +56,6 @@ const SelectCustom = ({ options, defautSelected, label }) => {
     setOpen(true);
   };
 
-  console.log({ value });
-
   return (
     <FormControl variant="outlined" className={classes.formControl}>
       <InputLabel ref={inputLabel} className={classes.inputLabel}>

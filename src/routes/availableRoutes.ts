@@ -4,6 +4,9 @@ export enum AvailableRoutes {
   // * Home
   home = `${rootPath}`,
 
+  //Página de bater ponto
+  pointCheckin = `${rootPath}/ponto-digital`,
+
   // PÁGINA DE DOCUMENTOS
   documentsPage = `${rootPath}/documentos`,
 

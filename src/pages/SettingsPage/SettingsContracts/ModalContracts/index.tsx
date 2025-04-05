@@ -5,7 +5,6 @@ import {
   useCreateContract,
   useUpdateContract,
 } from '@src/services/contractsService/queries';
-import { formatDateDayMonthAndYear } from '@src/utils/dates';
 import { UseMutateFunction } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useFormik } from 'formik';
@@ -64,7 +63,7 @@ const ModalContracts = ({
     initialValues: {
       name: contractName ?? '',
       status: contractStatus,
-      validity: contractValidity ?? new Date().toDateString(), // Adicione outros campos conforme necessário
+      validity: contractValidity ?? new Date().toDateString(),
     },
     validationSchema: Yup.object({
       name: Yup.string().required('O nome do contrato é obrigatório'),
@@ -79,7 +78,7 @@ const ModalContracts = ({
       }
     },
   });
-  console.log('FORMIK4', formik);
+
   useEffect(() => {
     if (isSuccess || isSuccessUpdate) {
       handleClose();

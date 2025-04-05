@@ -1,4 +1,3 @@
-// import { formatObjectToSearchParams } from '@/utils/functions';
 import { api } from '@src/lib/axios';
 
 import * as DTO from './dto';
@@ -110,33 +109,10 @@ export async function addDocument({
   dateStartCertificate,
   dateEndCertificate,
 }: DTO.AddDocumentDTO) {
-  console.log('dados', {
-    file,
-    recipientId,
-    senderId,
-    typeDocumentValue,
-    dateJustification,
-    dateStartCertificate,
-    dateEndCertificate,
-  });
-
   try {
     const formData = new FormData();
-    // if (file) formData.append('file', file);
 
     if (file) {
-      // const blob = new Blob([file], { type: 'application/pdf' });
-
-      // Cria um File com o Blob
-      // const fileTeste = new File([blob], 'sample.pdf', {
-      //   type: 'application/pdf',
-      // });
-      // Cria um blob a partir da URI do arquivo
-      // const fileBlob = await fetch(file.path).then((res) => res.blob());
-      // Cria um objeto File com o blob
-      // const fileObject = new File([fileBlob], file.name, { type: file.type });
-      console.log({ file });
-      // Adiciona o arquivo ao FormData
       formData.append('file', file);
 
       // Adiciona os metadados como um campo separado

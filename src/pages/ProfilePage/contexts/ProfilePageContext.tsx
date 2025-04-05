@@ -1,10 +1,4 @@
-import React, {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-} from 'react';
+import React, { createContext, useContext, useEffect, useMemo } from 'react';
 
 import useSnackbar from '@src/hooks/useSnackbar';
 import {
@@ -16,8 +10,6 @@ import { AxiosError } from 'axios';
 import { useFormik } from 'formik';
 import { UseMutateFunction } from 'react-query';
 import * as Yup from 'yup';
-
-import Snackbar from '@src/components/Snackbar';
 
 interface GetUser {
   userId: string;
@@ -96,7 +88,6 @@ export const ProfilePageProvider = ({ children }) => {
     mutate: getUser,
     isPending: isLoadingUser,
   } = useGetUser();
-  console.log('USERRRRRRRRRRRRRRKKKKKKKKKKKKKKK', user);
 
   const formik = useFormik({
     initialValues: {
@@ -117,8 +108,6 @@ export const ProfilePageProvider = ({ children }) => {
     enableReinitialize: true,
     validationSchema,
     onSubmit: (values) => {
-      // console.log('Form data:', values);
-      // handle form submission
       if (values?.id) {
         updateUser({
           id: values?.id,

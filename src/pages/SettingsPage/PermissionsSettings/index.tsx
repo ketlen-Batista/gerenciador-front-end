@@ -110,7 +110,6 @@ const PermissionsSettings = () => {
     { id: 'configPermission', name: translate('configPermission', 'pt') },
   ];
 
-  console.log({ permissionsNames });
   return (
     <div>
       {isDesktop ? (

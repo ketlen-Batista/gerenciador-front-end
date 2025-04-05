@@ -48,7 +48,6 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
   sectorId,
   getSectors,
 }) => {
-  console.log({ linkLocation });
   const { mutateAsync: createSector, isSuccess, isPending } = useCreateSector();
   const {
     mutateAsync: updateSector,
@@ -56,7 +55,6 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
     isPending: isPendingUpdate,
   } = useUpdateSector();
   const { data: contracts, mutate: getContracts } = useGetContracts();
-  const [locationLink, setLocationLink] = useState<string>('');
 
   const optionsDaySignature: SelectOption[] = Array.from(
     { length: 30 },
@@ -65,16 +63,6 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
       value: index + 1,
     }),
   );
-
-  const isCompleteGoogleMapsUrl = (url: string) => {
-    const completeUrlPattern =
-      /https:\/\/www\.google\.com\/maps\/place\/[^@]+@(-?\d+\.\d+),(-?\d+\.\d+)/;
-    const shortenedUrlPattern = /https:\/\/goo\.gl\/maps\/[^/]+/;
-    if (shortenedUrlPattern.test(url)) {
-      return false;
-    }
-    return completeUrlPattern.test(url);
-  };
 
   const extractCoordinatesFromUrl = useCallback((url: string) => {
     if (!url) {
@@ -108,11 +96,6 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
     email: Yup.string().optional(),
     daySignature: Yup.number().optional(),
     locationLink: Yup.string().optional(),
-    // .test(
-    //   'is-complete-url',
-    //   'Invalid location link. Please provide a complete Google Maps link, not a shortened URL.',
-    //   (value) => isCompleteGoogleMapsUrl(value ?? ''),
-    // ),
   });
 
   const formik = useFormik({
@@ -126,15 +109,6 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
     validationSchema,
     onSubmit: async (values) => {
       const coordinates = await extractCoordinatesFromUrl(values.locationLink);
-      // const { lat, lng } = coordinates;
-
-      // if (!coordinates) {
-      //   formik.setFieldError(
-      //     'locationLink',
-      //     'Invalid location link. Please provide a valid Google Maps link.',
-      //   );
-      //   return;
-      // }
 
       let lat, lng;
       if (coordinates) {
@@ -142,7 +116,6 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
         lng = coordinates.lng;
       }
 
-      console.log('location', values);
       if (sectorId) {
         await updateSector({
           id: sectorId,
@@ -170,7 +143,7 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
       getSectors && getSectors({});
     },
   });
-  console.log({ formik });
+
   useEffect(() => {
     getContracts({});
   }, []);
@@ -245,7 +218,6 @@ const ModalSectors: React.FC<ModalSectorsProps> = ({
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.errors.email && formik.errors.email}
                 fullWidth
-                // required
               />
             </Grid>
             <Grid item xs={6}>

@@ -95,10 +95,7 @@ export const DocumentsFilterProvider = ({ children }) => {
         });
       }
 
-      setDocumentsFiltered(
-        filteredDocs,
-        // ?.filter((doc) => doc?.document || doc?.photoId),
-      );
+      setDocumentsFiltered(filteredDocs);
     } catch (e) {
       console.log('Error filtering documents:', e);
     } finally {

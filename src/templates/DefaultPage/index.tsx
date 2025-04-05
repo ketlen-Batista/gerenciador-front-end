@@ -81,17 +81,18 @@ function DefaultPage({ children, pageTitle }: Props) {
   };
 
   useEffect(() => {
-    if (user?.photo_avatar_id && user.photo_avatar_id !== photoIdAvatar) {
-      getImageUrlServer(user.photo_avatar_id).then((urlImage) => {
-        setPhotoIdAvatar(user.photo_avatar_id);
+    if (user?.photo_avatar_id) {
+      (async () => {
+        const urlImage = await getImageUrlServer(user?.photo_avatar_id);
         setPhotoUrl(urlImage);
+        setPhotoIdAvatar(user.photo_avatar_id);
 
         // Salva no localStorage para evitar requisições desnecessárias
         localStorage.setItem('photoUrl', urlImage);
         localStorage.setItem('photoIdAvatar', String(user.photo_avatar_id));
-      });
+      })();
     }
-  }, [user?.photo_avatar_id]);
+  }, [user?.photo_avatar_id || user?.id]);
 
   return (
     <div theme-mode={isDark ? 'dark' : 'ligth'} className={classes.root}>
@@ -139,6 +140,7 @@ function DefaultPage({ children, pageTitle }: Props) {
               imageSrc={photoUrl ?? null}
               height={'35px'}
               width={'35px'}
+              fontSize={35}
               mt="0px"
               mb="0px"
             />

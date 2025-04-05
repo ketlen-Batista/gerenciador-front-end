@@ -3,7 +3,6 @@ import React, { createContext, useEffect, useMemo, useState } from 'react';
 import { createUserCheckpoint } from '@src/services/CheckinsPoints/api';
 import { ListDocumentsDTO } from '@src/services/DocumentsService/dto';
 import { useListDocuments } from '@src/services/DocumentsService/queries';
-// import { listDTO } from '@src/services/Certificates/dto';
 import { useGetContracts } from '@src/services/contractsService/queries';
 import { useGetJobPositions } from '@src/services/jobPositions/queries';
 import { useGetUserSchedules } from '@src/services/schedule/queries';
@@ -15,7 +14,7 @@ import { INIT_DATE_RANGE } from '@src/utils/dates';
 import { addHoursToTime, formatDateToCustomString } from '@src/utils/functions';
 import { UseMutateAsyncFunction } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { format, startOfDay } from 'date-fns';
+import { format } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { enUS, ptBR } from 'date-fns/locale';
 import { FormikProps, useFormik } from 'formik';
@@ -246,7 +245,6 @@ export const CertificatesProvider = ({ children }) => {
     endDate: string,
   ): { date: string; dayOfWeekPT: string; dayOfWeekEN: string }[] => {
     if (startDate && endDate) {
-      console.log('entrou aqyu');
       const start = new Date(startDate);
       const end = new Date(endDate);
 
@@ -274,7 +272,6 @@ export const CertificatesProvider = ({ children }) => {
       }
 
       setDates(dates);
-      console.log('saiu aqui');
       return dates;
     }
   };

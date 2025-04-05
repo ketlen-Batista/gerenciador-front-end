@@ -81,17 +81,9 @@ const DesktopHome = () => {
     getItemsCountHome({});
     getStatusCountHome({});
   }, []);
-  // console.log({ itemsCountHome });
+
   return (
     <Grid container spacing={2} px={8}>
-      {/* <Grid item xs={12}>
-          <Box display="flex" flexDirection="row" justifyContent="flex-end">
-            {setores?.map((item) => (
-              <ButtonFilter key={item.value} textButton={item.name} />
-            ))}
-          </Box>
-        </Grid> */}
-
       <Grid item xs={6} p={10} mt={6}>
         <Grid container spacing={1}>
           {!isPendingItemsCountHome &&

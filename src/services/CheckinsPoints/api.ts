@@ -90,3 +90,15 @@ export async function getBankHours(filters: DTO.UserCheckpointFiltersDTO) {
     throw error;
   }
 }
+
+export async function getUserCheckpointByIdCurrentDay(userId: string) {
+  try {
+    const { data } = await api.get(
+      `/list-checkpoints/current-day/user-id/${userId}`,
+    );
+    return data;
+  } catch (error) {
+    console.error(`Erro ao buscar histórico de pontos batidos`, error);
+    throw error;
+  }
+}

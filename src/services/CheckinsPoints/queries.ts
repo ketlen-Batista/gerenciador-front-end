@@ -60,3 +60,13 @@ export function useGetBankHours(handleReturn?: HandleReturn) {
     handleReturn,
   });
 }
+
+export function useGetUserCheckpointByIdCurrentDay(
+  handleReturn?: HandleReturn,
+) {
+  return useCustomMutation({
+    key: 'getUserCheckpointByIdCurrentDay',
+    request: (userId: string) => API.getUserCheckpointByIdCurrentDay(userId),
+    handleReturn,
+  });
+}

@@ -58,6 +58,7 @@
     "react-pdf": "^9.1.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
+    "react-webcam": "^7.2.0",
     "styled-components": "^6.1.8",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.3.2",
